@@ -1,16 +1,24 @@
 import { makeAutoObservable } from 'mobx'
 import Cookies from 'js-cookie'
-import { api } from '@poizon/api'
-import { API_URL } from '@/shared/config/env'
+import { DefaultApi, Configuration, AuthResponseDto, LoginDto, RegisterDto } from '@poizon/api'
 
 export class AuthStore {
   isAuthenticated = false
-  user = null
+  user: any = null
   isLoading = false
-  error = null
+  error: string | null = null
+  private authApi: DefaultApi
 
   constructor() {
     makeAutoObservable(this)
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+    const config = new Configuration({
+      basePath: baseUrl,
+      baseOptions: {
+        withCredentials: true
+      }
+    })
+    this.authApi = new DefaultApi(config)
   }
 
   setAuth(user: any, token: string) {
@@ -35,8 +43,12 @@ export class AuthStore {
     try {
       this.isLoading = true
       this.error = null
-      const response = await api.auth.login({ email, password })
-      this.setAuth(response.user, response.token)
+      const loginDto: LoginDto = {
+        email,
+        password
+      }
+      const response = await this.authApi.loginUser(loginDto)
+      this.setAuth({ email }, response.data.accessToken)
       return true
     } catch (error) {
       this.setError('Неверный email или пароль')
@@ -50,8 +62,14 @@ export class AuthStore {
     try {
       this.isLoading = true
       this.error = null
-      const response = await api.auth.register({ name, email, password })
-      this.setAuth(response.user, response.token)
+      const registerDto: RegisterDto = {
+        name,
+        email,
+        password,
+        username: email
+      }
+      const response = await this.authApi.registerUser(registerDto)
+      this.setAuth({ name, email }, response.data.accessToken)
       return true
     } catch (error) {
       this.setError('Ошибка при регистрации')
@@ -69,8 +87,9 @@ export class AuthStore {
         return false
       }
 
-      const response = await api.auth.me()
-      this.setAuth(response.user, token)
+      // Здесь нужно добавить метод для получения информации о пользователе
+      // const response = await this.authApi.getCurrentUser()
+      // this.setAuth(response.user, token)
       return true
     } catch (error) {
       this.logout()

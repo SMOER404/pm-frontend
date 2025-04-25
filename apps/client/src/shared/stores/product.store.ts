@@ -1,26 +1,8 @@
 import { makeAutoObservable } from 'mobx'
-import { ProductService } from '@/shared/api/product.service'
-
-export interface Product {
-  id: number
-  name: string
-  price: number
-  description: string
-  images: string[]
-  category: string
-  brand: string
-  size: string
-  color: string
-  inStock: boolean
-  createdAt: string
-  updatedAt: string
-  rating: number
-  sizes: string[]
-  colors: string[]
-}
+import { ProductsApi, Configuration, ProductResponseDto } from '@poizon/api'
 
 export class ProductStore {
-  products: Product[] = []
+  products: ProductResponseDto[] = []
   isLoading = false
   error: string | null = null
   filters = {
@@ -32,15 +14,21 @@ export class ProductStore {
     color: ''
   }
   sortBy = 'price'
-  private productService: ProductService
+  private productsApi: ProductsApi
 
   constructor() {
     makeAutoObservable(this)
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-    this.productService = new ProductService(baseUrl)
+    const config = new Configuration({
+      basePath: baseUrl,
+      baseOptions: {
+        withCredentials: true
+      }
+    })
+    this.productsApi = new ProductsApi(config)
   }
 
-  setProducts = (products: Product[]) => {
+  setProducts = (products: ProductResponseDto[]) => {
     this.products = products
   }
 
@@ -64,8 +52,8 @@ export class ProductStore {
     this.isLoading = true
     this.error = null
     try {
-      const products = await this.productService.getProducts()
-      this.products = products
+      const response = await this.productsApi.getAllProducts()
+      this.products = response.data
     } catch (error) {
       this.error = error instanceof Error ? error.message : 'Произошла ошибка при загрузке товаров'
     } finally {
@@ -73,11 +61,12 @@ export class ProductStore {
     }
   }
 
-  async fetchProductById(id: number) {
+  async fetchProductById(id: string) {
     this.isLoading = true
     this.error = null
     try {
-      return await this.productService.getProductById(id)
+      const response = await this.productsApi.getProductById(id)
+      return response.data
     } catch (error) {
       this.error = error instanceof Error ? error.message : 'Не удалось загрузить товар'
       return null
@@ -90,16 +79,36 @@ export class ProductStore {
     return this.products.filter(product => {
       if (this.filters.category && product.category !== this.filters.category) return false
       if (this.filters.brand && product.brand !== this.filters.brand) return false
-      if (this.filters.minPrice && product.price < this.filters.minPrice) return false
-      if (this.filters.maxPrice && product.price > this.filters.maxPrice) return false
-      if (this.filters.size && !product.sizes.includes(this.filters.size)) return false
-      if (this.filters.color && !product.colors.includes(this.filters.color)) return false
+      if (this.filters.minPrice && this.getMinPrice(product) < this.filters.minPrice) return false
+      if (this.filters.maxPrice && this.getMaxPrice(product) > this.filters.maxPrice) return false
+      if (this.filters.size && !this.hasSize(product, this.filters.size)) return false
+      if (this.filters.color && !this.hasColor(product, this.filters.color)) return false
       return true
     }).sort((a, b) => {
-      if (this.sortBy === 'price') return a.price - b.price
-      if (this.sortBy === 'rating') return b.rating - a.rating
+      if (this.sortBy === 'price') return this.getMinPrice(a) - this.getMinPrice(b)
+      if (this.sortBy === 'rating') return 0 // Рейтинг не реализован в API
       return 0
     })
+  }
+
+  private getMinPrice(product: ProductResponseDto): number {
+    if (!product.variants || product.variants.length === 0) return 0
+    return Math.min(...product.variants.map(v => v.priceCny))
+  }
+
+  private getMaxPrice(product: ProductResponseDto): number {
+    if (!product.variants || product.variants.length === 0) return 0
+    return Math.max(...product.variants.map(v => v.priceCny))
+  }
+
+  private hasSize(product: ProductResponseDto, size: string): boolean {
+    if (!product.variants) return false
+    return product.variants.some(v => v.size === size)
+  }
+
+  private hasColor(product: ProductResponseDto, color: string): boolean {
+    if (!product.variants) return false
+    return product.variants.some(v => v.color === color)
   }
 }
 

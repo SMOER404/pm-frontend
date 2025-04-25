@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'

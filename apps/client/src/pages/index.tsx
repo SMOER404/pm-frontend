@@ -4,6 +4,8 @@ import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'
 import { productStore } from '@/shared/stores/product.store'
 import React from 'react'
+import ProductCard from "@/shared/ui/Product-Card/ProductCard";
+import { ProductsApi, Configuration, ProductResponseDto } from '@poizon/api'
 
 interface HomePageProps {
   initialProducts: any[] // TODO: Добавить правильный тип после генерации API
@@ -15,6 +17,8 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
     productStore.setProducts(initialProducts)
   }, [initialProducts])
 
+  console.log('initialProducts', initialProducts)
+
   return (
     <Layout>
       <SeoHead
@@ -22,27 +26,6 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
         description="Широкий выбор одежды от лучших брендов по доступным ценам. Бесплатная доставка по всей России."
         url="/"
       />
-
-      {/* Hero Section */}
-      <section className="relative h-[600px] bg-gray-900 text-white">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
-        <div className="container mx-auto px-4 h-full flex items-center">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl font-bold mb-6">
-              Откройте для себя мир стиля с POIZON MARKET
-            </h1>
-            <p className="text-xl mb-8">
-              Широкий выбор одежды от лучших брендов по доступным ценам
-            </p>
-            <a
-              href="/catalog"
-              className="btn btn-primary text-lg px-8 py-3"
-            >
-              Смотреть каталог
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* Categories Section */}
       <section className="py-16">
@@ -53,11 +36,6 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
               href="/catalog/men"
               className="relative h-80 rounded-lg overflow-hidden group"
             >
-              <img
-                src="/images/men-category.jpg"
-                alt="Мужская одежда"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <h3 className="text-2xl font-bold text-white">Мужская одежда</h3>
@@ -68,11 +46,6 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
               href="/catalog/women"
               className="relative h-80 rounded-lg overflow-hidden group"
             >
-              <img
-                src="/images/women-category.jpg"
-                alt="Женская одежда"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <h3 className="text-2xl font-bold text-white">Женская одежда</h3>
@@ -83,11 +56,6 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
               href="/catalog/accessories"
               className="relative h-80 rounded-lg overflow-hidden group"
             >
-              <img
-                src="/images/accessories-category.jpg"
-                alt="Аксессуары"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <h3 className="text-2xl font-bold text-white">Аксессуары</h3>
@@ -102,24 +70,18 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8">Популярные товары</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {productStore.products.length && productStore.products.slice(0, 8).map((product) => (
+            {initialProducts.length && initialProducts.slice(0, 8).map((product) => (
               <a
                 key={product.id}
                 href={`/product/${product.id}`}
                 className="group"
               >
-                <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <h3 className="font-medium mb-2 group-hover:text-primary-600">
-                  {product.name}
-                </h3>
-                <p className="text-gray-600">{product.brand}</p>
-                <p className="font-bold mt-2">{product.price} ₽</p>
+                <ProductCard
+                    image={product.variants[0].imageUrls[0]}
+                    price={product.variants[0].priceCny}
+                    title={product.name}
+                    onClickLike={() => console.log('like')}
+                />
               </a>
             ))}
           </div>
@@ -205,12 +167,18 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-    const response = await fetch(`${baseUrl}/products/popular`)
-    const products = await response.json()
+    const config = new Configuration({
+      basePath: baseUrl,
+      baseOptions: {
+        withCredentials: true
+      }
+    })
+    const productsApi = new ProductsApi(config)
+    const productsResponse = await productsApi.getAllProducts()
 
     return {
       props: {
-        initialProducts: products,
+        initialProducts: productsResponse.data,
       },
     }
   } catch (error) {

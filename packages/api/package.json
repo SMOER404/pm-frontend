@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "generate": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api --additional-properties=supportsES6=true,npmName=@poizon/api,npmVersion=1.0.0,separateModelsAndApi=true,modelPackage=models,apiPackage=services,withSeparateModelsAndApi=true"
   },
   "dependencies": {
     "axios": "^1.6.7"
@@ -15,6 +16,7 @@
   "devDependencies": {
     "typescript": "^5.3.3",
     "rimraf": "^5.0.5",
-    "@types/node": "^20.11.19"
+    "@types/node": "^20.11.19",
+    "@openapitools/openapi-generator-cli": "^2.7.0"
   }
 } 

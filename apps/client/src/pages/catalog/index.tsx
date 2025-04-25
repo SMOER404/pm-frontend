@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'
 import { productStore } from '@/shared/stores/product.store'
+import {api} from "@poizon/api";
+import {CategoriesService} from "@poizon/api/dist/generated";
 
 interface CatalogPageProps {
   initialProducts: any[] // TODO: Добавить правильный тип после генерации API
@@ -11,19 +13,24 @@ interface CatalogPageProps {
   brands: string[]
 }
 
-const CatalogPage = observer(({ initialProducts, categories, brands }: CatalogPageProps) => {
+const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) => {
   const router = useRouter()
-  const { category, brand, minPrice, maxPrice, size, color, sortBy } = router.query
+  // const { category, brand, minPrice, maxPrice, size, color, sortBy } = router.query
 
+  console.log('initialProducts', initialProducts)
+  console.log('categories', categories)
+  console.log('brands', brands)
   // Инициализируем стор начальными данными и фильтрами
   productStore.setProducts(initialProducts)
-  if (category) productStore.setFilters({ category: category as string })
-  if (brand) productStore.setFilters({ brand: brand as string })
-  if (minPrice) productStore.setFilters({ minPrice: Number(minPrice) })
-  if (maxPrice) productStore.setFilters({ maxPrice: Number(maxPrice) })
-  if (size) productStore.setFilters({ size: size as string })
-  if (color) productStore.setFilters({ color: color as string })
-  if (sortBy) productStore.setSortBy(sortBy as string)
+  // if (category) productStore.setFilters({ category: category  as string })
+  // if (brand) productStore.setFilters({ brand: brand as string })
+  // if (minPrice) productStore.setFilters({ minPrice: Number(minPrice) })
+  // if (maxPrice) productStore.setFilters({ maxPrice: Number(maxPrice) })
+  // if (size) productStore.setFilters({ size: size as string })
+  // if (color) productStore.setFilters({ color: color as string })
+  // if (sortBy) productStore.setSortBy(sortBy as string)
+
+
 
   return (
     <Layout>
@@ -208,11 +215,11 @@ const CatalogPage = observer(({ initialProducts, categories, brands }: CatalogPa
                 >
                   <div className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="relative aspect-square">
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      {/*<img*/}
+                      {/*  src={product.images[0]}*/}
+                      {/*  alt={product.name}*/}
+                      {/*  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"*/}
+                      {/*/>*/}
                     </div>
                     <div className="p-4">
                       <h3 className="font-medium mb-2 group-hover:text-primary-600">
@@ -244,32 +251,27 @@ const CatalogPage = observer(({ initialProducts, categories, brands }: CatalogPa
       </div>
     </Layout>
   )
-})
+}
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
     // TODO: Заменить на реальный API клиент после генерации
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products?${new URLSearchParams(
-        query as Record<string, string>
-      ).toString()}`
-    )
-    const data = await response.json()
+    const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+    const products = await productsResponse.json()
 
     // Получаем список категорий и брендов
-    const categoriesResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/categories`
-    )
+    const categoriesResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
     const categories = await categoriesResponse.json()
 
-    const brandsResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/brands`
-    )
+    const brandsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/brands`)
     const brands = await brandsResponse.json()
+
+
+    console.log('products', products)
 
     return {
       props: {
-        initialProducts: data.products,
+        initialProducts: products,
         categories: categories,
         brands: brands,
       },
