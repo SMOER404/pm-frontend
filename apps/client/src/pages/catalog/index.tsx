@@ -1,36 +1,34 @@
 import { observer } from 'mobx-react-lite'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
 import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'
 import { productStore } from '@/shared/stores/product.store'
-import {api} from "@poizon/api";
-import {CategoriesService} from "@poizon/api/dist/generated";
+import { 
+  CategoryDto, 
+  BrandDto, 
+  ProductResponseDto,
+  Configuration,
+  ProductsApi,
+  CategoriesApi,
+  BrandsApi
+} from "@poizon/api"
 
 interface CatalogPageProps {
-  initialProducts: any[] // TODO: Добавить правильный тип после генерации API
-  categories: string[]
-  brands: string[]
+  initialProducts: ProductResponseDto[]
+  categories: CategoryDto[]
+  brands: BrandDto[]
 }
 
 const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) => {
   const router = useRouter()
-  // const { category, brand, minPrice, maxPrice, size, color, sortBy } = router.query
 
-  console.log('initialProducts', initialProducts)
-  console.log('categories', categories)
-  console.log('brands', brands)
-  // Инициализируем стор начальными данными и фильтрами
-  productStore.setProducts(initialProducts)
-  // if (category) productStore.setFilters({ category: category  as string })
-  // if (brand) productStore.setFilters({ brand: brand as string })
-  // if (minPrice) productStore.setFilters({ minPrice: Number(minPrice) })
-  // if (maxPrice) productStore.setFilters({ maxPrice: Number(maxPrice) })
-  // if (size) productStore.setFilters({ size: size as string })
-  // if (color) productStore.setFilters({ color: color as string })
-  // if (sortBy) productStore.setSortBy(sortBy as string)
-
-
+  useEffect(() => {
+    productStore.setProducts(initialProducts)
+  }, [initialProducts])
 
   return (
     <Layout>
@@ -63,8 +61,8 @@ const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) 
                 >
                   <option value="">Все категории</option>
                   {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
+                    <option key={category.id} value={category.id}>
+                      {category.name}
                     </option>
                   ))}
                 </select>
@@ -86,8 +84,8 @@ const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) 
                 >
                   <option value="">Все бренды</option>
                   {brands.map((brand) => (
-                    <option key={brand} value={brand}>
-                      {brand}
+                    <option key={brand.id} value={brand.id}>
+                      {brand.name}
                     </option>
                   ))}
                 </select>
@@ -99,13 +97,11 @@ const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) 
                 <div className="flex gap-4">
                   <input
                     type="number"
-                    className="input"
+                    className="input w-1/2"
                     placeholder="От"
                     value={productStore.filters.minPrice || ''}
                     onChange={(e) => {
-                      productStore.setFilters({
-                        minPrice: Number(e.target.value),
-                      })
+                      productStore.setFilters({ minPrice: Number(e.target.value) })
                       router.push({
                         pathname: router.pathname,
                         query: { ...router.query, minPrice: e.target.value },
@@ -114,13 +110,11 @@ const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) 
                   />
                   <input
                     type="number"
-                    className="input"
+                    className="input w-1/2"
                     placeholder="До"
                     value={productStore.filters.maxPrice || ''}
                     onChange={(e) => {
-                      productStore.setFilters({
-                        maxPrice: Number(e.target.value),
-                      })
+                      productStore.setFilters({ maxPrice: Number(e.target.value) })
                       router.push({
                         pathname: router.pathname,
                         query: { ...router.query, maxPrice: e.target.value },
@@ -173,80 +167,59 @@ const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) 
                   <option value="white">Белый</option>
                   <option value="red">Красный</option>
                   <option value="blue">Синий</option>
+                  <option value="green">Зеленый</option>
                 </select>
               </div>
             </div>
           </aside>
 
           {/* Products Grid */}
-          <div className="flex-1">
-            {/* Sort Controls */}
-            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <div className="flex items-center justify-between">
-                <p className="text-gray-600">
-                  Найдено {productStore.filteredProducts.length} товаров
-                </p>
-                <select
-                  className="input w-48"
-                  value={productStore.sortBy}
-                  onChange={(e) => {
-                    productStore.setSortBy(e.target.value)
-                    router.push({
-                      pathname: router.pathname,
-                      query: { ...router.query, sortBy: e.target.value },
-                    })
-                  }}
-                >
-                  <option value="newest">Сначала новые</option>
-                  <option value="price-asc">По возрастанию цены</option>
-                  <option value="price-desc">По убыванию цены</option>
-                  <option value="rating">По рейтингу</option>
-                </select>
-              </div>
+          <main className="flex-1">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold">Каталог товаров</h1>
+              <select
+                className="input"
+                value={productStore.sortBy}
+                onChange={(e) => {
+                  productStore.setSortBy(e.target.value)
+                  router.push({
+                    pathname: router.pathname,
+                    query: { ...router.query, sortBy: e.target.value },
+                  })
+                }}
+              >
+                <option value="price">По цене</option>
+                <option value="rating">По рейтингу</option>
+              </select>
             </div>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {productStore.filteredProducts.map((product) => (
-                <a
+                <Link 
+                  href={`/product/${product.id}`} 
                   key={product.id}
-                  href={`/product/${product.id}`}
-                  className="group"
+                  className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
                 >
-                  <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="relative aspect-square">
-                      {/*<img*/}
-                      {/*  src={product.images[0]}*/}
-                      {/*  alt={product.name}*/}
-                      {/*  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"*/}
-                      {/*/>*/}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-medium mb-2 group-hover:text-primary-600">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-600 mb-2">{product.brand}</p>
-                      <div className="flex items-center justify-between">
-                        <p className="font-bold">{product.price} ₽</p>
-                        <div className="flex items-center">
-                          <svg
-                            className="w-4 h-4 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          <span className="ml-1 text-sm text-gray-600">
-                            {product.rating}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                  <motion.img 
+                    src={`https://dummyimage.com/400x300/CCCCCC/000000&text=${encodeURIComponent(product.name)}`}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
+                    <p className="text-gray-600 mb-2">
+                      {brands.find(brand => brand.id === product.brand)?.name || 'Бренд не указан'}
+                    </p>
+                    <p className="text-xl font-bold text-primary">
+                      {product.variants?.[0]?.priceCny ? `${product.variants[0].priceCny} ¥` : 'Цена не указана'}
+                    </p>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </Layout>
@@ -254,38 +227,42 @@ const CatalogPage = ({ initialProducts, categories, brands }: CatalogPageProps) 
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+  const config = new Configuration({
+    basePath: baseUrl,
+    baseOptions: {
+      withCredentials: true
+    }
+  })
+
   try {
-    // TODO: Заменить на реальный API клиент после генерации
-    const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
-    const products = await productsResponse.json()
+    const productsApi = new ProductsApi(config)
+    const categoriesApi = new CategoriesApi(config)
+    const brandsApi = new BrandsApi(config)
 
-    // Получаем список категорий и брендов
-    const categoriesResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
-    const categories = await categoriesResponse.json()
-
-    const brandsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/brands`)
-    const brands = await brandsResponse.json()
-
-
-    console.log('products', products)
+    const [productsResponse, categoriesResponse, brandsResponse] = await Promise.all([
+      productsApi.getAllProducts(),
+      categoriesApi.getAllCategories(),
+      brandsApi.getAllBrands()
+    ])
 
     return {
       props: {
-        initialProducts: products,
-        categories: categories,
-        brands: brands,
-      },
+        initialProducts: productsResponse.data,
+        categories: categoriesResponse.data,
+        brands: brandsResponse.data
+      }
     }
   } catch (error) {
-    console.error('Ошибка при загрузке данных:', error)
+    console.error('Error fetching data:', error)
     return {
       props: {
         initialProducts: [],
         categories: [],
-        brands: [],
-      },
+        brands: []
+      }
     }
   }
 }
 
-export default CatalogPage 
+export default observer(CatalogPage) 

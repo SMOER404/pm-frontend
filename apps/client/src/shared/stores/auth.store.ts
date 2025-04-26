@@ -1,96 +1,182 @@
-import { makeAutoObservable } from 'mobx'
-import Cookies from 'js-cookie'
-import { DefaultApi, Configuration, AuthResponseDto, LoginDto, RegisterDto } from '@poizon/api'
+import { makeAutoObservable, runInAction } from 'mobx'
+import { defaultApi, AuthResponseDto, LoginDto, RegisterDto } from '@poizon/api'
+import { cartStore } from './cart.store'
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  username: string;
+  avatarUrl: string | null;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export class AuthStore {
   isAuthenticated = false
-  user: any = null
+  user: User | null = null
   isLoading = false
   error: string | null = null
-  private authApi: DefaultApi
 
   constructor() {
     makeAutoObservable(this)
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-    const config = new Configuration({
-      basePath: baseUrl,
-      baseOptions: {
-        withCredentials: true
-      }
-    })
-    this.authApi = new DefaultApi(config)
   }
 
-  setAuth(user: any, token: string) {
-    this.isAuthenticated = true
-    this.user = user
-    this.error = null
-    Cookies.set('token', token, { expires: 7 })
+  setAuth(user: User, token: string) {
+    runInAction(() => {
+      this.isAuthenticated = true
+      this.user = user
+      this.error = null
+    })
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', token)
+    }
   }
 
   logout() {
-    this.isAuthenticated = false
-    this.user = null
-    this.error = null
-    Cookies.remove('token')
+    runInAction(() => {
+      this.isAuthenticated = false
+      this.user = null
+      this.error = null
+    })
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token')
+    }
   }
 
   setError(error: string | null) {
-    this.error = error
+    runInAction(() => {
+      this.error = error
+    })
   }
 
   async login(email: string, password: string) {
     try {
-      this.isLoading = true
-      this.error = null
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
       const loginDto: LoginDto = {
         email,
         password
       }
-      const response = await this.authApi.loginUser(loginDto)
-      this.setAuth({ email }, response.data.accessToken)
-      return true
+      const response = await defaultApi.loginUser(loginDto)
+      const token = response.data.accessToken
+      
+      // Проверяем валидность токена
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        const user: User = {
+          id: payload.sub,
+          email: payload.email,
+          name: payload.name || '',
+          username: payload.username || '',
+          avatarUrl: payload.avatarUrl || null,
+          role: payload.role || 'USER',
+          createdAt: payload.createdAt || new Date().toISOString(),
+          updatedAt: payload.updatedAt || new Date().toISOString()
+        }
+        runInAction(() => {
+          this.setAuth(user, token)
+        })
+        return true
+      } catch (error) {
+        console.error('Ошибка при декодировании токена:', error)
+        this.setError('Ошибка при обработке ответа сервера')
+        return false
+      }
     } catch (error) {
-      this.setError('Неверный email или пароль')
+      runInAction(() => {
+        this.setError('Неверный email или пароль')
+      })
       return false
     } finally {
-      this.isLoading = false
+      runInAction(() => {
+        this.isLoading = false
+      })
     }
   }
 
   async register(name: string, email: string, password: string) {
     try {
-      this.isLoading = true
-      this.error = null
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
       const registerDto: RegisterDto = {
         name,
         email,
         password,
-        username: email
+        username: name // Используем name как username
       }
-      const response = await this.authApi.registerUser(registerDto)
-      this.setAuth({ name, email }, response.data.accessToken)
-      return true
+      const response = await defaultApi.registerUser(registerDto)
+      const token = response.data.accessToken
+      
+      // Проверяем валидность токена
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        const user: User = {
+          id: payload.sub,
+          email: payload.email,
+          name: payload.name || '',
+          username: payload.username || '',
+          avatarUrl: payload.avatarUrl || null,
+          role: payload.role || 'USER',
+          createdAt: payload.createdAt || new Date().toISOString(),
+          updatedAt: payload.updatedAt || new Date().toISOString()
+        }
+        runInAction(() => {
+          this.setAuth(user, token)
+        })
+        return true
+      } catch (error) {
+        console.error('Ошибка при декодировании токена:', error)
+        this.setError('Ошибка при обработке ответа сервера')
+        return false
+      }
     } catch (error) {
-      this.setError('Ошибка при регистрации')
+      runInAction(() => {
+        this.setError('Ошибка при регистрации')
+      })
       return false
     } finally {
-      this.isLoading = false
+      runInAction(() => {
+        this.isLoading = false
+      })
     }
   }
 
   async checkAuth() {
     try {
-      const token = Cookies.get('token')
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
       if (!token) {
         this.logout()
         return false
       }
 
-      // Здесь нужно добавить метод для получения информации о пользователе
-      // const response = await this.authApi.getCurrentUser()
-      // this.setAuth(response.user, token)
-      return true
+      // Проверяем валидность токена
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        const user: User = {
+          id: payload.sub,
+          email: payload.email,
+          name: payload.name || '',
+          username: payload.username || '',
+          avatarUrl: payload.avatarUrl || null,
+          role: payload.role || 'USER',
+          createdAt: payload.createdAt || new Date().toISOString(),
+          updatedAt: payload.updatedAt || new Date().toISOString()
+        }
+        runInAction(() => {
+          this.setAuth(user, token)
+        })
+        return true
+      } catch (error) {
+        console.error('Ошибка при декодировании токена:', error)
+        this.logout()
+        return false
+      }
     } catch (error) {
       this.logout()
       return false
@@ -98,9 +184,11 @@ export class AuthStore {
   }
 
   // Метод для SSR
-  setInitialState(isAuthenticated: boolean, user: any) {
-    this.isAuthenticated = isAuthenticated
-    this.user = user
+  setInitialState(isAuthenticated: boolean, user: User | null) {
+    runInAction(() => {
+      this.isAuthenticated = isAuthenticated
+      this.user = user
+    })
   }
 }
 

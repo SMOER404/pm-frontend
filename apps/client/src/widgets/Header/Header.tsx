@@ -2,9 +2,9 @@ import React from 'react'
 import { observer } from 'mobx-react-lite'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Input } from '@poizon/shared'
-import { authStore } from '@/shared/stores/auth.store'
-import { cartStore } from '@/shared/stores/cart.store'
+import { Input } from '@poizon/shared/src/components'
+import { authStore } from '../../shared/stores/auth.store'
+import { cartStore } from '../../shared/stores/cart.store'
 
 export const Header = observer(() => {
   return (

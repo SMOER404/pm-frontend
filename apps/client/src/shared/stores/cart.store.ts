@@ -1,92 +1,130 @@
-import { makeAutoObservable } from 'mobx'
-import { CartApi, Configuration, CartItemResponseDto, AddToCartDto } from '@poizon/api'
+import { makeAutoObservable, runInAction } from 'mobx'
+import { cartApi, CartItemResponseDto, AddToCartDto } from '@poizon/api'
 
 export class CartStore {
   items: CartItemResponseDto[] = []
-  loading = false
+  isLoading = false
   error: string | null = null
-  private cartApi: CartApi
 
   constructor() {
     makeAutoObservable(this)
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-    const config = new Configuration({
-      basePath: baseUrl,
-      baseOptions: {
-        withCredentials: true
-      }
-    })
-    this.cartApi = new CartApi(config)
-    // this.loadCart()
   }
 
-  private async loadCart() {
+  async addItem(variantId: string, quantity: number = 1) {
     try {
-      this.loading = true
-      const response = await this.cartApi.findAll()
-      this.items = response.data
-    } catch (error) {
-      console.error('Ошибка при загрузке корзины:', error)
-      this.error = 'Не удалось загрузить корзину'
-    } finally {
-      this.loading = false
-    }
-  }
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
 
-  async addItem(productVariantId: string, quantity: number) {
-    try {
-      this.loading = true
       const addToCartDto: AddToCartDto = {
-        productVariantId,
+        productVariantId: variantId,
         quantity
       }
-      await this.cartApi.addToCart(addToCartDto)
-      await this.loadCart()
-    } catch (error) {
-      console.error('Ошибка при добавлении товара в корзину:', error)
-      this.error = 'Не удалось добавить товар в корзину'
+
+      const response = await cartApi.addToCart(addToCartDto)
+      const cartResponse = await cartApi.findAll()
+      
+      runInAction(() => {
+        this.items = cartResponse.data
+      })
+    } catch (error: any) {
+      runInAction(() => {
+        this.error = error.message || 'Ошибка при добавлении товара в корзину'
+      })
+      throw error
     } finally {
-      this.loading = false
+      runInAction(() => {
+        this.isLoading = false
+      })
     }
   }
 
-  async removeItem(id: string) {
+  async getCart() {
     try {
-      this.loading = true
-      await this.cartApi.remove(id)
-      await this.loadCart()
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
+
+      const response = await cartApi.findAll()
+      
+      runInAction(() => {
+        this.items = response.data
+      })
+      return true
     } catch (error) {
-      console.error('Ошибка при удалении товара из корзины:', error)
-      this.error = 'Не удалось удалить товар из корзины'
+      runInAction(() => {
+        this.error = 'Ошибка при получении корзины'
+      })
+      return false
     } finally {
-      this.loading = false
+      runInAction(() => {
+        this.isLoading = false
+      })
     }
   }
 
-  async updateQuantity(id: string, quantity: number) {
+  async removeItem(variantId: string) {
     try {
-      this.loading = true
-      await this.cartApi.updateQuantity(id)
-      await this.loadCart()
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
+
+      await cartApi.remove(variantId)
+      
+      runInAction(() => {
+        this.items = this.items.filter(item => item.variantId !== variantId)
+      })
+      return true
     } catch (error) {
-      console.error('Ошибка при обновлении количества товара:', error)
-      this.error = 'Не удалось обновить количество товара'
+      runInAction(() => {
+        this.error = 'Ошибка при удалении товара из корзины'
+      })
+      return false
     } finally {
-      this.loading = false
+      runInAction(() => {
+        this.isLoading = false
+      })
     }
   }
 
-  async clearCart() {
+  async updateQuantity(variantId: string, quantity: number) {
     try {
-      this.loading = true
-      await this.cartApi.clearCart()
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
+
+      const addToCartDto: AddToCartDto = {
+        productVariantId: variantId,
+        quantity
+      }
+
+      const response = await cartApi.addToCart(addToCartDto)
+      
+      runInAction(() => {
+        this.items = [response.data]
+      })
+      return true
+    } catch (error) {
+      runInAction(() => {
+        this.error = 'Ошибка при обновлении количества товара'
+      })
+      return false
+    } finally {
+      runInAction(() => {
+        this.isLoading = false
+      })
+    }
+  }
+
+  clearCart() {
+    runInAction(() => {
       this.items = []
-    } catch (error) {
-      console.error('Ошибка при очистке корзины:', error)
-      this.error = 'Не удалось очистить корзину'
-    } finally {
-      this.loading = false
-    }
+      this.error = null
+    })
   }
 
   get totalItems() {

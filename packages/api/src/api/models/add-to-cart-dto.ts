@@ -21,7 +21,7 @@
  */
 export interface AddToCartDto {
     /**
-     * ID варианта товара
+     * Артикул (SKU) варианта товара
      * @type {string}
      * @memberof AddToCartDto
      */

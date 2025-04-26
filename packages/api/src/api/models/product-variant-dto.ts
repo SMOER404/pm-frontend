@@ -21,6 +21,18 @@
  */
 export interface ProductVariantDto {
     /**
+     * ID варианта товара
+     * @type {string}
+     * @memberof ProductVariantDto
+     */
+    'id': string;
+    /**
+     * ID продукта
+     * @type {string}
+     * @memberof ProductVariantDto
+     */
+    'productId': string;
+    /**
      * Размер товара
      * @type {string}
      * @memberof ProductVariantDto
@@ -62,6 +74,18 @@ export interface ProductVariantDto {
      * @memberof ProductVariantDto
      */
     'stockStatus': ProductVariantDtoStockStatusEnum;
+    /**
+     * Дата создания
+     * @type {string}
+     * @memberof ProductVariantDto
+     */
+    'createdAt': string;
+    /**
+     * Дата обновления
+     * @type {string}
+     * @memberof ProductVariantDto
+     */
+    'updatedAt': string;
 }
 
 export const ProductVariantDtoStockStatusEnum = {

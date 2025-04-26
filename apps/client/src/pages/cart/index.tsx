@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import Layout from '@/components/layout/Layout'
 import { cartStore } from '@/shared/stores/cart.store'
+import { CartItemResponseDto } from '@poizon/api'
 
 const CartPage = observer(() => {
   return (
@@ -40,28 +41,28 @@ const CartPage = observer(() => {
             <div className="flex-1">
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="divide-y">
-                  {cartStore.items.map((item) => (
+                  {cartStore.items.map((item: CartItemResponseDto) => (
                     <div
-                      key={`${item.id}-${item.size}-${item.color}`}
+                      key={item.id}
                       className="p-6"
                     >
                       <div className="flex gap-6">
                         <div className="w-24 h-24 flex-shrink-0">
                           <img
-                            src={item.image}
-                            alt={item.name}
+                            src={item.variant.imageUrls[0]}
+                            alt={item.variant.product.name}
                             className="w-full h-full object-cover rounded-md"
                           />
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between">
                             <div>
-                              <h3 className="font-medium">{item.name}</h3>
+                              <h3 className="font-medium">{item.variant.product.name}</h3>
                               <p className="text-gray-600">
-                                Размер: {item.size} | Цвет: {item.color}
+                                Размер: {item.variant.size} | Цвет: {item.variant.color}
                               </p>
                             </div>
-                            <p className="font-bold">{item.price} ₽</p>
+                            <p className="font-bold">{item.variant.priceCny} ₽</p>
                           </div>
                           <div className="mt-4 flex items-center justify-between">
                             <div className="flex items-center">
@@ -69,9 +70,7 @@ const CartPage = observer(() => {
                                 className="w-8 h-8 flex items-center justify-center border rounded-l-md hover:bg-gray-100"
                                 onClick={() =>
                                   cartStore.updateQuantity(
-                                    item.id,
-                                    item.size,
-                                    item.color,
+                                    item.variantId,
                                     Math.max(1, item.quantity - 1)
                                   )
                                 }
@@ -84,9 +83,7 @@ const CartPage = observer(() => {
                                 value={item.quantity}
                                 onChange={(e) =>
                                   cartStore.updateQuantity(
-                                    item.id,
-                                    item.size,
-                                    item.color,
+                                    item.variantId,
                                     Math.max(1, parseInt(e.target.value) || 1)
                                   )
                                 }
@@ -96,9 +93,7 @@ const CartPage = observer(() => {
                                 className="w-8 h-8 flex items-center justify-center border rounded-r-md hover:bg-gray-100"
                                 onClick={() =>
                                   cartStore.updateQuantity(
-                                    item.id,
-                                    item.size,
-                                    item.color,
+                                    item.variantId,
                                     item.quantity + 1
                                   )
                                 }
@@ -109,7 +104,7 @@ const CartPage = observer(() => {
                             <button
                               className="text-red-600 hover:text-red-700"
                               onClick={() =>
-                                cartStore.removeItem(item.id, item.size, item.color)
+                                cartStore.removeItem(item.id)
                               }
                             >
                               Удалить

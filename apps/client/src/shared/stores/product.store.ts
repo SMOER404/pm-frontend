@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx'
-import { ProductsApi, Configuration, ProductResponseDto } from '@poizon/api'
+import { ProductsApi, Configuration } from '@poizon/api'
+import type { ProductResponseDto } from '@poizon/api'
 
 export class ProductStore {
   products: ProductResponseDto[] = []
