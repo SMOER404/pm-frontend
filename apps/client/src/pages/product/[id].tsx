@@ -3,12 +3,14 @@ import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Snackbar, Alert } from '@mui/material'
 import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'
-import { ProductsApi, Configuration, ProductResponseDto, ProductVariantDto } from '@poizon/api'
+import { Snackbar } from '@/shared/ui/Snackbar/Snackbar'
+import { ProductsApi, Configuration } from '@poizon/api'
+import type { ProductResponseDto, ProductVariantDto } from '@poizon/api'
 import { cartStore } from '@/shared/stores/cart.store'
 import { useRouter } from 'next/router'
+import { log } from 'console'
 
 interface ProductPageProps {
   product: ProductResponseDto
@@ -31,20 +33,32 @@ const ProductPage = ({ product }: ProductPageProps) => {
     severity: 'success'
   })
 
-  const sizes = Array.from(new Set(product.variants.map(v => v.size)))
-  const colors = Array.from(new Set(product.variants.map(v => v.color)))
+  // Получаем все доступные размеры из sizesAndPrices
+  const sizes = Array.from(new Set(product.variants.flatMap((v: ProductVariantDto) => 
+    Object.keys(v.sizesAndPrices as Record<string, number>)
+  )))
+  const colors = Array.from(new Set(product.variants.map((v: ProductVariantDto) => v.color)))
 
   // Обновляем выбранный вариант при изменении размера или цвета
   useEffect(() => {
     if (selectedSize && selectedColor) {
-      const variant = product.variants.find(
-        v => v.size === selectedSize && v.color === selectedColor
-      )
+      const variant = product.variants.find(v => {
+        const sizesAndPrices = v.sizesAndPrices as Record<string, number>;
+        return Object.keys(sizesAndPrices).includes(selectedSize) && v.color === selectedColor;
+      })
       setSelectedVariant(variant || null)
     } else {
       setSelectedVariant(null)
     }
   }, [selectedSize, selectedColor, product.variants])
+
+  // Получаем цену для выбранного варианта
+  const getSelectedPrice = () => {
+    if (!selectedVariant || !selectedSize) return null;
+    
+    const sizesAndPrices = selectedVariant.sizesAndPrices as Record<string, number>;
+    return sizesAndPrices[selectedSize] || null;
+  }
 
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) {
@@ -78,6 +92,10 @@ const ProductPage = ({ product }: ProductPageProps) => {
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }))
   }
+
+  const selectedPrice = getSelectedPrice();
+  console.log('selectedPrice', selectedPrice)
+  console.log('product', product)
 
   return (
     <Layout>
@@ -141,30 +159,8 @@ const ProductPage = ({ product }: ProductPageProps) => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-2xl font-bold text-indigo-600"
             >
-              {selectedVariant ? `${selectedVariant.priceCny} ¥` : 'Выберите размер и цвет'}
+              {selectedPrice ? `${selectedPrice} ¥` : 'Выберите размер и цвет'}
             </motion.div>
-
-            {/* Выбор размера */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">Размер</h3>
-              <div className="grid grid-cols-6 gap-2">
-                {sizes.map(size => (
-                  <motion.button
-                    key={size}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`p-2 border rounded-lg ${
-                      selectedSize === size
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
-                        : 'border-gray-200 hover:border-indigo-600'
-                    }`}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    {size}
-                  </motion.button>
-                ))}
-              </div>
-            </div>
 
             {/* Выбор цвета */}
             <div className="space-y-2">
@@ -183,6 +179,27 @@ const ProductPage = ({ product }: ProductPageProps) => {
                     onClick={() => setSelectedColor(color)}
                   >
                     {color}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+            {/* Выбор размера */}
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium">Размер</h3>
+              <div className="grid grid-cols-6 gap-2">
+                {sizes.map(size => (
+                  <motion.button
+                    key={size}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`p-2 border rounded-lg ${
+                      selectedSize === size
+                        ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
+                        : 'border-gray-200 hover:border-indigo-600'
+                    }`}
+                    onClick={() => setSelectedSize(size)}
+                  >
+                    {size}
                   </motion.button>
                 ))}
               </div>
@@ -219,21 +236,12 @@ const ProductPage = ({ product }: ProductPageProps) => {
         </div>
       </div>
 
-      {/* Уведомление */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={6000}
+        message={snackbar.message}
+        severity={snackbar.severity}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity}
-          sx={{ width: '100%' }}
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+      />
     </Layout>
   )
 }
@@ -247,9 +255,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   })
 
+  if (!params?.id || typeof params.id !== 'string') {
+    return {
+      notFound: true
+    }
+  }
+
   try {
     const productsApi = new ProductsApi(config)
-    const response = await productsApi.getProductById(params?.id as string)
+    const response = await productsApi.getProductById(params.id)
+
+    if (!response.data) {
+      return {
+        notFound: true
+      }
+    }
 
     return {
       props: {
@@ -257,7 +277,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       }
     }
   } catch (error) {
-    console.error('Error fetching product:', error)
+    console.error('Ошибка при загрузке продукта:', error)
     return {
       notFound: true
     }
