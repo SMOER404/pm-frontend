@@ -61,14 +61,3 @@
     line-height: 1.75rem;
     letter-spacing: 0rem;
 }
-
-.cardLink {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.2s ease-in-out;
-}
-
-.cardLink:hover {
-    transform: translateY(-5px);
-}
