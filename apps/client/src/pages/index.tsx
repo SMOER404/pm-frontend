@@ -4,15 +4,16 @@ import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'
 import { productStore } from '@/shared/stores/product.store'
 import React from 'react'
-import { ProductsApi, Configuration, ProductResponseDto } from '@poizon/api'
-import { FeaturedProducts } from '@/features/featured-products/FeaturedProducts'
+import { ProductsApi, CategoriesApi, Configuration, ProductResponseDto, CategoryDto } from '@poizon/api'
+import { CategoryProducts } from '@/features/category-products/CategoryProducts'
 import { ShopFeatures } from '@/features/shop-features/ShopFeatures'
 
 interface HomePageProps {
   initialProducts: ProductResponseDto[]
+  categories: CategoryDto[]
 }
 
-const HomePage = observer(({ initialProducts }: HomePageProps) => {
+const HomePage = observer(({ initialProducts, categories }: HomePageProps) => {
   React.useEffect(() => {
     productStore.setProducts(initialProducts)
   }, [initialProducts])
@@ -25,7 +26,7 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
         url="/"
       />
       
-      <FeaturedProducts products={initialProducts} />
+      <CategoryProducts categories={categories} products={initialProducts} />
       <ShopFeatures />
     </Layout>
   )
@@ -41,18 +42,25 @@ export const getServerSideProps: GetServerSideProps = async () => {
       }
     })
     const productsApi = new ProductsApi(config)
-    const productsResponse = await productsApi.getAllProducts()
+    const categoriesApi = new CategoriesApi(config)
+    
+    const [productsResponse, categoriesResponse] = await Promise.all([
+      productsApi.getAllProducts(),
+      categoriesApi.getAllCategories()
+    ])
 
     return {
       props: {
         initialProducts: productsResponse.data,
+        categories: categoriesResponse.data,
       },
     }
   } catch (error) {
-    console.error('Ошибка при загрузке популярных товаров:', error)
+    console.error('Ошибка при загрузке данных:', error)
     return {
       props: {
         initialProducts: [],
+        categories: [],
       },
     }
   }

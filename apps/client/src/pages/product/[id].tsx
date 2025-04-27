@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 import Layout from '@/components/layout/Layout'
 import { SeoHead } from '@/shared/ui/SeoHead'
 import { Snackbar } from '@/shared/ui/Snackbar/Snackbar'
-import { ProductsApi, Configuration } from '@poizon/api'
-import type { ProductResponseDto, ProductVariantDto } from '@poizon/api'
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs'
+import { ProductsApi, Configuration, CategoriesApi } from '@poizon/api'
+import type { ProductResponseDto, ProductVariantDto, CategoryDto } from '@poizon/api'
 import { cartStore } from '@/shared/stores/cart.store'
 import { useRouter } from 'next/router'
 import { ProductGallery } from '@/features/product-gallery/ProductGallery'
@@ -15,9 +16,10 @@ import { motion } from 'framer-motion'
 
 interface ProductPageProps {
   product: ProductResponseDto
+  category: CategoryDto
 }
 
-const ProductPage = ({ product }: ProductPageProps) => {
+const ProductPage = ({ product, category }: ProductPageProps) => {
   const router = useRouter()
   const { id } = router.query
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDto | null>(null)
@@ -33,12 +35,7 @@ const ProductPage = ({ product }: ProductPageProps) => {
     message: '',
     severity: 'success'
   })
-
-  // Получаем все доступные размеры из sizesAndPrices
-  const sizes = Array.from(new Set(product.variants.flatMap((v: ProductVariantDto) => 
-    Object.keys(v.sizesAndPrices as Record<string, number>)
-  )))
-  const colors = Array.from(new Set(product.variants.map((v: ProductVariantDto) => v.color)))
+  console.log(product	)
 
   // Обновляем выбранный вариант при изменении размера или цвета
   useEffect(() => {
@@ -86,6 +83,12 @@ const ProductPage = ({ product }: ProductPageProps) => {
     setSnackbar(prev => ({ ...prev, open: false }))
   }
 
+  const breadcrumbItems = [
+    { label: 'Каталог', href: '/catalog' },
+    { label: category.name, href: `/catalog/${category.id}` },
+    { label: product.name }
+  ]
+
   return (
     <Layout>
       <SeoHead
@@ -95,6 +98,8 @@ const ProductPage = ({ product }: ProductPageProps) => {
       />
 
       <div className="container mx-auto px-4 py-8">
+        <Breadcrumbs items={breadcrumbItems} />
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ProductGallery product={product} />
           
@@ -142,15 +147,33 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
   const configuration = new Configuration({ basePath: baseUrl })
   const productsApi = new ProductsApi(configuration)
+  const categoriesApi = new CategoriesApi(configuration)
 
   try {
-    const response = await productsApi.getProductById(params?.id as string)
+    const [productResponse, categoriesResponse] = await Promise.all([
+      productsApi.getProductById(params?.id as string),
+      categoriesApi.getAllCategories()
+    ])
+
+    const product = productResponse.data
+    const category = categoriesResponse.data.find(
+      (category: CategoryDto) => category.id === product.category
+    )
+
+    if (!category) {
+      return {
+        notFound: true
+      }
+    }
+
     return {
       props: {
-        product: response.data
+        product,
+        category
       }
     }
   } catch (error) {
+    console.error('Error fetching product:', error)
     return {
       notFound: true
     }

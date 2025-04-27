@@ -1,6 +1,7 @@
-import React from "react";
-import { ProductResponseDto, VariantDto } from '@poizon/api'
+import React, { useEffect, useRef, useState } from "react";
+import { ProductResponseDto, ProductVariantDto } from '@poizon/api'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import styles from './ProductCard.module.css'
 
 interface ProductCardProps {
@@ -9,19 +10,81 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onClickLike }) => {
-    const variant = product.variants?.[0] as VariantDto;
-    const price = variant?.priceCny || 0;
+    const [isVisible, setIsVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const imageRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            {
+                rootMargin: '50px',
+                threshold: 0.1
+            }
+        );
+
+        if (imageRef.current) {
+            observer.observe(imageRef.current);
+        }
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    // Находим вариант с самой низкой ценой на самый маленький размер
+    const getLowestPriceVariant = () => {
+        let lowestPrice = Infinity;
+        let lowestPriceVariant: ProductVariantDto | null = null;
+
+        if (!product.variants) return null;
+
+        for (const variant of product.variants) {
+            const sizesAndPrices = variant.sizesAndPrices as Record<string, number>;
+            const sizes = Object.keys(sizesAndPrices).sort((a, b) => 
+                parseFloat(a) - parseFloat(b)
+            );
+            
+            if (sizes.length > 0) {
+                const smallestSize = sizes[0];
+                const price = sizesAndPrices[smallestSize];
+                if (price < lowestPrice) {
+                    lowestPrice = price;
+                    lowestPriceVariant = variant;
+                }
+            }
+        }
+
+        return lowestPriceVariant;
+    };
+
+    const lowestPriceVariant = getLowestPriceVariant();
+    const sizesAndPrices = lowestPriceVariant?.sizesAndPrices as Record<string, number>;
+    const sizes = Object.keys(sizesAndPrices || {}).sort((a, b) => 
+        parseFloat(a) - parseFloat(b)
+    );
+    const smallestSize = sizes[0];
+    const price = sizesAndPrices?.[smallestSize] || 0;
 
     return (
         <div>
             <div className={styles.image}>
-                <motion.img 
-                    src={`https://dummyimage.com/307x161/CCCCCC/000000&text=${encodeURIComponent(product.name)}`}
+                <div className={`${styles.placeholder} ${isLoading ? styles.visible : styles.hidden}`}>
+                    {product.name}
+                </div>
+                <Image 
+                    src={`https://dummyimage.com/307x161/000000/FFFFFF&text=${product.name}`}
                     alt={product.name} 
                     width={307} 
                     height={161}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
+                    loading="lazy"
+                    className={`${styles.productImage} ${isLoading ? styles.hidden : styles.visible}`}
+                    onLoadingComplete={() => setIsLoading(false)}
                 />
             </div>
             <div className="price">
