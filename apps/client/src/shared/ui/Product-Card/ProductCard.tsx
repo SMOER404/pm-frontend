@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { ProductResponseDto, ProductVariantDto } from '@poizon/api'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
 import styles from './ProductCard.module.css'
 
 interface ProductCardProps {
@@ -73,46 +72,44 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClickLike }) => {
     const price = sizesAndPrices?.[smallestSize] || 0;
 
     return (
-        <Link href={`/product/${product.id}`} className={styles.cardLink}>
-            <div className={styles.card}>
-                <div className={styles.image}>
-                    <div className={`${styles.placeholder} ${isLoading ? styles.visible : styles.hidden}`}>
-                        {product.name}
-                    </div>
-                    <Image 
-                        src={`https://dummyimage.com/307x161/000000/FFFFFF&text=${encodeURIComponent(product.name)}`}
-                        alt={product.name} 
-                        width={307} 
-                        height={161}
-                        loading="lazy"
-                        className={`${styles.productImage} ${isLoading ? styles.hidden : styles.visible}`}
-                        onLoadingComplete={() => setIsLoading(false)}
-                    />
-                </div>
-                <div className="price">
-                    <div className={styles.priceMain}>
-                        {price.toLocaleString()} ¥
-                    </div>
-                    <div className="price-split">
-                        {price.toLocaleString()} ¥ В сплит
-                    </div>
-                </div>
-                <motion.div 
-                    className={styles.title}
-                    whileHover={{ color: "#4F46E5" }}
-                >
+        <div>
+            <div className={styles.image}>
+                <div className={`${styles.placeholder} ${isLoading ? styles.visible : styles.hidden}`}>
                     {product.name}
-                </motion.div>
-                <div className="delivery-info">
-                    <div className="delivery-simple">
-                        25 дней
-                    </div>
-                    <div className="delivery-fast">
-                        9 дней
-                    </div>
+                </div>
+                <Image 
+                    src={`https://dummyimage.com/307x161/000000/FFFFFF&text=${product.name}`}
+                    alt={product.name} 
+                    width={307} 
+                    height={161}
+                    loading="lazy"
+                    className={`${styles.productImage} ${isLoading ? styles.hidden : styles.visible}`}
+                    onLoadingComplete={() => setIsLoading(false)}
+                />
+            </div>
+            <div className="price">
+                <div className={styles.priceMain}>
+                    {price.toLocaleString()} ¥
+                </div>
+                <div className="price-split">
+                    {price.toLocaleString()} ¥ В сплит
                 </div>
             </div>
-        </Link>
+            <motion.div 
+                className={styles.title}
+                whileHover={{ color: "#4F46E5" }}
+            >
+                {product.name}
+            </motion.div>
+            <div className="delivery-info">
+                <div className="delivery-simple">
+                    25 дней
+                </div>
+                <div className="delivery-fast">
+                    9 дней
+                </div>
+            </div>
+        </div>
     );
 };
 
