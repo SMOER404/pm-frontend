@@ -1,3 +1,5 @@
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +10,16 @@
   }
   
   body {
-    @apply bg-white text-gray-900;
+    @apply bg-white text-gray-900 font-sans;
+  }
+
+  main {
+    @apply pt-[70px];
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+    letter-spacing: 0.025em;
   }
 }
 

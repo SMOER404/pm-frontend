@@ -7,7 +7,7 @@ const CartPage = observer(() => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Корзина</h1>
+        <h1 className="text-3xl font-medium mb-8">Корзина</h1>
 
         {cartStore.items.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
@@ -25,7 +25,7 @@ const CartPage = observer(() => {
               />
             </svg>
             <h2 className="text-xl font-medium mb-2">Корзина пуста</h2>
-            <p className="text-gray-600 mb-6">
+            <p className="mb-6">
               Добавьте товары в корзину, чтобы оформить заказ
             </p>
             <a
@@ -58,11 +58,11 @@ const CartPage = observer(() => {
                           <div className="flex justify-between">
                             <div>
                               <h3 className="font-medium">{item.variant.product.name}</h3>
-                              <p className="text-gray-600">
+                              <p>
                                 Размер: {item.variant.size} | Цвет: {item.variant.color}
                               </p>
                             </div>
-                            <p className="font-bold">{item.variant.priceCny} ₽</p>
+                            <p className="font-medium">{item.variant.priceCny} ₽</p>
                           </div>
                           <div className="mt-4 flex items-center justify-between">
                             <div className="flex items-center">
@@ -121,18 +121,18 @@ const CartPage = observer(() => {
             {/* Order Summary */}
             <div className="w-full lg:w-80">
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold mb-6">Итого</h2>
+                <h2 className="text-xl font-medium mb-6">Итого</h2>
                 <div className="space-y-4">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Товары ({cartStore.totalItems})</span>
+                    <span>Товары ({cartStore.totalItems})</span>
                     <span>{cartStore.totalPrice} ₽</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Доставка</span>
+                    <span>Доставка</span>
                     <span>Бесплатно</span>
                   </div>
                   <div className="border-t pt-4">
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-medium">
                       <span>Итого</span>
                       <span>{cartStore.totalPrice} ₽</span>
                     </div>

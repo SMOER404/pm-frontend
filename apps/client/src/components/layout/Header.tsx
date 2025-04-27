@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { authStore } from '@/shared/stores/auth.store'
 import { cartStore } from '@/shared/stores/cart.store'
+import Image from 'next/image'
 
 // Определяем интерфейс для пользователя
 interface User {
@@ -23,11 +24,17 @@ const Header = observer(() => {
   // Не рендерим компоненты, зависящие от состояния аутентификации, пока не загрузимся на клиенте
   if (!mounted) {
     return (
-      <header className="bg-white shadow-md">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="text-2xl font-bold text-primary-600">
-              POIZON MARKET
+      <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 h-[70px]">
+        <div className="container mx-auto px-4 h-full">
+          <div className="flex items-center justify-between h-full">
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/static/images/logo-black.svg"
+                alt="POIZON MARKET"
+                width={180}
+                height={48}
+                priority
+              />
             </Link>
             <nav className="hidden md:flex space-x-8">
               <Link href="/catalog" className="text-gray-600 hover:text-primary-600">
@@ -47,11 +54,17 @@ const Header = observer(() => {
   }
 
   return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-primary-600">
-            POIZON MARKET
+    <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 h-[70px]">
+      <div className="container mx-auto px-4 h-full">
+        <div className="flex items-center justify-between h-full">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/static/images/logo-black.svg"
+              alt="POIZON MARKET"
+              width={180}
+              height={48}
+              priority
+            />
           </Link>
 
           <nav className="hidden md:flex space-x-8">

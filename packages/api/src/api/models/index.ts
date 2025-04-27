@@ -20,6 +20,7 @@ export * from './product-variant-dto';
 export * from './register-dto';
 export * from './review-dto';
 export * from './review-user-dto';
+export * from './size-and-price-dto';
 export * from './tag-dto';
 export * from './user-content-dto';
 export * from './user-content-user-dto';

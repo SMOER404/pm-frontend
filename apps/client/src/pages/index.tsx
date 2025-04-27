@@ -26,49 +26,10 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
         description="Широкий выбор одежды от лучших брендов по доступным ценам. Бесплатная доставка по всей России."
         url="/"
       />
-
-      {/* Categories Section */}
-      {/* <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8">Категории</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <a
-              href="/catalog/men"
-              className="relative h-80 rounded-lg overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-2xl font-bold text-white">Мужская одежда</h3>
-              </div>
-            </a>
-
-            <a
-              href="/catalog/women"
-              className="relative h-80 rounded-lg overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-2xl font-bold text-white">Женская одежда</h3>
-              </div>
-            </a>
-
-            <a
-              href="/catalog/accessories"
-              className="relative h-80 rounded-lg overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-2xl font-bold text-white">Аксессуары</h3>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section> */}
-
       {/* Featured Products Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8">Популярные товары</h2>
+          <h2 className="text-3xl font-medium mb-8">Популярные товары</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {initialProducts.length && initialProducts.slice(0, 8).map((product) => (
               <a
@@ -103,7 +64,7 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Гарантия качества</h3>
+              <h3 className="text-xl font-medium mb-2">Гарантия качества</h3>
               <p className="text-gray-600">
                 Все товары проходят тщательную проверку перед отправкой
               </p>
@@ -125,7 +86,7 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Быстрая доставка</h3>
+              <h3 className="text-xl font-medium mb-2">Быстрая доставка</h3>
               <p className="text-gray-600">
                 Доставляем заказы по всей России в кратчайшие сроки
               </p>
@@ -147,7 +108,7 @@ const HomePage = observer(({ initialProducts }: HomePageProps) => {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Удобная оплата</h3>
+              <h3 className="text-xl font-medium mb-2">Удобная оплата</h3>
               <p className="text-gray-600">
                 Принимаем все популярные способы оплаты
               </p>

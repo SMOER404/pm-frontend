@@ -148,7 +148,7 @@ const ProductPage = ({ product }: ProductPageProps) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-3xl font-bold"
+              className="text-3xl font-medium"
             >
               {product.name}
             </motion.h1>
@@ -157,7 +157,7 @@ const ProductPage = ({ product }: ProductPageProps) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-2xl font-bold text-indigo-600"
+              className="text-2xl font-medium text-indigo-600"
             >
               {selectedPrice ? `${selectedPrice} ¥` : 'Выберите размер и цвет'}
             </motion.div>
@@ -229,7 +229,7 @@ const ProductPage = ({ product }: ProductPageProps) => {
                 className="prose prose-indigo"
               >
                 <h3 className="text-lg font-medium">Описание</h3>
-                <p>{product.description}</p>
+                <p className="mb-4">{product.description}</p>
               </motion.div>
             )}
           </div>

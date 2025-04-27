@@ -30,6 +30,7 @@ models/product-variant-dto.ts
 models/register-dto.ts
 models/review-dto.ts
 models/review-user-dto.ts
+models/size-and-price-dto.ts
 models/tag-dto.ts
 models/user-content-dto.ts
 models/user-content-user-dto.ts

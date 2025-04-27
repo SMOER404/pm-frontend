@@ -1,24 +1,27 @@
 import React from 'react'
-import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import styles from './Button.module.css'
 
-const StyledButton = styled(MuiButton)(({ theme }) => ({
-  borderRadius: 8,
-  textTransform: 'none',
-  fontWeight: 600,
-  padding: '10px 24px',
-  '&.MuiButton-contained': {
-    boxShadow: 'none',
-    '&:hover': {
-      boxShadow: 'none',
-    },
-  },
-}))
-
-export interface ButtonProps extends Omit<MuiButtonProps, 'css'> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'contained' | 'outlined' | 'text'
+  color?: 'primary' | 'secondary'
+  size?: 'small' | 'medium' | 'large'
   children: React.ReactNode
 }
 
-export const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
-  return <StyledButton {...props}>{children}</StyledButton>
+export const Button: React.FC<ButtonProps> = ({ 
+  children, 
+  variant = 'contained',
+  color = 'primary',
+  size = 'medium',
+  className,
+  ...props 
+}) => {
+  return (
+    <button 
+      className={`${styles.button} ${styles[variant]} ${styles[color]} ${styles[size]} ${className || ''}`}
+      {...props}
+    >
+      {children}
+    </button>
+  )
 } 

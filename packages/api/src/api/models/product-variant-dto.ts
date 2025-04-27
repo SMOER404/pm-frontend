@@ -21,79 +21,40 @@
  */
 export interface ProductVariantDto {
     /**
-     * ID варианта товара
+     * 
      * @type {string}
      * @memberof ProductVariantDto
      */
     'id': string;
     /**
-     * ID продукта
-     * @type {string}
-     * @memberof ProductVariantDto
-     */
-    'productId': string;
-    /**
-     * Размер товара
-     * @type {string}
-     * @memberof ProductVariantDto
-     */
-    'size': string;
-    /**
-     * Цвет товара
+     * 
      * @type {string}
      * @memberof ProductVariantDto
      */
     'color': string;
     /**
-     * Артикул товара
-     * @type {string}
-     * @memberof ProductVariantDto
-     */
-    'sku'?: string;
-    /**
-     * URL изображений варианта товара
+     * 
      * @type {Array<string>}
      * @memberof ProductVariantDto
      */
     'imageUrls': Array<string>;
     /**
-     * Цена в юанях
-     * @type {number}
+     * 
+     * @type {object}
      * @memberof ProductVariantDto
      */
-    'priceCny': number;
+    'sizesAndPrices': object;
     /**
-     * Цена в рублях
-     * @type {number}
-     * @memberof ProductVariantDto
-     */
-    'priceRub'?: number;
-    /**
-     * Статус наличия товара
-     * @type {string}
-     * @memberof ProductVariantDto
-     */
-    'stockStatus': ProductVariantDtoStockStatusEnum;
-    /**
-     * Дата создания
+     * 
      * @type {string}
      * @memberof ProductVariantDto
      */
     'createdAt': string;
     /**
-     * Дата обновления
+     * 
      * @type {string}
      * @memberof ProductVariantDto
      */
     'updatedAt': string;
 }
-
-export const ProductVariantDtoStockStatusEnum = {
-    InStock: 'IN_STOCK',
-    OutOfStock: 'OUT_OF_STOCK',
-    LowStock: 'LOW_STOCK'
-} as const;
-
-export type ProductVariantDtoStockStatusEnum = typeof ProductVariantDtoStockStatusEnum[keyof typeof ProductVariantDtoStockStatusEnum];
-
 

@@ -66,7 +66,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
         />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Требуется авторизация</h1>
+            <h1 className="text-2xl font-medium mb-4">Требуется авторизация</h1>
             <p className="mb-4">Для доступа к профилю необходимо войти в систему</p>
             <button
               onClick={() => router.push('/login')}
@@ -91,7 +91,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Профиль</h1>
+              <h1 className="text-2xl font-medium">Профиль</h1>
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
@@ -116,7 +116,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-medium mb-2">
                   Имя
                 </label>
                 <input
@@ -130,7 +130,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-medium mb-2">
                   Email
                 </label>
                 <input
@@ -146,7 +146,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
               {isEditing && (
                 <>
                   <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
                       Текущий пароль
                     </label>
                     <input
@@ -159,7 +159,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
                   </div>
 
                   <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
                       Новый пароль
                     </label>
                     <input
@@ -172,7 +172,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
                   </div>
 
                   <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 text-sm font-medium mb-2">
                       Подтверждение пароля
                     </label>
                     <input
@@ -205,7 +205,7 @@ const ProfilePage = observer(({ initialUser }: ProfilePageProps) => {
 
           {/* История заказов */}
           <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold mb-4">История заказов</h2>
+            <h2 className="text-xl font-medium mb-4">История заказов</h2>
             <p className="text-gray-600">У вас пока нет заказов</p>
           </div>
         </div>

@@ -1,40 +1,37 @@
 import React from 'react'
-import { TextField, TextFieldProps } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import styles from './Input.module.css'
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  '& .MuiOutlinedInput-root': {
-    borderRadius: 8,
-    '& fieldset': {
-      borderColor: theme.palette.grey[200],
-    },
-    '&:hover fieldset': {
-      borderColor: theme.palette.grey[300],
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: theme.palette.primary.main,
-    },
-  },
-  '& .MuiInputLabel-root': {
-    '&.Mui-focused': {
-      color: theme.palette.primary.main,
-    },
-  },
-}))
-
-export interface InputProps extends Omit<TextFieldProps, 'css'> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string
   error?: boolean
   helperText?: string
+  fullWidth?: boolean
 }
 
-export const Input: React.FC<InputProps> = ({ error, helperText, ...props }) => {
+export const Input: React.FC<InputProps> = ({ 
+  label,
+  error,
+  helperText,
+  fullWidth = true,
+  className,
+  ...props 
+}) => {
   return (
-    <StyledTextField
-      variant="outlined"
-      fullWidth
-      error={error}
-      helperText={helperText}
-      {...props}
-    />
+    <div className={`${styles.inputWrapper} ${fullWidth ? styles.fullWidth : ''}`}>
+      {label && (
+        <label className={styles.label}>
+          {label}
+        </label>
+      )}
+      <input 
+        className={`${styles.input} ${error ? styles.error : ''} ${className || ''}`}
+        {...props}
+      />
+      {helperText && (
+        <span className={`${styles.helperText} ${error ? styles.error : ''}`}>
+          {helperText}
+        </span>
+      )}
+    </div>
   )
 } 

@@ -21,11 +21,17 @@
  */
 export interface AddToCartDto {
     /**
-     * Артикул (SKU) варианта товара
+     * ID варианта товара
      * @type {string}
      * @memberof AddToCartDto
      */
     'productVariantId': string;
+    /**
+     * Размер товара
+     * @type {string}
+     * @memberof AddToCartDto
+     */
+    'size': string;
     /**
      * Количество товара
      * @type {number}
