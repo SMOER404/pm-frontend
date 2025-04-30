@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { cartApi, CartItemResponseDto, AddToCartDto } from '@poizon/api'
+import { cartApi, CartItemResponseDto, AddToCartDto, SizeAndPriceDto } from '@poizon-market/api'
 
 export class CartStore {
   items: CartItemResponseDto[] = []
@@ -10,7 +10,7 @@ export class CartStore {
     makeAutoObservable(this)
   }
 
-  async addItem(variantId: string, quantity: number = 1) {
+  async addItem(variantId: string, size: string, quantity: number = 1) {
     try {
       runInAction(() => {
         this.isLoading = true
@@ -19,10 +19,11 @@ export class CartStore {
 
       const addToCartDto: AddToCartDto = {
         productVariantId: variantId,
+        size,
         quantity
       }
 
-      const response = await cartApi.addToCart(addToCartDto)
+      await cartApi.addToCart(addToCartDto)
       const cartResponse = await cartApi.findAll()
       
       runInAction(() => {
@@ -90,7 +91,7 @@ export class CartStore {
     }
   }
 
-  async updateQuantity(variantId: string, quantity: number) {
+  async updateQuantity(variantId: string, size: string, quantity: number) {
     try {
       runInAction(() => {
         this.isLoading = true
@@ -99,13 +100,15 @@ export class CartStore {
 
       const addToCartDto: AddToCartDto = {
         productVariantId: variantId,
+        size,
         quantity
       }
 
-      const response = await cartApi.addToCart(addToCartDto)
+      await cartApi.addToCart(addToCartDto)
+      const cartResponse = await cartApi.findAll()
       
       runInAction(() => {
-        this.items = [response.data]
+        this.items = cartResponse.data
       })
       return true
     } catch (error) {
@@ -133,8 +136,9 @@ export class CartStore {
 
   get totalPrice() {
     return this.items.reduce((sum, item) => {
-      const price = item.variant?.priceCny || 0
-      return sum + price * item.quantity
+      const sizesAndPrices = item.variant?.sizesAndPrices as SizeAndPriceDto[]
+      const priceItem = sizesAndPrices?.find(p => p.size === (item as any).size)
+      return sum + (priceItem?.priceCny || 0) * item.quantity
     }, 0)
   }
 }

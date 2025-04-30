@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { Spinner } from '@/shared/ui/Spinner'
 import { Fallback } from '@/shared/ui/Fallback'

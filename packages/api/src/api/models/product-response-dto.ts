@@ -15,6 +15,12 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import type { BrandDto } from './brand-dto';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CategoryDto } from './category-dto';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { ProductVariantDto } from './product-variant-dto';
 
 /**
@@ -24,58 +30,52 @@ import type { ProductVariantDto } from './product-variant-dto';
  */
 export interface ProductResponseDto {
     /**
-     * Название товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'name': string;
-    /**
-     * ID бренда товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'brand': string;
-    /**
-     * ID категории товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'category': string;
-    /**
-     * Описание товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'description'?: string;
-    /**
-     * Медиафайлы товара (изображения, видео)
-     * @type {object}
-     * @memberof ProductResponseDto
-     */
-    'media': object;
-    /**
-     * Уникальный идентификатор товара
+     * 
      * @type {string}
      * @memberof ProductResponseDto
      */
     'id': string;
     /**
-     * Дата создания товара
+     * 
+     * @type {string}
+     * @memberof ProductResponseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof ProductResponseDto
+     */
+    'media': object;
+    /**
+     * 
+     * @type {CategoryDto}
+     * @memberof ProductResponseDto
+     */
+    'category': CategoryDto;
+    /**
+     * 
+     * @type {BrandDto}
+     * @memberof ProductResponseDto
+     */
+    'brand': BrandDto;
+    /**
+     * 
+     * @type {Array<ProductVariantDto>}
+     * @memberof ProductResponseDto
+     */
+    'variants': Array<ProductVariantDto>;
+    /**
+     * 
      * @type {string}
      * @memberof ProductResponseDto
      */
     'createdAt': string;
     /**
-     * Дата последнего обновления товара
+     * 
      * @type {string}
      * @memberof ProductResponseDto
      */
     'updatedAt': string;
-    /**
-     * Варианты товара
-     * @type {Array<ProductVariantDto>}
-     * @memberof ProductResponseDto
-     */
-    'variants': Array<ProductVariantDto>;
 }
 

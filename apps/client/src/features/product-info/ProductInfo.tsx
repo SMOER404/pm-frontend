@@ -1,5 +1,6 @@
-import { ProductResponseDto, ProductVariantDto } from '@poizon/api'
+import { ProductResponseDto, ProductVariantDto } from '@poizon-market/api'
 import { motion } from 'framer-motion'
+import { formatPrice } from '@/shared/utils/format-price'
 
 interface ProductInfoProps {
   product: ProductResponseDto
@@ -20,22 +21,13 @@ export const ProductInfo = ({ product, selectedVariant, selectedSize }: ProductI
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">{product.name}</h1>
-        <p className="text-gray-500 mt-2">{product.brand}</p>
+        <p className="text-gray-500 mt-2">{product.brand.name}</p>
       </div>
 
       <div className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold">Описание</h2>
-          <p className="mt-2 text-gray-600">{product.description}</p>
-        </div>
-
-        <div>
           <h2 className="text-xl font-semibold">Характеристики</h2>
           <ul className="mt-2 space-y-2">
-            <li className="flex justify-between">
-              <span className="text-gray-600">Категория</span>
-              <span className="font-medium">{product.category}</span>
-            </li>
             {selectedVariant && (
               <li className="flex justify-between">
                 <span className="text-gray-600">Цвет</span>
@@ -57,7 +49,7 @@ export const ProductInfo = ({ product, selectedVariant, selectedSize }: ProductI
             animate={{ opacity: 1, y: 0 }}
             className="text-2xl font-bold text-indigo-600"
           >
-            {selectedPrice} ¥
+            {formatPrice(selectedPrice)}
           </motion.div>
         )}
       </div>

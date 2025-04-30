@@ -1,6 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { observer } from 'mobx-react-lite'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { authStore } from '@/shared/stores/auth.store'
 import { cartStore } from '@/shared/stores/cart.store'
@@ -14,7 +16,7 @@ interface User {
 }
 
 const Header = observer(() => {
-  const router = useRouter()
+  const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const Header = observer(() => {
                 alt="POIZON MARKET"
                 width={180}
                 height={48}
-                priority
+                fetchPriority="high"
               />
             </Link>
             <nav className="hidden md:flex space-x-8">
@@ -63,7 +65,7 @@ const Header = observer(() => {
               alt="POIZON MARKET"
               width={180}
               height={48}
-              priority
+              fetchPriority="high"
             />
           </Link>
 

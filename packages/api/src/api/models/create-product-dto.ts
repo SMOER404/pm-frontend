@@ -13,6 +13,12 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BrandDto } from './brand-dto';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CategoryDto } from './category-dto';
 
 /**
  * 
@@ -27,17 +33,17 @@ export interface CreateProductDto {
      */
     'name': string;
     /**
-     * ID бренда товара
-     * @type {string}
+     * Бренд товара
+     * @type {BrandDto}
      * @memberof CreateProductDto
      */
-    'brand': string;
+    'brand': BrandDto;
     /**
-     * ID категории товара
-     * @type {string}
+     * Категория товара
+     * @type {CategoryDto}
      * @memberof CreateProductDto
      */
-    'category': string;
+    'category': CategoryDto;
     /**
      * Описание товара
      * @type {string}

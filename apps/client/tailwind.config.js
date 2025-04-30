@@ -7,7 +7,6 @@ module.exports = {
     './src/features/**/*.{js,ts,jsx,tsx,mdx}',
     './src/shared/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  important: '#__next',
   theme: {
     extend: {
       colors: {

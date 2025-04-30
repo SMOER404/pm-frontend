@@ -1,116 +1,71 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ProductResponseDto, ProductVariantDto } from '@poizon/api'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import styles from './ProductCard.module.css'
+'use client'
 
-interface ProductCardProps {
-    product: ProductResponseDto;
-    onClickLike: () => void;
+import { observer } from 'mobx-react-lite';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ProductBasicDto } from '@poizon-market/api';
+import { formatPrice } from '@/shared/utils/format-price';
+import styles from './ProductCard.module.css';
+import { useRootStore } from '@/shared/hooks/use-root-store';
+
+interface ProductMedia {
+  images: string[];
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onClickLike }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const imageRef = useRef<HTMLDivElement>(null);
+interface ProductCardProps {
+  product: ProductBasicDto;
+  showAddToCart?: boolean;
+}
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
-            },
-            {
-                rootMargin: '50px',
-                threshold: 0.1
-            }
-        );
+// Клиентский компонент для кнопки добавления в корзину
+const AddToCartButton = observer(({ product }: { product: ProductBasicDto }) => {
+  const { cartStore } = useRootStore();
 
-        if (imageRef.current) {
-            observer.observe(imageRef.current);
-        }
+  const handleAddToCart = () => {
+    // TODO: Реализовать добавление в корзину
+    console.log('Добавление в корзину:', product);
+  };
 
-        return () => {
-            observer.disconnect();
-        };
-    }, []);
+  return (
+    <button
+      onClick={handleAddToCart}
+      className="w-full bg-primary-600 text-white py-2 px-4 rounded-b-lg hover:bg-primary-700 transition-colors"
+    >
+      В корзину
+    </button>
+  );
+});
 
-    // Находим вариант с самой низкой ценой на самый маленький размер
-    const getLowestPriceVariant = () => {
-        let lowestPrice = Infinity;
-        let lowestPriceVariant: ProductVariantDto | null = null;
+export const ProductCard = observer(({ product, showAddToCart = false }: ProductCardProps) => {
+  const { media, name, minPrice, maxPrice, slug } = product;
+  const productMedia = media as ProductMedia;
 
-        if (!product.variants) return null;
-
-        for (const variant of product.variants) {
-            const sizesAndPrices = variant.sizesAndPrices as Record<string, number>;
-            const sizes = Object.keys(sizesAndPrices).sort((a, b) => 
-                parseFloat(a) - parseFloat(b)
-            );
-            
-            if (sizes.length > 0) {
-                const smallestSize = sizes[0];
-                const price = sizesAndPrices[smallestSize];
-                if (price < lowestPrice) {
-                    lowestPrice = price;
-                    lowestPriceVariant = variant;
-                }
-            }
-        }
-
-        return lowestPriceVariant;
-    };
-
-    const lowestPriceVariant = getLowestPriceVariant();
-    const sizesAndPrices = lowestPriceVariant?.sizesAndPrices as Record<string, number>;
-    const sizes = Object.keys(sizesAndPrices || {}).sort((a, b) => 
-        parseFloat(a) - parseFloat(b)
-    );
-    const smallestSize = sizes[0];
-    const price = sizesAndPrices?.[smallestSize] || 0;
-
-    return (
-        <div>
-            <div className={styles.image}>
-                <div className={`${styles.placeholder} ${isLoading ? styles.visible : styles.hidden}`}>
-                    {product.name}
-                </div>
-                <Image 
-                    src={`https://dummyimage.com/307x161/000000/FFFFFF&text=${product.name}`}
-                    alt={product.name} 
-                    width={307} 
-                    height={161}
-                    loading="lazy"
-                    className={`${styles.productImage} ${isLoading ? styles.hidden : styles.visible}`}
-                    onLoadingComplete={() => setIsLoading(false)}
-                />
+  return (
+    <div className={styles.card}>
+      <Link href={`/product/${slug}`} className={styles.productLink}>
+        <div className={styles.image}>
+          {productMedia.images && productMedia.images.length > 0 ? (
+            <Image
+              src={productMedia.images[0]}
+              alt={name}
+              width={300}
+              height={300}
+              className={styles.productImage}
+            />
+          ) : (
+            <div className={styles.placeholder}>
+              Нет изображения
             </div>
-            <div className="price">
-                <div className={styles.priceMain}>
-                    {price.toLocaleString()} ¥
-                </div>
-                <div className="price-split">
-                    {price.toLocaleString()} ¥ В сплит
-                </div>
-            </div>
-            <motion.div 
-                className={styles.title}
-                whileHover={{ color: "#4F46E5" }}
-            >
-                {product.name}
-            </motion.div>
-            <div className="delivery-info">
-                <div className="delivery-simple">
-                    25 дней
-                </div>
-                <div className="delivery-fast">
-                    9 дней
-                </div>
-            </div>
+          )}
         </div>
-    );
-};
-
-export default ProductCard;
+        <div className={styles.title}>{name}</div>
+        <div className={styles.price}>
+          <div className={styles.priceMain}>
+            {formatPrice(minPrice)}
+          </div>
+        </div>
+      </Link>
+      {showAddToCart && <AddToCartButton product={product} />}
+    </div>
+  );
+});

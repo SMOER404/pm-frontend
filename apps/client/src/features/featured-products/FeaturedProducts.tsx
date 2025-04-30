@@ -1,6 +1,5 @@
-import { ProductResponseDto } from '@poizon/api'
-import ProductCard from "@/shared/ui/Product-Card/ProductCard"
-import Link from 'next/link'
+import { ProductResponseDto } from '@poizon-market/api'
+import { ProductCard } from "@/shared/ui/Product-Card/ProductCard"
 
 interface FeaturedProductsProps {
   products: ProductResponseDto[]
@@ -13,13 +12,10 @@ export const FeaturedProducts = ({ products }: FeaturedProductsProps) => {
         <h2 className="text-3xl font-medium mb-8">Популярные товары</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {products.slice(0, 8).map((product) => (
-            <Link
+            <ProductCard 
               key={product.id}
-              href={`/product/${product.id}`}
-              className="group"
-            >
-              <ProductCard product={product} onClickLike={() => console.log('like')} />
-            </Link>
+              product={product}
+            />
           ))}
         </div>
       </div>

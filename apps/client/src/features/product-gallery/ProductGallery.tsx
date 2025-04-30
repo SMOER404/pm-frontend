@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ProductResponseDto } from '@poizon/api'
+import { ProductResponseDto } from '@poizon-market/api'
 
 interface ProductGalleryProps {
   product: ProductResponseDto

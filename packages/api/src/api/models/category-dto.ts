@@ -37,6 +37,12 @@ export interface CategoryDto {
      * @type {string}
      * @memberof CategoryDto
      */
+    'slug': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CategoryDto
+     */
     'parentId'?: string;
     /**
      * 

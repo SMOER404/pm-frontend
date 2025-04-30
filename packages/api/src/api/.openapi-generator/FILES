@@ -24,9 +24,11 @@ models/imported-product-draft-dto.ts
 models/index.ts
 models/login-dto.ts
 models/order-dto.ts
+models/paginated-response-dto.ts
+models/product-basic-dto.ts
 models/product-dto.ts
-models/product-response-dto.ts
 models/product-variant-dto.ts
+models/product-variants-response-dto.ts
 models/register-dto.ts
 models/review-dto.ts
 models/review-user-dto.ts

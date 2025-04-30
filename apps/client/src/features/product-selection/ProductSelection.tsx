@@ -1,14 +1,22 @@
+'use client'
+
 import { motion } from 'framer-motion'
-import { ProductResponseDto, ProductVariantDto } from '@poizon/api'
+import { ProductResponseDto, ProductVariantDto } from '@poizon-market/api'
 import { useState, useEffect } from 'react'
 
 interface ProductSelectionProps {
   product: ProductResponseDto
   onVariantChange: (variant: ProductVariantDto | null) => void
+  onSizeChange: (size: string) => void
+  selectedSize: string
 }
 
-export const ProductSelection = ({ product, onVariantChange }: ProductSelectionProps) => {
-  const [selectedSize, setSelectedSize] = useState<string>('')
+export const ProductSelection = ({ 
+  product, 
+  onVariantChange, 
+  onSizeChange,
+  selectedSize 
+}: ProductSelectionProps) => {
   const [selectedColor, setSelectedColor] = useState<string>('')
 
   // Получаем все доступные размеры из sizesAndPrices
@@ -68,7 +76,7 @@ export const ProductSelection = ({ product, onVariantChange }: ProductSelectionP
                   ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
                   : 'border-gray-200 hover:border-indigo-600'
               }`}
-              onClick={() => setSelectedSize(size)}
+              onClick={() => onSizeChange(size)}
             >
               {size}
             </motion.button>

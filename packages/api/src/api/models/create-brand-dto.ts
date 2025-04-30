@@ -21,13 +21,19 @@
  */
 export interface CreateBrandDto {
     /**
-     * 
+     * The name of the brand
      * @type {string}
      * @memberof CreateBrandDto
      */
     'name': string;
     /**
-     * 
+     * The brand description
+     * @type {string}
+     * @memberof CreateBrandDto
+     */
+    'description': string;
+    /**
+     * URL to the brand logo
      * @type {string}
      * @memberof CreateBrandDto
      */
