@@ -19,11 +19,12 @@
     "generate": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api --additional-properties=supportsES6=true,npmName=@poizon/api,npmVersion=1.0.0,separateModelsAndApi=true,withSeparateModelsAndApi=true,modelPackage=models,apiPackage=services"
   },
   "dependencies": {
-    "axios": "^1.6.2"
+    "axios": "^1.6.2",
+    "tailwind-merge": "^3.2.0"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/node": "^20.10.4",
     "typescript": "^5.3.3"
   }
-} 
+}

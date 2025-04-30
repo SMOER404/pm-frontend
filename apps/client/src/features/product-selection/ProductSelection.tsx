@@ -1,11 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ProductResponseDto, ProductVariantDto } from '@poizon-market/api'
+import { ProductVariantsResponseDto, ProductVariantDto } from '@poizon/api'
 import { useState, useEffect } from 'react'
 
 interface ProductSelectionProps {
-  product: ProductResponseDto
+  product: ProductVariantsResponseDto
   onVariantChange: (variant: ProductVariantDto | null) => void
   onSizeChange: (size: string) => void
   selectedSize: string
@@ -20,13 +20,23 @@ export const ProductSelection = ({
   const [selectedColor, setSelectedColor] = useState<string>('')
 
   // Получаем все доступные размеры из sizesAndPrices
-  const sizes = Array.from(new Set(product.variants.flatMap((v: ProductVariantDto) => 
-    Object.keys(v.sizesAndPrices as Record<string, number>)
-  )))
-  const colors = Array.from(new Set(product.variants.map((v: ProductVariantDto) => v.color)))
+  const sizes = product.variants?.length 
+    ? Array.from(new Set(product.variants.flatMap((v: ProductVariantDto) => 
+        Object.keys(v.sizesAndPrices as Record<string, number>)
+      )))
+    : []
+  
+  const colors = product.variants?.length
+    ? Array.from(new Set(product.variants.map((v: ProductVariantDto) => v.color)))
+    : []
 
   // Обновляем выбранный вариант при изменении размера или цвета
   useEffect(() => {
+    if (!product.variants?.length) {
+      onVariantChange(null)
+      return
+    }
+
     if (selectedSize && selectedColor) {
       const variant = product.variants.find(v => {
         const sizesAndPrices = v.sizesAndPrices as Record<string, number>;
@@ -44,7 +54,7 @@ export const ProductSelection = ({
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Цвет</h3>
         <div className="grid grid-cols-6 gap-2">
-          {colors.map(color => (
+          {colors.map((color: string) => (
             <motion.button
               key={color}
               whileHover={{ scale: 1.05 }}
@@ -66,7 +76,7 @@ export const ProductSelection = ({
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Размер</h3>
         <div className="grid grid-cols-6 gap-2">
-          {sizes.map(size => (
+          {sizes.map((size: string) => (
             <motion.button
               key={size}
               whileHover={{ scale: 1.05 }}

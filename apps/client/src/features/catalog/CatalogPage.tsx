@@ -10,14 +10,14 @@ import { productStore } from '@/shared/stores/product.store'
 import { 
   CategoryDto, 
   BrandDto, 
-  ProductResponseDto
-} from "@poizon-market/api"
+  ProductBasicDto
+} from "@poizon/api"
 import { ProductCard } from '@/shared/ui/Product-Card/ProductCard'
 
 interface CatalogPageProps {
-  initialProducts: ProductResponseDto[]
   categories: CategoryDto[]
   brands: BrandDto[]
+  initialProducts: ProductBasicDto[]
 }
 
 export const CatalogPage = observer(({ initialProducts, categories, brands }: CatalogPageProps) => {
@@ -120,7 +120,7 @@ export const CatalogPage = observer(({ initialProducts, categories, brands }: Ca
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link href={`/product/${product.id}`}>
+                <Link href={`/catalog/${product.category.slug}/${product.brand.slug}/${product.slug}`}>
                   <ProductCard product={product} />
                 </Link>
               </motion.div>

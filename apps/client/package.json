@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@poizon/api": "*",
+    "clsx": "^2.1.0",
     "js-cookie": "^3.0.5",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^4.0.3",
@@ -17,7 +18,8 @@
     "next-pwa": "^5.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.87.0"
+    "sass": "^1.87.0",
+    "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

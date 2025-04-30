@@ -1,50 +1,107 @@
-'use client'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { api } from '@/shared/api'
+import { ProductPage } from '@/features/product/ProductPage'
+import { ProductBasicDto, ProductVariantDto, ProductVariantsResponseDto } from '@poizon/api'
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { productsApi } from '@poizon-market/api';
-import type { ProductResponseDto } from '@poizon-market/api';
-import { ProductDetails } from '@/features/product-details/ProductDetails';
+export const dynamic = 'force-dynamic'
 
-export default function ProductPage() {
-  const params = useParams();
-  const [product, setProduct] = useState<ProductResponseDto | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface ProductPageProps {
+  params: {
+    categorySlug: string
+    brandSlug: string
+    productSlug: string
+  }
+}
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const { categorySlug, brandSlug, productSlug } = params;
-        const response = await productsApi.getProductBySlug(
-          categorySlug as string,
-          brandSlug as string,
-          productSlug as string
-        );
-        setProduct(response);
-      } catch (err) {
-        console.error('Ошибка при загрузке продукта:', err);
-        setError('Не удалось загрузить информацию о продукте');
-      } finally {
-        setLoading(false);
-      }
-    };
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const [categoriesResponse, brandsResponse, productsResponse] = await Promise.all([
+    api.categories.getAllCategories(),
+    api.brands.getAllBrands(),
+    api.products.getAllProducts()
+  ])
 
-    fetchProduct();
-  }, [params]);
+  const category = categoriesResponse.data.find(c => c.slug === params.categorySlug)
+  const brand = brandsResponse.data.find(b => b.slug === params.brandSlug)
+  const product = (productsResponse.data.items as unknown as ProductBasicDto[]).find(p => 
+    p.category.slug === params.categorySlug && 
+    p.brand.slug === params.brandSlug && 
+    p.slug === params.productSlug
+  )
 
-  if (loading) {
-    return <div>Загрузка...</div>;
+  if (!category || !brand || !product) {
+    return {
+      title: 'Товар не найден | POIZON MARKET',
+      description: 'Запрошенный товар не существует.'
+    }
   }
 
-  if (error) {
-    return <div>{error}</div>;
+  return {
+    title: `${product.name} | ${brand.name} | POIZON MARKET`,
+    description: `Купить ${product.name} от ${brand.name} в категории ${category.name}`,
+    openGraph: {
+      images: product.media && 'images' in product.media && Array.isArray(product.media.images) 
+        ? product.media.images 
+        : undefined
+    }
+  }
+}
+
+export default async function Page({ params }: ProductPageProps) {
+  const [categoriesResponse, brandsResponse, productsResponse] = await Promise.all([
+    api.categories.getAllCategories(),
+    api.brands.getAllBrands(),
+    api.products.getAllProducts()
+  ])
+
+  const category = categoriesResponse.data.find(c => c.slug === params.categorySlug)
+  const brand = brandsResponse.data.find(b => b.slug === params.brandSlug)
+  const product = (productsResponse.data.items as unknown as ProductBasicDto[]).find(p => 
+    p.category.slug === params.categorySlug && 
+    p.brand.slug === params.brandSlug && 
+    p.slug === params.productSlug
+  )
+
+  if (!category || !brand || !product) {
+    notFound()
   }
 
-  if (!product) {
-    return <div>Продукт не найден</div>;
+  // Получаем варианты продукта
+  const variantsResponse = await api.products.getProductVariants(product.id)
+  const variants = (variantsResponse.data as ProductVariantsResponseDto).variants
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: `Купить ${product.name} от ${brand.name} в категории ${category.name}`,
+    brand: {
+      '@type': 'Brand',
+      name: brand.name
+    },
+    category: category.name,
+    offers: {
+      '@type': 'Offer',
+      price: product.minPrice,
+      priceCurrency: 'RUB',
+      availability: 'https://schema.org/InStock'
+    },
+    image: product.media && 'images' in product.media && Array.isArray(product.media.images) 
+      ? product.media.images[0] 
+      : undefined
   }
 
-  return <ProductDetails product={product} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductPage 
+        product={product}
+        category={category}
+        variants={variants}
+      />
+    </>
+  )
 } 

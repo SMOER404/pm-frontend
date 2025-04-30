@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import { productsApi, categoriesApi } from '@/shared/api'
-import type { CategoryDto } from '@poizon-market/api'
+import { api } from '@/shared/api'
+import type { CategoryDto } from '@poizon/api'
 import { CategoryProducts } from '@/features/category-products/CategoryProducts'
 import { ShopFeatures } from '@/features/shop-features/ShopFeatures'
 
@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   // Получаем все категории
-  const categoriesResponse = await categoriesApi.getAllCategories()
+  const categoriesResponse = await api.categories.getAllCategories()
   const categories: CategoryDto[] = categoriesResponse.data
 
   const categoryProducts = await Promise.all(categories.map(async (category) => {
-    const products = await productsApi.getAllProducts(1, 4, category.id)
+    const products = await api.products.getAllProducts(1, 4, category.id)
     return {
       categoryId: category.id,
       categoryName: category.name,

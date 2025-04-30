@@ -1,6 +1,18 @@
+@import '../shared/styles/fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Azorath', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Druk Cyr', system-ui, sans-serif;
+  }
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;

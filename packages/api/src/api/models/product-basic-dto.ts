@@ -46,12 +46,6 @@ export interface ProductBasicDto {
     'slug': string;
     /**
      * 
-     * @type {string}
-     * @memberof ProductBasicDto
-     */
-    'description': string;
-    /**
-     * 
      * @type {object}
      * @memberof ProductBasicDto
      */

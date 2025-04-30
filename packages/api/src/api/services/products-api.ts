@@ -31,8 +31,6 @@ import type { ProductBasicDto } from '../models';
 import type { ProductVariantDto } from '../models';
 // @ts-ignore
 import type { ProductVariantsResponseDto } from '../models';
-import { api } from '../api';
-import type { ProductResponseDto } from '../models';
 /**
  * ProductsApi - axios parameter creator
  * @export
@@ -109,6 +107,48 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createProductDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get product by slug
+         * @param {string} categorySlug 
+         * @param {string} brandSlug 
+         * @param {string} productSlug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findBySlug: async (categorySlug: string, brandSlug: string, productSlug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'categorySlug' is not null or undefined
+            assertParamExists('findBySlug', 'categorySlug', categorySlug)
+            // verify required parameter 'brandSlug' is not null or undefined
+            assertParamExists('findBySlug', 'brandSlug', brandSlug)
+            // verify required parameter 'productSlug' is not null or undefined
+            assertParamExists('findBySlug', 'productSlug', productSlug)
+            const localVarPath = `/products/slug/{categorySlug}/{brandSlug}/{productSlug}`
+                .replace(`{${"categorySlug"}}`, encodeURIComponent(String(categorySlug)))
+                .replace(`{${"brandSlug"}}`, encodeURIComponent(String(brandSlug)))
+                .replace(`{${"productSlug"}}`, encodeURIComponent(String(productSlug)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -267,6 +307,21 @@ export const ProductsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get product by slug
+         * @param {string} categorySlug 
+         * @param {string} brandSlug 
+         * @param {string} productSlug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findBySlug(categorySlug: string, brandSlug: string, productSlug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findBySlug(categorySlug, brandSlug, productSlug, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProductsApi.findBySlug']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Получить все товары с пагинацией
          * @param {number} [page] Номер страницы
          * @param {number} [limit] Количество элементов на странице
@@ -339,6 +394,18 @@ export const ProductsApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @summary Get product by slug
+         * @param {string} categorySlug 
+         * @param {string} brandSlug 
+         * @param {string} productSlug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findBySlug(categorySlug: string, brandSlug: string, productSlug: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.findBySlug(categorySlug, brandSlug, productSlug, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Получить все товары с пагинацией
          * @param {number} [page] Номер страницы
          * @param {number} [limit] Количество элементов на странице
@@ -406,6 +473,20 @@ export class ProductsApi extends BaseAPI {
 
     /**
      * 
+     * @summary Get product by slug
+     * @param {string} categorySlug 
+     * @param {string} brandSlug 
+     * @param {string} productSlug 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductsApi
+     */
+    public findBySlug(categorySlug: string, brandSlug: string, productSlug: string, options?: RawAxiosRequestConfig) {
+        return ProductsApiFp(this.configuration).findBySlug(categorySlug, brandSlug, productSlug, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Получить все товары с пагинацией
      * @param {number} [page] Номер страницы
      * @param {number} [limit] Количество элементов на странице
@@ -441,28 +522,5 @@ export class ProductsApi extends BaseAPI {
     public getProductVariants(id: string, options?: RawAxiosRequestConfig) {
         return ProductsApiFp(this.configuration).getProductVariants(id, options).then((request) => request(this.axios, this.basePath));
     }
-
-    async getAllProducts(page: number, limit: number, options?: { categoryId?: string }) {
-        const response = await api.get<ProductResponseDto[]>('/products', {
-            params: {
-                page,
-                limit,
-                ...options,
-            },
-        });
-        return response.data;
-    }
-
-    async getProductBySlug(slug: string) {
-        const response = await api.get<ProductResponseDto>(`/products/slug/${slug}`);
-        return response.data;
-    }
-
-    async getProductVariants(productId: string) {
-        const response = await api.get<ProductVariantsResponseDto>(`/products/${productId}/variants`);
-        return response.data;
-    }
 }
-
-export const productsApi = new ProductsApi();
 

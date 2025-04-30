@@ -42,7 +42,7 @@ export const ProductCard = observer(({ product, showAddToCart = false }: Product
 
   return (
     <div className={styles.card}>
-      <Link href={`/product/${slug}`} className={styles.productLink}>
+      <Link href={`/catalog/${product.category.slug}/${product.brand.slug}/${slug}`} className={styles.productLink}>
         <div className={styles.image}>
           {productMedia.images && productMedia.images.length > 0 ? (
             <Image

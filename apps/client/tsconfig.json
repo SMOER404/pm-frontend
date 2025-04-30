@@ -23,7 +23,7 @@
       "@/*": [
         "./src/*"
       ],
-      "@poizon-market/api": [
+      "@poizon/api": [
         "../../packages/api/src"
       ]
     },

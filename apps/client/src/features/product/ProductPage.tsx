@@ -6,18 +6,19 @@ import { motion } from 'framer-motion'
 import { SeoHead } from '@/shared/ui/SeoHead'
 import { Snackbar } from '@/shared/ui/Snackbar/Snackbar'
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs'
-import type { ProductResponseDto, ProductVariantDto, CategoryDto } from '@poizon-market/api'
+import type { ProductBasicDto, ProductVariantDto, CategoryDto } from '@poizon/api'
 import { cartStore } from '@/shared/stores/cart.store'
 import { ProductGallery } from '@/features/product-gallery/ProductGallery'
 import { ProductInfo } from '@/features/product-info/ProductInfo'
 import { ProductSelection } from '@/features/product-selection/ProductSelection'
 
 interface ProductPageProps {
-  product: ProductResponseDto
+  product: ProductBasicDto
   category: CategoryDto
+  variants: ProductVariantDto[]
 }
 
-export const ProductPage = observer(({ product, category }: ProductPageProps) => {
+export const ProductPage = observer(({ product, category, variants }: ProductPageProps) => {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDto | null>(null)
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [isAddingToCart, setIsAddingToCart] = useState(false)
@@ -40,8 +41,8 @@ export const ProductPage = observer(({ product, category }: ProductPageProps) =>
   const breadcrumbItems = [
     { label: 'Главная', href: '/' },
     { label: 'Каталог', href: '/catalog' },
-    { label: category.name, href: `/catalog/${category.name.toLowerCase()}` },
-    { label: product.brand.name, href: `/catalog/${category.name.toLowerCase()}/${product.brand.name.toLowerCase()}` },
+    { label: category.name, href: `/catalog/${category.slug}` },
+    { label: product.brand.name, href: `/catalog/${category.slug}/${product.brand.slug}` },
     { label: product.name, href: '#' }
   ]
 
@@ -76,7 +77,7 @@ export const ProductPage = observer(({ product, category }: ProductPageProps) =>
       <SeoHead
         title={`${product.name} | POIZON MARKET`}
         description={`Купить ${product.name} на POIZON MARKET`}
-        url={`/catalog/${category.name.toLowerCase()}/${product.brand.name.toLowerCase()}/${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+        url={`/catalog/${category.slug}/${product.brand.slug}/${product.slug}`}
       />
 
       <div className="container mx-auto px-4 py-8">
@@ -93,7 +94,7 @@ export const ProductPage = observer(({ product, category }: ProductPageProps) =>
             />
 
             <ProductSelection
-              product={product}
+              product={{ productId: product.id, variants }}
               onVariantChange={setSelectedVariant}
               onSizeChange={setSelectedSize}
               selectedSize={selectedSize}

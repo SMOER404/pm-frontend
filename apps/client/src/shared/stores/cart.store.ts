@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { cartApi, CartItemResponseDto, AddToCartDto, SizeAndPriceDto } from '@poizon-market/api'
+import { cartApi, CartItemResponseDto, AddToCartDto, SizeAndPriceDto } from '@poizon/api'
 
 export class CartStore {
   items: CartItemResponseDto[] = []
@@ -10,55 +10,19 @@ export class CartStore {
     makeAutoObservable(this)
   }
 
-  async addItem(variantId: string, size: string, quantity: number = 1) {
+  async fetchCart() {
+    this.isLoading = true
+    this.error = null
     try {
-      runInAction(() => {
-        this.isLoading = true
-        this.error = null
-      })
-
-      const addToCartDto: AddToCartDto = {
-        productVariantId: variantId,
-        size,
-        quantity
-      }
-
-      await cartApi.addToCart(addToCartDto)
-      const cartResponse = await cartApi.findAll()
-      
-      runInAction(() => {
-        this.items = cartResponse.data
-      })
-    } catch (error: any) {
-      runInAction(() => {
-        this.error = error.message || 'Ошибка при добавлении товара в корзину'
-      })
-      throw error
-    } finally {
-      runInAction(() => {
-        this.isLoading = false
-      })
-    }
-  }
-
-  async getCart() {
-    try {
-      runInAction(() => {
-        this.isLoading = true
-        this.error = null
-      })
-
-      const response = await cartApi.findAll()
-      
+      const response = await cartApi.getCart()
       runInAction(() => {
         this.items = response.data
       })
-      return true
     } catch (error) {
       runInAction(() => {
-        this.error = 'Ошибка при получении корзины'
+        this.error = 'Ошибка при загрузке корзины'
+        console.error(error)
       })
-      return false
     } finally {
       runInAction(() => {
         this.isLoading = false
@@ -66,80 +30,52 @@ export class CartStore {
     }
   }
 
-  async removeItem(variantId: string) {
+  async addToCart(productId: string, sizeAndPrice: SizeAndPriceDto) {
+    this.isLoading = true
+    this.error = null
     try {
+      const dto: AddToCartDto = {
+        productId,
+        sizeAndPrice
+      }
+      await cartApi.addToCart(dto)
+      await this.fetchCart()
+    } catch (error) {
       runInAction(() => {
-        this.isLoading = true
-        this.error = null
+        this.error = 'Ошибка при добавлении товара в корзину'
+        console.error(error)
       })
+    } finally {
+      runInAction(() => {
+        this.isLoading = false
+      })
+    }
+  }
 
-      await cartApi.remove(variantId)
-      
-      runInAction(() => {
-        this.items = this.items.filter(item => item.variantId !== variantId)
-      })
-      return true
+  async removeFromCart(itemId: string) {
+    this.isLoading = true
+    this.error = null
+    try {
+      await cartApi.removeFromCart(itemId)
+      await this.fetchCart()
     } catch (error) {
       runInAction(() => {
         this.error = 'Ошибка при удалении товара из корзины'
+        console.error(error)
       })
-      return false
     } finally {
       runInAction(() => {
         this.isLoading = false
       })
     }
-  }
-
-  async updateQuantity(variantId: string, size: string, quantity: number) {
-    try {
-      runInAction(() => {
-        this.isLoading = true
-        this.error = null
-      })
-
-      const addToCartDto: AddToCartDto = {
-        productVariantId: variantId,
-        size,
-        quantity
-      }
-
-      await cartApi.addToCart(addToCartDto)
-      const cartResponse = await cartApi.findAll()
-      
-      runInAction(() => {
-        this.items = cartResponse.data
-      })
-      return true
-    } catch (error) {
-      runInAction(() => {
-        this.error = 'Ошибка при обновлении количества товара'
-      })
-      return false
-    } finally {
-      runInAction(() => {
-        this.isLoading = false
-      })
-    }
-  }
-
-  clearCart() {
-    runInAction(() => {
-      this.items = []
-      this.error = null
-    })
   }
 
   get totalItems() {
-    return this.items.reduce((sum, item) => sum + item.quantity, 0)
+    return this.items.length
   }
 
   get totalPrice() {
-    return this.items.reduce((sum, item) => {
-      const sizesAndPrices = item.variant?.sizesAndPrices as SizeAndPriceDto[]
-      const priceItem = sizesAndPrices?.find(p => p.size === (item as any).size)
-      return sum + (priceItem?.priceCny || 0) * item.quantity
-    }, 0)
+    return this.items.reduce((sum, item) => sum + item.sizeAndPrice.price, 0)
   }
 }
 
