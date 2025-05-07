@@ -24,13 +24,9 @@ import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError
 // @ts-ignore
 import type { CreateProductDto } from '../models';
 // @ts-ignore
-import type { PaginatedResponseDto } from '../models';
-// @ts-ignore
-import type { ProductBasicDto } from '../models';
+import type { ProductResponseDto } from '../models';
 // @ts-ignore
 import type { ProductVariantDto } from '../models';
-// @ts-ignore
-import type { ProductVariantsResponseDto } from '../models';
 /**
  * ProductsApi - axios parameter creator
  * @export
@@ -115,56 +111,11 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Get product by slug
-         * @param {string} categorySlug 
-         * @param {string} brandSlug 
-         * @param {string} productSlug 
+         * @summary Получить все товары
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findBySlug: async (categorySlug: string, brandSlug: string, productSlug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'categorySlug' is not null or undefined
-            assertParamExists('findBySlug', 'categorySlug', categorySlug)
-            // verify required parameter 'brandSlug' is not null or undefined
-            assertParamExists('findBySlug', 'brandSlug', brandSlug)
-            // verify required parameter 'productSlug' is not null or undefined
-            assertParamExists('findBySlug', 'productSlug', productSlug)
-            const localVarPath = `/products/slug/{categorySlug}/{brandSlug}/{productSlug}`
-                .replace(`{${"categorySlug"}}`, encodeURIComponent(String(categorySlug)))
-                .replace(`{${"brandSlug"}}`, encodeURIComponent(String(brandSlug)))
-                .replace(`{${"productSlug"}}`, encodeURIComponent(String(productSlug)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Получить все товары с пагинацией
-         * @param {number} [page] Номер страницы
-         * @param {number} [limit] Количество элементов на странице
-         * @param {string} [categoryId] ID категории для фильтрации
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllProducts: async (page?: number, limit?: number, categoryId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllProducts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -177,18 +128,6 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (categoryId !== undefined) {
-                localVarQueryParameter['categoryId'] = categoryId;
-            }
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -202,7 +141,7 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Получить базовую информацию о товаре
+         * @summary Получить товар по ID
          * @param {string} id ID товара
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -299,7 +238,7 @@ export const ProductsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createProduct(createProductDto: CreateProductDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductBasicDto>> {
+        async createProduct(createProductDto: CreateProductDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createProduct(createProductDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProductsApi.createProduct']?.[localVarOperationServerIndex]?.url;
@@ -307,42 +246,24 @@ export const ProductsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get product by slug
-         * @param {string} categorySlug 
-         * @param {string} brandSlug 
-         * @param {string} productSlug 
+         * @summary Получить все товары
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findBySlug(categorySlug: string, brandSlug: string, productSlug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findBySlug(categorySlug, brandSlug, productSlug, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductsApi.findBySlug']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary Получить все товары с пагинацией
-         * @param {number} [page] Номер страницы
-         * @param {number} [limit] Количество элементов на странице
-         * @param {string} [categoryId] ID категории для фильтрации
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllProducts(page?: number, limit?: number, categoryId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedResponseDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(page, limit, categoryId, options);
+        async getAllProducts(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductResponseDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProductsApi.getAllProducts']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Получить базовую информацию о товаре
+         * @summary Получить товар по ID
          * @param {string} id ID товара
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProductById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductBasicDto>> {
+        async getProductById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProductById(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProductsApi.getProductById']?.[localVarOperationServerIndex]?.url;
@@ -355,7 +276,7 @@ export const ProductsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProductVariants(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductVariantsResponseDto>> {
+        async getProductVariants(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductVariantDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProductVariants(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProductsApi.getProductVariants']?.[localVarOperationServerIndex]?.url;
@@ -389,41 +310,26 @@ export const ProductsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProduct(createProductDto: CreateProductDto, options?: RawAxiosRequestConfig): AxiosPromise<ProductBasicDto> {
+        createProduct(createProductDto: CreateProductDto, options?: RawAxiosRequestConfig): AxiosPromise<ProductResponseDto> {
             return localVarFp.createProduct(createProductDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Get product by slug
-         * @param {string} categorySlug 
-         * @param {string} brandSlug 
-         * @param {string} productSlug 
+         * @summary Получить все товары
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findBySlug(categorySlug: string, brandSlug: string, productSlug: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.findBySlug(categorySlug, brandSlug, productSlug, options).then((request) => request(axios, basePath));
+        getAllProducts(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductResponseDto>> {
+            return localVarFp.getAllProducts(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Получить все товары с пагинацией
-         * @param {number} [page] Номер страницы
-         * @param {number} [limit] Количество элементов на странице
-         * @param {string} [categoryId] ID категории для фильтрации
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllProducts(page?: number, limit?: number, categoryId?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedResponseDto> {
-            return localVarFp.getAllProducts(page, limit, categoryId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Получить базовую информацию о товаре
+         * @summary Получить товар по ID
          * @param {string} id ID товара
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProductById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<ProductBasicDto> {
+        getProductById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<ProductResponseDto> {
             return localVarFp.getProductById(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -433,7 +339,7 @@ export const ProductsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProductVariants(id: string, options?: RawAxiosRequestConfig): AxiosPromise<ProductVariantsResponseDto> {
+        getProductVariants(id: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductVariantDto>> {
             return localVarFp.getProductVariants(id, options).then((request) => request(axios, basePath));
         },
     };
@@ -473,35 +379,18 @@ export class ProductsApi extends BaseAPI {
 
     /**
      * 
-     * @summary Get product by slug
-     * @param {string} categorySlug 
-     * @param {string} brandSlug 
-     * @param {string} productSlug 
+     * @summary Получить все товары
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductsApi
      */
-    public findBySlug(categorySlug: string, brandSlug: string, productSlug: string, options?: RawAxiosRequestConfig) {
-        return ProductsApiFp(this.configuration).findBySlug(categorySlug, brandSlug, productSlug, options).then((request) => request(this.axios, this.basePath));
+    public getAllProducts(options?: RawAxiosRequestConfig) {
+        return ProductsApiFp(this.configuration).getAllProducts(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Получить все товары с пагинацией
-     * @param {number} [page] Номер страницы
-     * @param {number} [limit] Количество элементов на странице
-     * @param {string} [categoryId] ID категории для фильтрации
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProductsApi
-     */
-    public getAllProducts(page?: number, limit?: number, categoryId?: string, options?: RawAxiosRequestConfig) {
-        return ProductsApiFp(this.configuration).getAllProducts(page, limit, categoryId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Получить базовую информацию о товаре
+     * @summary Получить товар по ID
      * @param {string} id ID товара
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

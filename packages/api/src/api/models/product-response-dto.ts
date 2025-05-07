@@ -15,12 +15,6 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { BrandDto } from './brand-dto';
-// May contain unused imports in some cases
-// @ts-ignore
-import type { CategoryDto } from './category-dto';
-// May contain unused imports in some cases
-// @ts-ignore
 import type { ProductVariantDto } from './product-variant-dto';
 
 /**
@@ -30,49 +24,73 @@ import type { ProductVariantDto } from './product-variant-dto';
  */
 export interface ProductResponseDto {
     /**
-     * 
+     * ID товара
      * @type {string}
      * @memberof ProductResponseDto
      */
     'id': string;
     /**
-     * 
+     * Название товара
      * @type {string}
      * @memberof ProductResponseDto
      */
     'name': string;
     /**
-     * 
-     * @type {object}
+     * Описание товара
+     * @type {string}
      * @memberof ProductResponseDto
      */
-    'media': object;
+    'description': string;
     /**
-     * 
-     * @type {CategoryDto}
+     * Цена товара
+     * @type {number}
      * @memberof ProductResponseDto
      */
-    'category': CategoryDto;
+    'price': number;
     /**
-     * 
-     * @type {BrandDto}
+     * Изображения товара
+     * @type {Array<string>}
      * @memberof ProductResponseDto
      */
-    'brand': BrandDto;
+    'images': Array<string>;
     /**
-     * 
+     * Категория товара
+     * @type {string}
+     * @memberof ProductResponseDto
+     */
+    'category': string;
+    /**
+     * Бренд товара
+     * @type {string}
+     * @memberof ProductResponseDto
+     */
+    'brand': string;
+    /**
+     * Варианты товара
      * @type {Array<ProductVariantDto>}
      * @memberof ProductResponseDto
      */
-    'variants': Array<ProductVariantDto>;
+    'variants'?: Array<ProductVariantDto>;
     /**
-     * 
+     * Рейтинг товара
+     * @type {number}
+     * @memberof ProductResponseDto
+     */
+    'rating'?: number;
+    /**
+     * Количество отзывов
+     * @type {number}
+     * @memberof ProductResponseDto
+     */
+    'reviewsCount'?: number;
+    /**
+     * Дата создания
      * @type {string}
      * @memberof ProductResponseDto
      */
     'createdAt': string;
     /**
-     * 
+     * Дата обновления
      * @type {string}
      * @memberof ProductResponseDto
      */

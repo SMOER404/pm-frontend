@@ -37,19 +37,7 @@ export interface BrandDto {
      * @type {string}
      * @memberof BrandDto
      */
-    'slug': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BrandDto
-     */
     'logoUrl'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BrandDto
-     */
-    'description': string;
     /**
      * 
      * @type {string}

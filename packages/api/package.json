@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc --outDir dist/",
     "prepare": "npm run build",
-    "generate": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api --additional-properties=supportsES6=true,npmName=@poizon/api,npmVersion=1.0.0,separateModelsAndApi=true,withSeparateModelsAndApi=true,modelPackage=models,apiPackage=services"
+    "generate": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api --additional-properties=supportsES6=true,npmName=@poizon/api,npmVersion=1.0.0,separateModelsAndApi=true,withSeparateModelsAndApi=true,modelPackage=models,apiPackage=services,useTags=true"
   },
   "dependencies": {
     "axios": "^1.6.2",

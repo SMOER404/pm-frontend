@@ -21,40 +21,55 @@
  */
 export interface ProductVariantDto {
     /**
-     * 
+     * Размер товара
      * @type {string}
      * @memberof ProductVariantDto
      */
-    'id': string;
+    'size': string;
     /**
-     * 
+     * Цвет товара
      * @type {string}
      * @memberof ProductVariantDto
      */
     'color': string;
     /**
-     * 
+     * Артикул товара
+     * @type {string}
+     * @memberof ProductVariantDto
+     */
+    'sku'?: string;
+    /**
+     * URL изображений варианта товара
      * @type {Array<string>}
      * @memberof ProductVariantDto
      */
     'imageUrls': Array<string>;
     /**
-     * 
-     * @type {object}
+     * Цена в юанях
+     * @type {number}
      * @memberof ProductVariantDto
      */
-    'sizesAndPrices': object;
+    'priceCny': number;
     /**
-     * 
+     * Цена в рублях
+     * @type {number}
+     * @memberof ProductVariantDto
+     */
+    'priceRub'?: number;
+    /**
+     * Статус наличия товара
      * @type {string}
      * @memberof ProductVariantDto
      */
-    'createdAt': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProductVariantDto
-     */
-    'updatedAt': string;
+    'stockStatus': ProductVariantDtoStockStatusEnum;
 }
+
+export const ProductVariantDtoStockStatusEnum = {
+    InStock: 'IN_STOCK',
+    OutOfStock: 'OUT_OF_STOCK',
+    LowStock: 'LOW_STOCK'
+} as const;
+
+export type ProductVariantDtoStockStatusEnum = typeof ProductVariantDtoStockStatusEnum[keyof typeof ProductVariantDtoStockStatusEnum];
+
 

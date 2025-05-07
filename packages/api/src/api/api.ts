@@ -21,6 +21,7 @@ export * from './services/cart-api';
 export * from './services/categories-api';
 export * from './services/orders-api';
 export * from './services/products-api';
+export * from './services/recommendations-api';
 export * from './services/reviews-api';
 export * from './services/search-api';
 export * from './services/tags-api';
