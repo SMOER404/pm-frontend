@@ -63,6 +63,12 @@ const config = {
       ],
     });
 
+    // Добавляем поддержку шрифтов
+    config.module.rules.push({
+      test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      type: 'asset/resource',
+    });
+
     // Добавляем алиасы для импортов
     if (config.resolve) {
       config.resolve.alias = {
