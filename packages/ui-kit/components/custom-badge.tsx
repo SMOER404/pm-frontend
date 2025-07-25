@@ -45,10 +45,15 @@ export default function CustomBadge({
     error: "bg-destructive text-destructive-foreground",
   }
 
-  // clipPath для скосов (1px) - меньшие скосы для badge
-  const clipPath = dot
-    ? "[clip-path:polygon(2px_0px,100%_0px,100%_calc(100%-2px),calc(100%-2px)_100%,0px_100%,0px_2px)]"
-    : "[clip-path:polygon(4px_0px,100%_0px,100%_calc(100%-4px),calc(100%-4px)_100%,0px_100%,0px_4px)]"
+  // Размер скоса для badge (меньший для маленьких элементов)
+  const getChamferSize = () => {
+    if (dot) return 1 // Для точек очень маленький скос
+    switch (size) {
+      case "sm": return 2 // 25% от 8px = 2px
+      case "lg": return 3 // 25% от 12px = 3px
+      default: return 2.5 // 25% от 10px = 2.5px
+    }
+  }
 
   const customStyles = {
     ...(backgroundColor && { backgroundColor: backgroundColor }),
@@ -67,27 +72,72 @@ export default function CustomBadge({
     }
   }
 
+  const chamferSize = getChamferSize()
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 0.5px) 0.5px, calc(100% - 0.5px) 0.5px, calc(100% - 0.5px) calc(100% - ${chamferSize}px - 0.5px), calc(100% - ${chamferSize}px - 0.5px) calc(100% - 0.5px), 0.5px calc(100% - 0.5px), 0.5px calc(${chamferSize}px + 0.5px))`
+
   if (dot) {
     return (
-      <span
-        className={cn("inline-block rounded-full", sizes[size], variants[variant], clipPath, className)}
-        style={customStyles}
-      />
+      <div className="relative inline-block">
+        {/* Внешняя рамка со скосами */}
+        <div
+          className="absolute inset-0 transition-colors duration-200"
+          style={{
+            clipPath: outerClipPath,
+            backgroundColor: "#292D30",
+          }}
+        />
+
+        {/* Внутренний контент */}
+        <div
+          className="relative"
+          style={{
+            clipPath: innerClipPath,
+          }}
+        >
+          <span
+            className={cn("inline-block", sizes[size], variants[variant], className)}
+            style={customStyles}
+          />
+        </div>
+      </div>
     )
   }
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center justify-center font-medium rounded-full",
-        sizes[size],
-        variants[variant],
-        clipPath,
-        className,
-      )}
-      style={customStyles}
-    >
-      {displayContent}
-    </span>
+    <div className="relative inline-block">
+      {/* Внешняя рамка со скосами */}
+      <div
+        className="absolute inset-0 transition-colors duration-200"
+        style={{
+          clipPath: outerClipPath,
+          backgroundColor: "#292D30",
+        }}
+      />
+
+      {/* Внутренний контент */}
+      <div
+        className="relative"
+        style={{
+          clipPath: innerClipPath,
+        }}
+      >
+        <span
+          className={cn(
+            "inline-flex items-center justify-center font-medium",
+            sizes[size],
+            variants[variant],
+            className,
+          )}
+          style={customStyles}
+        >
+          {displayContent}
+        </span>
+      </div>
+    </div>
   )
 }

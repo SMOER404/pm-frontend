@@ -8,6 +8,7 @@ interface CustomTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaE
   label?: string
   error?: string
   helperText?: string
+  size?: "sm" | "md" | "lg"
   variant?: "outlined" | "filled"
   borderColor?: string
   backgroundColor?: string
@@ -19,6 +20,7 @@ export default function CustomTextarea({
   label,
   error,
   helperText,
+  size = "md",
   variant = "outlined",
   borderColor,
   backgroundColor,
@@ -28,6 +30,22 @@ export default function CustomTextarea({
   ...props
 }: CustomTextareaProps) {
   const [isFocused, setIsFocused] = useState(false)
+
+  // Размеры
+  const sizes = {
+    sm: "px-3 py-2 text-sm min-h-[32px]",
+    md: "px-4 py-3 text-sm min-h-[40px]",
+    lg: "px-5 py-4 text-base min-h-[48px]",
+  }
+
+  // Точные размеры для расчета скоса (25% от высоты)
+  const getChamferSize = () => {
+    switch (size) {
+      case "sm": return 8 // 25% от 32px = 8px
+      case "lg": return 12 // 25% от 48px = 12px
+      default: return 10 // 25% от 40px = 10px
+    }
+  }
 
   // Варианты стилей
   const variants = {
@@ -43,11 +61,6 @@ export default function CustomTextarea({
     both: "resize",
   }
 
-  // clipPath для скосов (1px)
-  const clipPath = "[clip-path:polygon(8px_0px,100%_0px,100%_calc(100%-8px),calc(100%-8px)_100%,0px_100%,0px_8px)]"
-  const contentClipPath =
-    "[clip-path:polygon(7px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-7px),calc(100%-7px)_calc(100%-1px),1px_calc(100%-1px),1px_7px)]"
-
   const customBorderStyles = {
     ...(borderColor && { backgroundColor: borderColor }),
   }
@@ -57,6 +70,24 @@ export default function CustomTextarea({
     ...(textColor && { color: textColor }),
   }
 
+  const chamferSize = getChamferSize()
+
+  // Определяем цвет для рамки
+  const getBorderColor = () => {
+    if (error) return "#ef4444" // destructive
+    if (isFocused) return "#AFEB0F" // brand
+    if (borderColor) return borderColor
+    return "#e5e7eb" // border
+  }
+
+  const borderColorValue = getBorderColor()
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
+
   return (
     <div className={cn("space-y-1", className)}>
       {/* Label */}
@@ -64,30 +95,36 @@ export default function CustomTextarea({
 
       {/* Textarea Container */}
       <div className="relative">
-        {/* Border */}
+        {/* Внешняя рамка со скосами */}
         <div
-          className={cn(
-            "absolute inset-0 transition-colors duration-200",
-            clipPath,
-            error ? "bg-red-500" : isFocused ? "bg-[#AFEB0F]" : "bg-gray-300",
-          )}
-          style={!error && !isFocused ? customBorderStyles : undefined}
+          className="absolute inset-0 transition-colors duration-200"
+          style={{
+            clipPath: outerClipPath,
+            backgroundColor: borderColorValue,
+          }}
         />
 
-        {/* Textarea */}
-        <textarea
-          className={cn(
-            "relative w-full px-4 py-3 text-sm border-0 outline-none transition-all duration-200 placeholder:text-gray-400 min-h-[80px]",
-            variants[variant],
-            resizeStyles[resize],
-            error && "border-red-500 focus:border-red-500",
-            contentClipPath,
-          )}
-          style={customContentStyles}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          {...props}
-        />
+        {/* Внутренний контент */}
+        <div
+          className="relative"
+          style={{
+            clipPath: innerClipPath,
+          }}
+        >
+          <textarea
+            className={cn(
+              "w-full border-0 outline-none transition-all duration-200 placeholder:text-gray-400 min-h-[80px]",
+              sizes[size],
+              variants[variant],
+              resizeStyles[resize],
+              error && "border-red-500 focus:border-red-500",
+            )}
+            style={customContentStyles}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            {...props}
+          />
+        </div>
       </div>
 
       {/* Helper Text / Error */}

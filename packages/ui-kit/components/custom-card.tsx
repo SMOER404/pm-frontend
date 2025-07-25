@@ -35,10 +35,14 @@ export default function CustomCard({
     elevated: "bg-white border-gray-200 shadow-lg",
   }
 
-  // clipPath для скосов (1px)
-  const clipPath = "[clip-path:polygon(12px_0px,100%_0px,100%_calc(100%-12px),calc(100%-12px)_100%,0px_100%,0px_12px)]"
-  const contentClipPath =
-    "[clip-path:polygon(11px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-11px),calc(100%-11px)_calc(100%-1px),1px_calc(100%-1px),1px_11px)]"
+  // Размер скоса для карточки (фиксированный)
+  const chamferSize = 12
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
 
   const customBorderStyles = {
     ...(borderColor && { backgroundColor: borderColor }),
@@ -50,13 +54,23 @@ export default function CustomCard({
 
   return (
     <div className={cn("relative", className)}>
-      {/* Border */}
-      <div className={cn("absolute inset-0 bg-[#292D30]", clipPath)} style={customBorderStyles} />
-
-      {/* Content */}
+      {/* Внешняя рамка со скосами */}
       <div
-        className={cn("relative", contentClipPath, variants[variant], paddings[padding])}
-        style={customContentStyles}
+        className="absolute inset-0 transition-colors duration-200"
+        style={{
+          clipPath: outerClipPath,
+          backgroundColor: "#292D30",
+          ...customBorderStyles,
+        }}
+      />
+
+      {/* Внутренний контент */}
+      <div
+        className={cn("relative", variants[variant], paddings[padding])}
+        style={{
+          clipPath: innerClipPath,
+          ...customContentStyles,
+        }}
       >
         {children}
       </div>

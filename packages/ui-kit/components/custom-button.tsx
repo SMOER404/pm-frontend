@@ -38,9 +38,16 @@ export default function CustomButton({
     xl: "px-8 py-4 text-lg min-h-[56px]",
   }
 
-  // clipPath для скосов (как в Input)
-  const borderClipPath = "[clip-path:polygon(12px_0px,100%_0px,100%_calc(100%-12px),calc(100%-12px)_100%,0px_100%,0px_12px)]"
-  const contentClipPath = "[clip-path:polygon(11px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-11px),calc(100%-11px)_calc(100%-1px),1px_calc(100%-1px),1px_11px)]"
+  // Точные размеры для расчета скоса (25% от высоты)
+  const getChamferSize = () => {
+    switch (size) {
+      case "xs": return 6 // 25% от 24px = 6px
+      case "sm": return 8 // 25% от 32px = 8px
+      case "lg": return 12 // 25% от 48px = 12px
+      case "xl": return 14 // 25% от 56px = 14px
+      default: return 10 // 25% от 40px = 10px
+    }
+  }
 
   // Кастомные стили
   const customBorderStyles = {
@@ -52,24 +59,37 @@ export default function CustomButton({
     ...(textColor && { color: textColor }),
   }
 
+  const chamferSize = getChamferSize()
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
+
   return (
     <div className="relative inline-block">
-      {/* Border - фигура со скошенными углами */}
+      {/* Внешняя рамка со скосами */}
       <div
-        className={cn(
-          "absolute inset-0 transition-colors duration-200",
-          borderClipPath,
-          variant === "primary" && "bg-[#AFEB0F]",
-          variant === "secondary" && "bg-[#292D30]",
-          variant === "outlined" && "bg-[#292D30]", // Видимая граница для outlined
-          variant === "ghost" && "bg-transparent",
-          variant === "danger" && "bg-red-500",
-        )}
-        style={customBorderStyles}
+        className="absolute inset-0 transition-colors duration-200"
+        style={{
+          clipPath: outerClipPath,
+          backgroundColor: variant === "primary" ? "#AFEB0F" : 
+                          variant === "secondary" ? "#292D30" : 
+                          variant === "outlined" ? "#292D30" : 
+                          variant === "ghost" ? "transparent" : 
+                          variant === "danger" ? "#ef4444" : "#e5e7eb",
+          ...customBorderStyles,
+        }}
       />
 
-      {/* Button Content - внутренняя область с отступом 1px */}
-      <div className={cn("relative", contentClipPath)}>
+      {/* Внутренний контент */}
+      <div
+        className="relative"
+        style={{
+          clipPath: innerClipPath,
+        }}
+      >
         <button
           className={cn(
             "w-full border-0 outline-none transition-all duration-200 font-medium focus:ring-2 focus:ring-[#AFEB0F] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",

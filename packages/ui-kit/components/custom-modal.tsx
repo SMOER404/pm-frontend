@@ -87,6 +87,15 @@ const CustomModal: React.FC<CustomModalProps> = ({
     }
   }
 
+  // Размер скоса для модала (фиксированный)
+  const chamferSize = 12
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
+
   const modalContent = (
     <div
       className={cn("fixed inset-0 z-50 flex", positionClasses[position], overlayClassName)}
@@ -96,29 +105,37 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
       {/* Modal */}
-      <div
-        className={cn(
-          "relative bg-white rounded-lg shadow-xl mx-4 my-8 w-full",
-          "border border-gray-200",
-          "clip-path-[polygon(0_1px,calc(100%-1px)_0,100%_calc(100%-1px),1px_100%,0_calc(100%-1px))]",
-          sizeClasses[size],
-          {
-            "m-0 rounded-none": size === "full",
-          },
-          className,
-        )}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {showCloseButton && (
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors z-10"
-            aria-label="Закрыть модальное окно"
-          >
-            <X className="w-5 h-5 text-gray-500" />
-          </button>
-        )}
-        {children}
+      <div className={cn("relative mx-4 my-8 w-full", sizeClasses[size], {
+        "m-0": size === "full",
+      }, className)}>
+        {/* Внешняя рамка со скосами */}
+        <div
+          className="absolute inset-0 transition-colors duration-200"
+          style={{
+            clipPath: size === "full" ? "" : outerClipPath,
+            backgroundColor: "#292D30",
+          }}
+        />
+
+        {/* Внутренний контент */}
+        <div
+          className="relative bg-white"
+          style={{
+            clipPath: size === "full" ? "" : innerClipPath,
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {showCloseButton && (
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors z-10"
+              aria-label="Закрыть модальное окно"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          )}
+          {children}
+        </div>
       </div>
     </div>
   )

@@ -37,11 +37,14 @@ export default function CustomDialog({
     xl: "max-w-2xl",
   }
 
-  // clipPath для скосов (1px)
-  const containerClipPath =
-    "[clip-path:polygon(12px_0px,100%_0px,100%_calc(100%-12px),calc(100%-12px)_100%,0px_100%,0px_12px)]"
-  const contentClipPath =
-    "[clip-path:polygon(11px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-11px),calc(100%-11px)_calc(100%-1px),1px_calc(100%-1px),1px_11px)]"
+  // Размер скоса для диалога (фиксированный)
+  const chamferSize = 12
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
 
   // Закрытие по Escape
   useEffect(() => {
@@ -82,11 +85,24 @@ export default function CustomDialog({
 
       {/* Dialog */}
       <div className={cn("relative w-full mx-4", sizeStyles[size])}>
-        {/* Border */}
-        <div className={cn("absolute inset-0 bg-[#292D30]", containerClipPath)} style={customBorderStyles} />
+        {/* Внешняя рамка со скосами */}
+        <div
+          className="absolute inset-0 transition-colors duration-200"
+          style={{
+            clipPath: outerClipPath,
+            backgroundColor: "#292D30",
+            ...customBorderStyles,
+          }}
+        />
 
-        {/* Content */}
-        <div className={cn("relative bg-white", contentClipPath)} style={customContentStyles}>
+        {/* Внутренний контент */}
+        <div
+          className="relative bg-white"
+          style={{
+            clipPath: innerClipPath,
+            ...customContentStyles,
+          }}
+        >
           {/* Header */}
           {(title || showCloseButton) && (
             <div className="flex items-center justify-between p-6 border-b border-gray-200">

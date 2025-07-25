@@ -50,16 +50,20 @@ export default function CustomSelect({
     lg: "px-5 py-4 text-base min-h-[48px]",
   }
 
+  // Точные размеры для расчета скоса (25% от высоты)
+  const getChamferSize = () => {
+    switch (size) {
+      case "sm": return 8 // 25% от 32px = 8px
+      case "lg": return 12 // 25% от 48px = 12px
+      default: return 10 // 25% от 40px = 10px
+    }
+  }
+
   // Варианты стилей
   const variants = {
     outlined: "bg-white border-gray-300 focus:border-[#AFEB0F]",
     filled: "bg-gray-50 border-transparent focus:bg-white focus:border-[#AFEB0F]",
   }
-
-  // clipPath для скосов (1px)
-  const clipPath = "[clip-path:polygon(8px_0px,100%_0px,100%_calc(100%-8px),calc(100%-8px)_100%,0px_100%,0px_8px)]"
-  const contentClipPath =
-    "[clip-path:polygon(7px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-7px),calc(100%-7px)_calc(100%-1px),1px_calc(100%-1px),1px_7px)]"
 
   const customBorderStyles = {
     ...(borderColor && { backgroundColor: borderColor }),
@@ -79,6 +83,24 @@ export default function CustomSelect({
     setIsOpen(false)
   }
 
+  const chamferSize = getChamferSize()
+
+  // Определяем цвет для рамки
+  const getBorderColor = () => {
+    if (error) return "#ef4444" // destructive
+    if (isFocused || isOpen) return "#AFEB0F" // brand
+    if (borderColor) return borderColor
+    return "#e5e7eb" // border
+  }
+
+  const borderColorValue = getBorderColor()
+
+  // Точные clip-path без округлений
+  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  
+  // Точный внутренний clip-path с идеальным отступом
+  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
+
   return (
     <div className="relative space-y-1">
       {/* Label */}
@@ -86,46 +108,62 @@ export default function CustomSelect({
 
       {/* Select Container */}
       <div className="relative">
-        {/* Border */}
+        {/* Внешняя рамка со скосами */}
         <div
-          className={cn(
-            "absolute inset-0 transition-colors duration-200",
-            clipPath,
-            error ? "bg-red-500" : isFocused || isOpen ? "bg-[#AFEB0F]" : "bg-gray-300",
-          )}
-          style={!error && !isFocused && !isOpen ? customBorderStyles : undefined}
+          className="absolute inset-0 transition-colors duration-200"
+          style={{
+            clipPath: outerClipPath,
+            backgroundColor: borderColorValue,
+          }}
         />
 
-        {/* Select Button */}
-        <button
-          type="button"
-          className={cn(
-            "relative w-full flex items-center justify-between border-0 outline-none transition-all duration-200 cursor-pointer",
-            sizes[size],
-            variants[variant],
-            disabled && "opacity-50 cursor-not-allowed",
-            contentClipPath,
-          )}
-          style={customContentStyles}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          disabled={disabled}
+        {/* Внутренний контент */}
+        <div
+          className="relative"
+          style={{
+            clipPath: innerClipPath,
+          }}
         >
-          <span className={cn(selectedOption ? "text-[#292D30]" : "text-gray-400")}>
-            {selectedOption ? selectedOption.label : placeholder}
-          </span>
-          <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", isOpen && "rotate-180")} />
-        </button>
+          <button
+            type="button"
+            className={cn(
+              "w-full flex items-center justify-between border-0 outline-none transition-all duration-200 cursor-pointer",
+              sizes[size],
+              variants[variant],
+              disabled && "opacity-50 cursor-not-allowed",
+            )}
+            style={customContentStyles}
+            onClick={() => !disabled && setIsOpen(!isOpen)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            disabled={disabled}
+          >
+            <span className={cn(selectedOption ? "text-[#292D30]" : "text-gray-400")}>
+              {selectedOption ? selectedOption.label : placeholder}
+            </span>
+            <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", isOpen && "rotate-180")} />
+          </button>
+        </div>
 
         {/* Dropdown */}
         {isOpen && (
           <div className="absolute top-full left-0 right-0 z-50 mt-1">
-            {/* Border */}
-            <div className={cn("absolute inset-0 bg-[#292D30]", clipPath)} />
+            {/* Внешняя рамка dropdown со скосами */}
+            <div
+              className="absolute inset-0 transition-colors duration-200"
+              style={{
+                clipPath: outerClipPath,
+                backgroundColor: "#292D30",
+              }}
+            />
 
-            {/* Content */}
-            <div className={cn("relative bg-white max-h-60 overflow-auto", contentClipPath)}>
+            {/* Внутренний контент dropdown */}
+            <div
+              className="relative bg-white max-h-60 overflow-auto"
+              style={{
+                clipPath: innerClipPath,
+              }}
+            >
               {options.map((option) => (
                 <button
                   key={option.value}

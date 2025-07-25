@@ -55,20 +55,38 @@ export default function CustomDrawer({
     bottom: open ? "translate-y-0" : "translate-y-full",
   }
 
-  // clipPath для drawer'а (скосы только с внешней стороны, 1px)
-  const clipPaths = {
-    left: "[clip-path:polygon(0px_0px,calc(100%-12px)_0px,100%_12px,100%_100%,0px_100%)]",
-    right: "[clip-path:polygon(12px_0px,100%_0px,100%_100%,0px_100%,0px_12px)]",
-    top: "[clip-path:polygon(0px_0px,100%_0px,100%_calc(100%-12px),calc(100%-12px)_100%,0px_100%)]",
-    bottom: "[clip-path:polygon(0px_12px,12px_0px,100%_0px,100%_100%,0px_100%)]",
+  // Размер скоса для drawer (фиксированный)
+  const chamferSize = 12
+
+  // Точные clip-path для разных позиций drawer'а
+  const getOuterClipPath = () => {
+    switch (anchor) {
+      case "left":
+        return `polygon(0px 0px, calc(100% - ${chamferSize}px) 0px, 100% ${chamferSize}px, 100% 100%, 0px 100%)`
+      case "right":
+        return `polygon(${chamferSize}px 0px, 100% 0px, 100% 100%, 0px 100%, 0px ${chamferSize}px)`
+      case "top":
+        return `polygon(0px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%)`
+      case "bottom":
+        return `polygon(0px ${chamferSize}px, ${chamferSize}px 0px, 100% 0px, 100% 100%, 0px 100%)`
+      default:
+        return `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+    }
   }
 
-  const contentClipPaths = {
-    left: "[clip-path:polygon(1px_1px,calc(100%-11px)_1px,calc(100%-1px)_11px,calc(100%-1px)_calc(100%-1px),1px_calc(100%-1px))]",
-    right: "[clip-path:polygon(11px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-1px),1px_calc(100%-1px),1px_11px)]",
-    top: "[clip-path:polygon(1px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-11px),calc(100%-11px)_calc(100%-1px),1px_calc(100%-1px))]",
-    bottom:
-      "[clip-path:polygon(1px_11px,11px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-1px),1px_calc(100%-1px))]",
+  const getInnerClipPath = () => {
+    switch (anchor) {
+      case "left":
+        return `polygon(1px 1px, calc(100% - ${chamferSize - 1}px) 1px, calc(100% - 1px) ${chamferSize + 1}px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px))`
+      case "right":
+        return `polygon(${chamferSize + 1}px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px ${chamferSize + 1}px)`
+      case "top":
+        return `polygon(1px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize + 1}px), calc(100% - ${chamferSize + 1}px) calc(100% - 1px), 1px calc(100% - 1px))`
+      case "bottom":
+        return `polygon(1px ${chamferSize + 1}px, ${chamferSize + 1}px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px))`
+      default:
+        return `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
+    }
   }
 
   // Закрытие по Escape
@@ -102,31 +120,14 @@ export default function CustomDrawer({
     ...(backgroundColor && { backgroundColor: backgroundColor }),
   }
 
-  // Permanent drawer всегда видим
-  if (variant === "permanent") {
-    return (
-      <div className={cn("relative", sizes[size], positions[anchor])}>
-        {/* Border */}
-        <div className={cn("absolute inset-0 bg-[#292D30]", clipPaths[anchor])} style={customBorderStyles} />
+  if (!open && variant === "temporary") return null
 
-        {/* Content */}
-        <div
-          className={cn("relative bg-white h-full overflow-auto", contentClipPaths[anchor])}
-          style={customContentStyles}
-        >
-          <div className="p-6">{children}</div>
-        </div>
-      </div>
-    )
-  }
-
-  // Temporary и Persistent drawer'ы - ИСПРАВЛЕН Z-INDEX
   return (
     <>
-      {/* Overlay */}
+      {/* Overlay для temporary drawer */}
       {variant === "temporary" && open && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           onClick={closeOnOverlayClick ? onClose : undefined}
         />
       )}
@@ -134,24 +135,35 @@ export default function CustomDrawer({
       {/* Drawer */}
       <div
         className={cn(
-          "fixed z-30 transition-transform duration-300 ease-in-out",
+          "fixed z-50 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           sizes[size],
           positions[anchor],
-          animations[anchor],
-          variant === "persistent" && !open && "pointer-events-none",
+          variant === "temporary" && animations[anchor],
+          variant === "persistent" && !open && animations[anchor],
         )}
       >
-        {/* Border */}
-        <div className={cn("absolute inset-0 bg-[#292D30]", clipPaths[anchor])} style={customBorderStyles} />
-
-        {/* Content */}
+        {/* Внешняя рамка со скосами */}
         <div
-          className={cn("relative bg-white h-full overflow-auto", contentClipPaths[anchor])}
-          style={customContentStyles}
+          className="absolute inset-0 transition-colors duration-200"
+          style={{
+            clipPath: getOuterClipPath(),
+            backgroundColor: "#292D30",
+            ...customBorderStyles,
+          }}
+        />
+
+        {/* Внутренний контент */}
+        <div
+          className="relative h-full bg-white"
+          style={{
+            clipPath: getInnerClipPath(),
+            ...customContentStyles,
+          }}
         >
-          {/* Close Button */}
-          {showCloseButton && variant === "temporary" && (
-            <div className="absolute top-4 right-4 z-10">
+          {/* Header */}
+          {showCloseButton && (
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-[#292D30]">Drawer</h2>
               <CustomButton variant="ghost" size="sm" icon={<X className="w-4 h-4" />} iconOnly onClick={onClose}>
                 Закрыть
               </CustomButton>
@@ -159,7 +171,7 @@ export default function CustomDrawer({
           )}
 
           {/* Content */}
-          <div className={cn("p-6", showCloseButton && variant === "temporary" && "pt-16")}>{children}</div>
+          <div className="p-4 overflow-y-auto h-full">{children}</div>
         </div>
       </div>
     </>
