@@ -43,25 +43,51 @@ const config = {
       ],
     });
 
-    // Добавляем поддержку PostCSS для Tailwind
-    config.module.rules.push({
-      test: /\.css$/,
-      use: [
-        'style-loader',
-        'css-loader',
-        {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: [
-                require('tailwindcss'),
-                require('autoprefixer'),
-              ],
+    // Находим существующее правило для CSS и заменяем его
+    const cssRuleIndex = config.module.rules.findIndex(rule => 
+      rule.test && rule.test.toString().includes('css')
+    );
+
+    if (cssRuleIndex !== -1) {
+      config.module.rules[cssRuleIndex] = {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
+              },
             },
           },
-        },
-      ],
-    });
+        ],
+      };
+    } else {
+      // Если правило не найдено, добавляем новое
+      config.module.rules.push({
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
+              },
+            },
+          },
+        ],
+      });
+    }
 
     // Добавляем поддержку шрифтов
     config.module.rules.push({
