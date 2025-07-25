@@ -43,7 +43,7 @@ const config = {
       ],
     });
 
-    // Добавляем поддержку CSS с PostCSS и Tailwind
+    // Добавляем поддержку PostCSS для Tailwind
     config.module.rules.push({
       test: /\.css$/,
       use: [
