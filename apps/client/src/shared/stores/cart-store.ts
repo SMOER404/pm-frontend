@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { RootStore } from './root-store'
-import { ProductVariantDto } from '@poizon-market/api'
+import { ProductVariantDto } from '@poizon/api'
 
 interface CartItem {
   variant: ProductVariantDto

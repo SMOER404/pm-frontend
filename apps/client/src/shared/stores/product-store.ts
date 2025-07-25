@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { RootStore } from './root-store'
-import { ProductDto, ProductVariantDto } from '@poizon-market/api'
+import { ProductDto, ProductVariantDto } from '@poizon/api'
 
 export class ProductStore {
   products: Map<string, ProductDto> = new Map()

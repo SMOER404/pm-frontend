@@ -25,6 +25,9 @@
       ],
       "@poizon/api": [
         "../../packages/api/src"
+      ],
+      "@poizon/ui-kit": [
+        "../../packages/ui-kit"
       ]
     },
     "plugins": [
@@ -41,5 +44,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "types": ["@svgr/webpack"]
 }

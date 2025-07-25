@@ -1,42 +1,38 @@
 import { Metadata } from 'next'
 import { api } from '@/shared/api'
-import type { CategoryDto } from '@poizon/api'
-import { CategoryProducts } from '@/features/category-products/CategoryProducts'
-import { ShopFeatures } from '@/features/shop-features/ShopFeatures'
-import { log } from 'console'
+import ProductCardList from "@/shared/ui/product-card-list/ProductCardList";
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'POIZON MARKET - Магазин стильной одежды',
-  description: 'Широкий выбор одежды от лучших брендов по доступным ценам. Бесплатная доставка по всей России.',
+  title: 'POIZON MARKET - Главная',
+  description: 'Официальный маркетплейс POIZON в России. Стильная одежда и аксессуары от лучших брендов.',
 }
 
 export default async function HomePage() {
+  // Получаем популярные товары
+  const popularProducts = await api.recommendations.getPopularRecommendations(4)
 
-
-  // Получаем только основные категории
-  const categoriesResponse = await api.recommendations.getPopularItems()
-  console.log(categoriesResponse)
-  // const mainCategories: CategoryDto[] = categoriesResponse.data
-  // console.log('Main categories:', mainCategories)
-
-  // const categoryProducts = await Promise.all(mainCategories.map(async (category) => {
-  //   const products = await api.products.getAllProducts(1, 4, category.id)
-  //   console.log(`Products for category ${category.name}:`, products.data)
-  //   return {
-  //     categoryId: category.id,
-  //     categoryName: category.name,
-  //     categorySlug: category.slug,
-  //     products: products.data.items
-  //   }
-  // }))
-  // console.log('Category products:', categoryProducts)
+  // Получаем трендовые товары
+  const trendingProducts = await api.recommendations.getTrendingRecommendations(8)
 
   return (
-    <div className="space-y-12">
-      {/* <CategoryProducts categories={categoryProducts} /> */}
-      <ShopFeatures />
+    <div className="container prose mt-10 mb-10 px-0">
+      <div className='mb-20'>
+        {Boolean(popularProducts.data.length) &&
+            <ProductCardList
+                title='Популярные'
+                products={popularProducts.data.slice(0,4)}
+            />
+        }
+      </div>
+
+      {Boolean(trendingProducts.data.length) &&
+          <ProductCardList
+              title='В тренде'
+              products={trendingProducts.data.slice(0,4)}
+          />
+      }
     </div>
   )
 } 

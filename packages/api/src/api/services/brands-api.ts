@@ -99,16 +99,16 @@ export const BrandsApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @summary Get brand by id
-         * @param {string} id 
+         * @summary Get brand by slug
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBrandById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getBrandById', 'id', id)
-            const localVarPath = `/brands/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getBrandBySlug: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('getBrandBySlug', 'slug', slug)
+            const localVarPath = `/brands/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -134,15 +134,15 @@ export const BrandsApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @summary Get products by brand
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProductsByBrand: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getProductsByBrand', 'id', id)
-            const localVarPath = `/brands/{id}/products`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getProductsByBrand: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('getProductsByBrand', 'slug', slug)
+            const localVarPath = `/brands/{slug}/products`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -202,26 +202,26 @@ export const BrandsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get brand by id
-         * @param {string} id 
+         * @summary Get brand by slug
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBrandById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BrandDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBrandById(id, options);
+        async getBrandBySlug(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BrandDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBrandBySlug(slug, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['BrandsApi.getBrandById']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['BrandsApi.getBrandBySlug']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Get products by brand
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProductsByBrand(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductsByBrand(id, options);
+        async getProductsByBrand(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductsByBrand(slug, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BrandsApi.getProductsByBrand']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -257,23 +257,23 @@ export const BrandsApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @summary Get brand by id
-         * @param {string} id 
+         * @summary Get brand by slug
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBrandById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<BrandDto> {
-            return localVarFp.getBrandById(id, options).then((request) => request(axios, basePath));
+        getBrandBySlug(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<BrandDto> {
+            return localVarFp.getBrandBySlug(slug, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get products by brand
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProductsByBrand(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.getProductsByBrand(id, options).then((request) => request(axios, basePath));
+        getProductsByBrand(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.getProductsByBrand(slug, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -310,26 +310,26 @@ export class BrandsApi extends BaseAPI {
 
     /**
      * 
-     * @summary Get brand by id
-     * @param {string} id 
+     * @summary Get brand by slug
+     * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BrandsApi
      */
-    public getBrandById(id: string, options?: RawAxiosRequestConfig) {
-        return BrandsApiFp(this.configuration).getBrandById(id, options).then((request) => request(this.axios, this.basePath));
+    public getBrandBySlug(slug: string, options?: RawAxiosRequestConfig) {
+        return BrandsApiFp(this.configuration).getBrandBySlug(slug, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get products by brand
-     * @param {string} id 
+     * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BrandsApi
      */
-    public getProductsByBrand(id: string, options?: RawAxiosRequestConfig) {
-        return BrandsApiFp(this.configuration).getProductsByBrand(id, options).then((request) => request(this.axios, this.basePath));
+    public getProductsByBrand(slug: string, options?: RawAxiosRequestConfig) {
+        return BrandsApiFp(this.configuration).getProductsByBrand(slug, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

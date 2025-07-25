@@ -9,9 +9,9 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'dummyimage.com'],
+    domains: ['localhost', 'placehold.co', 'picsum.photos', 'nikitaefremov.ru'],
   },
-  transpilePackages: ['@poizon/api', '@poizon/config', '@poizon/shared'],
+  transpilePackages: ['@poizon/api', '@poizon/config', '@poizon/shared', '@poizon/ui-kit'],
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

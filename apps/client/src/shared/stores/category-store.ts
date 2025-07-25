@@ -1,9 +1,10 @@
 import { makeAutoObservable } from 'mobx'
 import { RootStore } from './root-store'
-import { CategoryDto } from '@poizon-market/api'
+import {CategoryDto} from '@poizon/api'
+import {api} from "@/shared/api";
 
 export class CategoryStore {
-  categories: Map<string, CategoryDto> = new Map()
+  categories: Array<CategoryDto> = []
   rootStore: RootStore
 
   constructor(rootStore: RootStore) {
@@ -11,14 +12,15 @@ export class CategoryStore {
     this.rootStore = rootStore
   }
 
-  setCategories(categories: CategoryDto[]) {
-    categories.forEach(category => {
-      this.categories.set(category.id, category)
-    })
-  }
-
-  getCategoryById(id: string): CategoryDto | undefined {
-    return this.categories.get(id)
+  async getAllCategories() {
+    return api.categories.getAllCategories()
+        .then((result) => {
+          console.log('getAllCategories result',result.data.filter((category) => !category.parentId))
+          if (result.status === 200) {
+            this.categories = result.data
+          }
+        })
+        .catch((err) => console.log('err fetch categories error', err))
   }
 
   getChildCategories(parentId: string): CategoryDto[] {
@@ -31,9 +33,5 @@ export class CategoryStore {
     return Array.from(this.categories.values()).filter(
       category => !category.parentId
     )
-  }
-
-  clear() {
-    this.categories.clear()
   }
 } 

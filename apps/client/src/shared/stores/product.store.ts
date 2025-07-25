@@ -108,7 +108,7 @@ export class ProductStore {
   private getMinPrice(product: ProductResponseDto): number {
     if (!product.variants || product.variants.length === 0) return 0
     return Math.min(...product.variants.map(v => {
-      const prices = Object.values(v.sizesAndPrices as Record<string, number>)
+      const prices = Object.values((v.sizesAndPrices as Record<string, number>) || {})
       return Math.min(...prices)
     }))
   }
@@ -116,7 +116,7 @@ export class ProductStore {
   private getMaxPrice(product: ProductResponseDto): number {
     if (!product.variants || product.variants.length === 0) return 0
     return Math.max(...product.variants.map(v => {
-      const prices = Object.values(v.sizesAndPrices as Record<string, number>)
+      const prices = Object.values((v.sizesAndPrices as Record<string, number>) || {})
       return Math.max(...prices)
     }))
   }

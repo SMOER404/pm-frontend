@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { CustomTypography, CustomButton } from "@poizon/ui-kit";
 
 export const metadata: Metadata = {
   title: 'Страница не найдена | POIZON MARKET',
@@ -9,16 +10,15 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-      <h1 className="text-4xl font-bold mb-4">404</h1>
-      <h2 className="text-2xl mb-6">Страница не найдена</h2>
-      <p className="text-gray-600 mb-8 text-center">
+      <CustomTypography variant="h1" className="font-bold mb-4">404</CustomTypography>
+      <CustomTypography variant="h2" className="mb-6">Страница не найдена</CustomTypography>
+      <CustomTypography variant="body1" className="text-gray-600 mb-8 text-center">
         К сожалению, запрашиваемая страница не существует или была удалена
-      </p>
-      <Link 
-        href="/"
-        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-      >
-        Вернуться на главную
+      </CustomTypography>
+      <Link href="/">
+        <CustomButton variant="primary">
+          Вернуться на главную
+        </CustomButton>
       </Link>
     </div>
   )

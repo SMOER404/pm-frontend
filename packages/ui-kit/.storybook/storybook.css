@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Кастомные цвета для UI библиотеки */
+.bg-brand {
+  background-color: #AFEB0F !important;
+}
+
+.text-brand {
+  color: #AFEB0F !important;
+}
+
+.bg-primary {
+  background-color: #292D30 !important;
+}
+
+.text-primary {
+  color: #292D30 !important;
+}
+
+.hover\:bg-brand-dark:hover {
+  background-color: #8FBC0B !important;
+}
+
+.hover\:bg-primary-dark:hover {
+  background-color: #1A1D20 !important;
+}
+
+.border-brand {
+  border-color: #AFEB0F !important;
+}
+
+.border-primary {
+  border-color: #292D30 !important;
+}
+
+.focus\:ring-brand:focus {
+  --tw-ring-color: #AFEB0F !important;
+}
+
+/* Скосы для компонентов */
+.chamfer-clip {
+  clip-path: polygon(12px 0px, 100% 0px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0px 100%, 0px 12px);
+}
+
+.chamfer-clip-small {
+  clip-path: polygon(4px 0px, 100% 0px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0px 100%, 0px 4px);
+} 
