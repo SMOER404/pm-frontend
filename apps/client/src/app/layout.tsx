@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from './providers'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import {CustomHeader, CustomFooter} from '@poizon/ui-kit'
 
 export const metadata: Metadata = {
   title: 'POIZON MARKET',
@@ -18,11 +17,11 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
       <body>
         <Providers>
           <div className="min-h-screen flex flex-col">
-            <Header />
+            <CustomHeader />
             <main className="flex-grow container mx-auto px-4 pt-[70px] pb-8">
               {children}
             </main>
-            <Footer />
+            <CustomFooter />
           </div>
         </Providers>
       </body>

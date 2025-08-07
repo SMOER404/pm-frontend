@@ -1,18 +1,19 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { cn } from "../lib/utils"
+import { tokens, type SizeToken } from "../lib/design-tokens"
+import { createChamferStyles, getChamferSizeFromComponentSize } from "../lib/chamfer-utils"
+import { useComponentStates } from "../lib/with-states"
 
-interface CustomButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outlined" | "ghost" | "danger"
-  size?: "xs" | "sm" | "md" | "lg" | "xl"
+interface CustomButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
+  variant?: "primary" | "secondary" | "outlined" | "ghost" | "text" | "danger" | "success" | "warning"
+  size?: SizeToken
   icon?: React.ReactNode
   iconOnly?: boolean
   loading?: boolean
-  borderColor?: string
-  backgroundColor?: string
-  textColor?: string
-  children: React.ReactNode
+  fullWidth?: boolean
+  children?: React.ReactNode
 }
 
 export default function CustomButton({
@@ -21,105 +22,195 @@ export default function CustomButton({
   icon,
   iconOnly = false,
   loading = false,
-  borderColor,
-  backgroundColor,
-  textColor,
+  fullWidth = false,
   className,
   children,
   disabled,
   ...props
 }: CustomButtonProps) {
-  // Размеры кнопок
-  const sizes = {
-    xs: "px-2 py-1 text-xs min-h-[24px]",
-    sm: "px-3 py-1.5 text-sm min-h-[32px]",
-    md: "px-4 py-2 text-sm min-h-[40px]",
-    lg: "px-6 py-3 text-base min-h-[48px]",
-    xl: "px-8 py-4 text-lg min-h-[56px]",
-  }
+  const { states, handlers } = useComponentStates(disabled || loading)
 
-  // Точные размеры для расчета скоса (25% от высоты)
-  const getChamferSize = () => {
-    switch (size) {
-      case "xs": return 6 // 25% от 24px = 6px
-      case "sm": return 8 // 25% от 32px = 8px
-      case "lg": return 12 // 25% от 48px = 12px
-      case "xl": return 14 // 25% от 56px = 14px
-      default: return 10 // 25% от 40px = 10px
-    }
-  }
-
-  // Кастомные стили
-  const customBorderStyles = {
-    ...(borderColor && { backgroundColor: borderColor }),
-  }
-
-  const customContentStyles = {
-    ...(backgroundColor && { backgroundColor: backgroundColor }),
-    ...(textColor && { color: textColor }),
-  }
-
-  const chamferSize = getChamferSize()
-
-  // Точные clip-path без округлений
-  const outerClipPath = `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
+  // Получаем размеры из токенов
+  const sizeConfig = tokens.sizes[size]
+  const chamferSize = getChamferSizeFromComponentSize(size)
   
-  // Точный внутренний clip-path с идеальным отступом
-  const innerClipPath = `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
+  // Создаем стили для скосов
+  const chamferStyles = createChamferStyles(chamferSize)
+
+  // Определяем цвета на основе варианта и состояния
+  const getVariantColors = () => {
+    const baseColors = {
+      primary: {
+        border: "#AFEB0F",
+        background: "#AFEB0F",
+        text: "#292D30",
+        hover: {
+          border: "#292D30",
+          background: "#292D30",
+          text: "#AFEB0F",
+        },
+      },
+      secondary: {
+        border: "#292D30",
+        background: "#292D30",
+        text: "#AFEB0F",
+        hover: {
+          border: "#AFEB0F",
+          background: "#AFEB0F",
+          text: "#1A1D20",
+        },
+      },
+      outlined: {
+        border: "#AFEB0F",
+        background: "white",
+        text: "#292D30",
+        hover: {
+
+          border: "#AFEB0F",
+          background: "#AFEB0F",
+          text: "#1A1D20",
+        },
+      },
+      ghost: {
+        border: "transparent",
+        background: "transparent",
+        text: "#292D30",
+        hover: {
+          border: "transparent",
+          background: "#F0F0F0",
+          text: "#292D30",
+        },
+      },
+      text: {
+        border: "transparent",
+        background: "transparent",
+        text: "#292D30",
+        hover: {
+          border: "transparent",
+          background: "transparent",
+          text: "#AFEB0F",
+        },
+      },
+      danger: {
+        border: "#EF4444",
+        background: "#EF4444",
+        text: "#FFFFFF",
+        hover: {
+          border: "#B91C1C",
+          background: "#B91C1C",
+          text: "#FFFFFF",
+        },
+      },
+      success: {
+        border: "#10B981",
+        background: "#10B981",
+        text: "#FFFFFF",
+        hover: {
+          border: "#047857",
+          background: "#047857",
+          text: "#FFFFFF",
+        },
+      },
+      warning: {
+        border: "#F59E0B",
+        background: "#F59E0B",
+        text: "#FFFFFF",
+        hover: {
+          border: "#B45309",
+          background: "#B45309",
+          text: "#FFFFFF",
+        },
+      },
+    }
+
+    const colors = baseColors[variant]
+    
+    // Обрабатываем фокус для всех вариантов
+    if (states.isFocused && variant !== 'ghost' && variant !== 'text') {
+      return {
+        border: "#AFEB0F",
+        background: variant === 'outlined' ? "transparent" : "#AFEB0F",
+        text: variant === 'outlined' ? "#AFEB0F" : "#292D30",
+      }
+    }
+    
+    if (variant === 'outlined') {
+      // Для outlined всегда показываем border, но меняем background при hover
+      return {
+        border: states.isHovered ? colors.hover.border : colors.border,
+        background: states.isHovered ? colors.hover.background : colors.background,
+        text: states.isHovered ? colors.hover.text : colors.text,
+      }
+    }
+    if (variant === 'text') {
+      // Для text меняем только цвет текста при hover
+      return {
+        border: colors.border,
+        background: colors.background,
+        text: states.isHovered ? colors.hover.text : colors.text,
+      }
+    }
+    return states.isHovered ? colors.hover : colors
+  }
+
+  const colors = getVariantColors()
 
   return (
-    <div className="relative inline-block">
-      {/* Внешняя рамка со скосами */}
-      <div
-        className="absolute inset-0 transition-colors duration-200"
-        style={{
-          clipPath: outerClipPath,
-          backgroundColor: variant === "primary" ? "#AFEB0F" : 
-                          variant === "secondary" ? "#292D30" : 
-                          variant === "outlined" ? "#292D30" : 
-                          variant === "ghost" ? "transparent" : 
-                          variant === "danger" ? "#ef4444" : "#e5e7eb",
-          ...customBorderStyles,
-        }}
-      />
+    <div className={cn("relative inline-block", fullWidth && "w-full")}>
+      {/* Внешняя рамка со скосами - для всех вариантов кроме text */}
+      {variant !== 'text' && (
+        <div
+          className="absolute inset-0 transition-all duration-200"
+          style={{
+            ...chamferStyles.outer,
+            backgroundColor: variant === 'ghost' ? 'transparent' : colors.border,
+          }}
+        />
+      )}
 
       {/* Внутренний контент */}
       <div
         className="relative"
         style={{
-          clipPath: innerClipPath,
+          padding: variant !== 'text' ? '1px' : '0',
+          backgroundColor: colors.background,
+          ...(variant !== 'text' ? { clipPath: chamferStyles.inner.clipPath } : {}),
         }}
       >
         <button
           className={cn(
-            "w-full border-0 outline-none transition-all duration-200 font-medium focus:ring-2 focus:ring-[#AFEB0F] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
-            sizes[size],
+            "w-full border-0 outline-none transition-all duration-200 font-medium focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
             iconOnly && "aspect-square p-0",
-            // Базовые стили
-            variant === "primary" && "bg-[#AFEB0F] text-[#292D30]",
-            variant === "secondary" && "bg-[#292D30] text-white",
-            variant === "outlined" && "bg-transparent text-[#292D30]", // Прозрачный фон для outlined
-            variant === "ghost" && "bg-transparent text-[#292D30]",
-            variant === "danger" && "bg-red-500 text-white",
-            // Hover эффекты
-            variant === "primary" && "hover:bg-[#292D30] hover:text-[#AFEB0F]",
-            variant === "secondary" && "hover:bg-[#1F2326]",
-            variant === "outlined" && "hover:bg-[#292D30] hover:text-[#AFEB0F]",
-            variant === "ghost" && "hover:bg-gray-100",
-            variant === "danger" && "hover:bg-red-600",
+            fullWidth && "w-full",
+            variant === "text" && "hover:underline",
             className,
           )}
-          style={customContentStyles}
+          style={{
+            padding: iconOnly ? '0' : sizeConfig.padding,
+            fontSize: sizeConfig.fontSize,
+            minHeight: sizeConfig.height,
+            width: iconOnly ? sizeConfig.height : 'auto',
+            backgroundColor: colors.background,
+            color: colors.text,
+            boxShadow: states.isPressed ? tokens.shadows.inner : tokens.shadows.none,
+            transform: states.isPressed ? 'scale(0.98)' : 'scale(1)',
+          }}
           disabled={disabled || loading}
+          {...handlers}
           {...props}
         >
           <div className="flex items-center justify-center gap-2">
-            {loading && <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent" />}
+            {loading && (
+              <div 
+                className="animate-spin rounded-full border-2 border-current border-t-transparent"
+                style={{ width: '16px', height: '16px' }}
+              />
+            )}
             {!loading && icon && <span className="flex-shrink-0">{icon}</span>}
-            {!iconOnly && <span>{children}</span>}
+            {!iconOnly && children && <span>{children}</span>}
           </div>
         </button>
       </div>
     </div>
   )
-}
+} 

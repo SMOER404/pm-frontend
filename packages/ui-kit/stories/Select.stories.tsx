@@ -1,168 +1,333 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
 import CustomSelect from "../components/custom-select"
+import { demoSelectData } from "../lib/select-utils"
 
-const meta = {
-  title: "Components/CustomSelect",
+const meta: Meta<typeof CustomSelect> = {
+  title: "Components/Select V2",
   component: CustomSelect,
   parameters: {
     layout: "centered",
-    docs: {
-      description: {
-        component: "Кастомный селект с скошенными углами для выбора опций.",
-      },
-    },
   },
   tags: ["autodocs"],
   argTypes: {
     size: {
-      control: "select",
-      options: ["sm", "md", "lg"],
-      description: "Размер селекта",
+      control: { type: "select" },
+      options: ["xs", "sm", "md", "lg", "xl"],
     },
     variant: {
-      control: "select",
+      control: { type: "select" },
       options: ["outlined", "filled"],
-      description: "Вариант стиля",
+    },
+    multiSelect: {
+      control: { type: "boolean" },
+    },
+    searchable: {
+      control: { type: "boolean" },
     },
     disabled: {
-      control: "boolean",
-      description: "Отключенное состояние",
+      control: { type: "boolean" },
     },
   },
-} satisfies Meta<typeof CustomSelect>
-
-export default meta
-type Story = StoryObj<typeof meta>
-
-const SelectWithState = (args: any) => {
-  const [value, setValue] = useState<string>("")
-
-  return (
-    <CustomSelect
-      {...args}
-      value={value}
-      onChange={setValue}
-    />
-  )
 }
 
-const options = [
-  { value: "option1", label: "Опция 1" },
-  { value: "option2", label: "Опция 2" },
-  { value: "option3", label: "Опция 3" },
-  { value: "option4", label: "Опция 4" },
-  { value: "option5", label: "Опция 5" },
-]
-
-const countries = [
-  { value: "ru", label: "Россия" },
-  { value: "us", label: "США" },
-  { value: "de", label: "Германия" },
-  { value: "fr", label: "Франция" },
-  { value: "uk", label: "Великобритания" },
-  { value: "cn", label: "Китай" },
-  { value: "jp", label: "Япония" },
-  { value: "kr", label: "Южная Корея" },
-]
+export default meta
+type Story = StoryObj<typeof CustomSelect>
 
 export const Default: Story = {
   args: {
-    options,
-    placeholder: "Выберите опцию",
+    label: "Select Country",
+    data: demoSelectData.countries,
+    placeholder: "Выберите страну...",
   },
-  render: (args) => <SelectWithState {...args} />,
 }
 
-export const WithLabel: Story = {
-  args: {
-    options,
-    label: "Выберите страну",
-    placeholder: "Выберите страну",
-  },
-  render: (args) => <SelectWithState {...args} />,
+export const Sizes: Story = {
+  render: () => (
+    <div className="space-y-4 w-80">
+      <CustomSelect 
+        label="Extra Small" 
+        size="xs" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="xs size"
+      />
+      <CustomSelect 
+        label="Small" 
+        size="sm" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="sm size"
+      />
+      <CustomSelect 
+        label="Medium" 
+        size="md" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="md size"
+      />
+      <CustomSelect 
+        label="Large" 
+        size="lg" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="lg size"
+      />
+      <CustomSelect 
+        label="Extra Large" 
+        size="xl" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="xl size"
+      />
+    </div>
+  ),
 }
 
-export const Countries: Story = {
-  args: {
-    options: countries,
-    label: "Страна",
-    placeholder: "Выберите страну",
-  },
-  render: (args) => <SelectWithState {...args} />,
+export const Variants: Story = {
+  render: () => (
+    <div className="space-y-4 w-80">
+      <CustomSelect 
+        label="Outlined" 
+        variant="outlined" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="Outlined variant"
+      />
+      <CustomSelect 
+        label="Filled" 
+        variant="filled" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="Filled variant"
+      />
+    </div>
+  ),
 }
 
-export const Small: Story = {
-  args: {
-    options,
-    size: "sm",
-    label: "Маленький селект",
-    placeholder: "Выберите опцию",
-  },
-  render: (args) => <SelectWithState {...args} />,
+export const WithSearch: Story = {
+  render: () => (
+    <div className="space-y-4 w-80">
+      <CustomSelect 
+        label="Searchable Select" 
+        data={demoSelectData.countries}
+        searchable
+        placeholder="Поиск страны..."
+      />
+      <CustomSelect 
+        label="Searchable Grouped" 
+        data={demoSelectData.groupedCategories}
+        searchable
+        placeholder="Поиск категории..."
+      />
+    </div>
+  ),
 }
 
-export const Large: Story = {
-  args: {
-    options,
-    size: "lg",
-    label: "Большой селект",
-    placeholder: "Выберите опцию",
+export const MultiSelect: Story = {
+  render: () => {
+    const [selectedCountries, setSelectedCountries] = useState<string[]>([])
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+
+    const handleCountriesChange = (value: string | string[]) => {
+      setSelectedCountries(Array.isArray(value) ? value : [])
+    }
+
+    const handleCategoriesChange = (value: string | string[]) => {
+      setSelectedCategories(Array.isArray(value) ? value : [])
+    }
+
+    return (
+      <div className="space-y-4 w-80">
+        <CustomSelect 
+          label="Multi Select Countries" 
+          data={demoSelectData.countries}
+          value={selectedCountries}
+          onChange={handleCountriesChange}
+          multiSelect
+          placeholder="Выберите страны..."
+        />
+        <p className="text-sm text-gray-600">
+          Выбрано: {selectedCountries.length} стран
+        </p>
+        
+        <CustomSelect 
+          label="Multi Select Categories" 
+          data={demoSelectData.groupedCategories}
+          value={selectedCategories}
+          onChange={handleCategoriesChange}
+          multiSelect
+          searchable
+          placeholder="Выберите категории..."
+        />
+        <p className="text-sm text-gray-600">
+          Выбрано: {selectedCategories.length} категорий
+        </p>
+      </div>
+    )
   },
-  render: (args) => <SelectWithState {...args} />,
 }
 
-export const Filled: Story = {
-  args: {
-    options,
-    variant: "filled",
-    label: "Заполненный селект",
-    placeholder: "Выберите опцию",
-  },
-  render: (args) => <SelectWithState {...args} />,
+export const GroupedOptions: Story = {
+  render: () => (
+    <div className="space-y-4 w-80">
+      <CustomSelect 
+        label="Grouped Categories" 
+        data={demoSelectData.groupedCategories}
+        placeholder="Выберите категорию..."
+      />
+      <CustomSelect 
+        label="Grouped with Search" 
+        data={demoSelectData.groupedCategories}
+        searchable
+        placeholder="Поиск категории..."
+      />
+    </div>
+  ),
 }
 
-export const Disabled: Story = {
-  args: {
-    options,
-    disabled: true,
-    label: "Отключенный селект",
-    placeholder: "Выберите опцию",
-  },
-  render: (args) => <SelectWithState {...args} />,
+export const States: Story = {
+  render: () => (
+    <div className="space-y-4 w-80">
+      <CustomSelect 
+        label="Normal" 
+        data={demoSelectData.countries.slice(0, 3)}
+        placeholder="Normal state"
+      />
+      <CustomSelect 
+        label="Disabled" 
+        data={demoSelectData.countries.slice(0, 3)}
+        disabled
+        placeholder="Disabled state"
+      />
+      <CustomSelect 
+        label="With Error" 
+        data={demoSelectData.countries.slice(0, 3)}
+        error="This field has an error"
+        placeholder="Error state"
+      />
+      <CustomSelect 
+        label="With Helper" 
+        data={demoSelectData.countries.slice(0, 3)}
+        helperText="This is helper text"
+        placeholder="Helper text"
+      />
+    </div>
+  ),
 }
 
-export const WithError: Story = {
-  args: {
-    options,
-    error: "Это поле обязательно для заполнения",
-    label: "Селект с ошибкой",
-    placeholder: "Выберите опцию",
+export const ControlledSelect: Story = {
+  render: () => {
+    const [value, setValue] = useState<string>("")
+
+    const handleChange = (newValue: string | string[]) => {
+      setValue(Array.isArray(newValue) ? newValue[0] || "" : newValue)
+    }
+
+    return (
+      <div className="space-y-4 w-80">
+        <CustomSelect 
+          label="Controlled Select" 
+          data={demoSelectData.countries}
+          value={value}
+          onChange={handleChange}
+          placeholder="This is controlled"
+        />
+        <p className="text-sm text-gray-600">
+          Current value: <span className="font-mono">{value || "(empty)"}</span>
+        </p>
+        <button 
+          onClick={() => setValue("us")}
+          className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Set to USA
+        </button>
+        <button 
+          onClick={() => setValue("")}
+          className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 ml-2"
+        >
+          Clear
+        </button>
+      </div>
+    )
   },
-  render: (args) => <SelectWithState {...args} />,
 }
 
-export const WithHelperText: Story = {
-  args: {
-    options,
-    helperText: "Выберите подходящую опцию из списка",
-    label: "Селект с подсказкой",
-    placeholder: "Выберите опцию",
+export const ControlledMultiSelect: Story = {
+  render: () => {
+    const [values, setValues] = useState<string[]>([])
+
+    const handleChange = (newValue: string | string[]) => {
+      setValues(Array.isArray(newValue) ? newValue : [])
+    }
+
+    return (
+      <div className="space-y-4 w-80">
+        <CustomSelect 
+          label="Controlled Multi Select" 
+          data={demoSelectData.countries}
+          value={values}
+          onChange={handleChange}
+          multiSelect
+          placeholder="This is controlled multi select"
+        />
+        <p className="text-sm text-gray-600">
+          Current values: <span className="font-mono">{JSON.stringify(values)}</span>
+        </p>
+        <button 
+          onClick={() => setValues(["us", "gb"])}
+          className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Set to USA & UK
+        </button>
+        <button 
+          onClick={() => setValues([])}
+          className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 ml-2"
+        >
+          Clear
+        </button>
+      </div>
+    )
   },
-  render: (args) => <SelectWithState {...args} />,
 }
 
-export const WithDisabledOptions: Story = {
-  args: {
-    options: [
-      { value: "option1", label: "Опция 1" },
-      { value: "option2", label: "Опция 2", disabled: true },
-      { value: "option3", label: "Опция 3" },
-      { value: "option4", label: "Опция 4", disabled: true },
-      { value: "option5", label: "Опция 5" },
-    ],
-    label: "Селект с отключенными опциями",
-    placeholder: "Выберите опцию",
+export const Interactive: Story = {
+  render: () => {
+    const [selectedCountry, setSelectedCountry] = useState<string>("")
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+
+    const handleCountryChange = (value: string | string[]) => {
+      setSelectedCountry(Array.isArray(value) ? value[0] || "" : value)
+    }
+
+    const handleCategoriesChange = (value: string | string[]) => {
+      setSelectedCategories(Array.isArray(value) ? value : [])
+    }
+
+    return (
+      <div className="space-y-6 w-80">
+        <CustomSelect 
+          label="Country" 
+          data={demoSelectData.countries}
+          value={selectedCountry}
+          onChange={handleCountryChange}
+          searchable
+          placeholder="Выберите страну..."
+        />
+        
+        <CustomSelect 
+          label="Categories" 
+          data={demoSelectData.groupedCategories}
+          value={selectedCategories}
+          onChange={handleCategoriesChange}
+          multiSelect
+          searchable
+          placeholder="Выберите категории..."
+        />
+        
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h4 className="font-medium mb-2">Selected Values:</h4>
+          <p className="text-sm text-gray-600">
+            Country: <span className="font-mono">{selectedCountry || "(none)"}</span>
+          </p>
+          <p className="text-sm text-gray-600">
+            Categories: <span className="font-mono">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "(none)"}</span>
+          </p>
+        </div>
+      </div>
+    )
   },
-  render: (args) => <SelectWithState {...args} />,
 } 

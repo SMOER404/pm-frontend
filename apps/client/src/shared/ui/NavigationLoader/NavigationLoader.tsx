@@ -1,12 +1,10 @@
 'use client'
 
-import { Fallback } from '../Fallback'
+import { CustomNavigationLoader } from "@poizon/ui-kit"
 import { useLoading } from '@/shared/hooks/useLoading'
 
 export const NavigationLoader = () => {
   const isLoading = useLoading()
 
-  if (!isLoading) return null
-
-  return <Fallback />
+  return <CustomNavigationLoader isLoading={isLoading} />
 } 

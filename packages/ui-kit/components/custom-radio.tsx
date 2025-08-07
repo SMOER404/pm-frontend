@@ -1,7 +1,9 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { cn } from "../lib/utils"
+import { tokens } from "../lib/design-tokens"
+import { createChamferStyles, getChamferSizeFromComponentSize } from "../lib/chamfer-utils"
 
 interface CustomRadioProps {
   name: string
@@ -41,14 +43,14 @@ export default function CustomRadio({
     lg: "text-lg",
   }
 
-  // clipPath для скосов (1px) - меньшие скосы для radio
-  const clipPath = "[clip-path:polygon(4px_0px,100%_0px,100%_calc(100%-4px),calc(100%-4px)_100%,0px_100%,0px_4px)]"
-  const contentClipPath =
-    "[clip-path:polygon(3px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-3px),calc(100%-3px)_calc(100%-1px),1px_calc(100%-1px),1px_3px)]"
-
-  const customBorderStyles = {
-    ...(borderColor && { backgroundColor: borderColor }),
-  }
+  // Получаем размеры скосов (меньшие для radio)
+  const chamferSize = getChamferSizeFromComponentSize("xs")
+  
+  // Создаем стили для скосов
+  const chamferStyles = createChamferStyles(
+    chamferSize,
+    checked ? tokens.colors.brand.DEFAULT : (borderColor || tokens.colors.primary[300])
+  )
 
   const customContentStyles = {
     ...(backgroundColor && { backgroundColor: backgroundColor }),
@@ -76,28 +78,30 @@ export default function CustomRadio({
 
         {/* Custom Radio */}
         <div className={cn("relative", sizes[size])}>
-          {/* Border */}
+          {/* Внешняя рамка со скосами */}
           <div
-            className={cn(
-              "absolute inset-0 transition-colors duration-200",
-              clipPath,
-              checked ? "bg-[#AFEB0F]" : "bg-gray-300",
-            )}
-            style={!checked ? customBorderStyles : undefined}
+            className="absolute inset-0 transition-all duration-200"
+            style={{
+              ...chamferStyles.outer,
+              backgroundColor: checked ? tokens.colors.brand.DEFAULT : (borderColor || tokens.colors.primary[300]),
+            }}
           />
 
-          {/* Content */}
+          {/* Внутренний контент */}
           <div
-            className={cn("relative w-full h-full bg-white transition-all duration-200", contentClipPath)}
-            style={customContentStyles}
+            className="relative w-full h-full bg-white transition-all duration-200"
+            style={{
+              ...chamferStyles.inner,
+              ...customContentStyles,
+            }}
           >
             {/* Checked Indicator */}
             {checked && (
               <div
-                className={cn(
-                  "absolute inset-1 bg-[#AFEB0F] transition-all duration-200",
-                  "[clip-path:polygon(2px_0px,100%_0px,100%_calc(100%-2px),calc(100%-2px)_100%,0px_100%,0px_2px)]",
-                )}
+                className="absolute inset-1 bg-[#AFEB0F] transition-all duration-200"
+                style={{
+                  clipPath: `polygon(2px 0px, 100% 0px, 100% calc(100% - 2px), calc(100% - 2px) 100%, 0px 100%, 0px 2px)`,
+                }}
               />
             )}
           </div>

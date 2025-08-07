@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import { api } from '@/shared/api'
-import ProductCardList from "@/shared/ui/product-card-list/ProductCardList";
+import ProductCardList from "@/shared/ui/product-card-list/ProductCardList"
+import HeroSection from "@/components/HeroSection"
+import { CustomContainer, CustomTypography } from "@poizon/ui-kit"
 
 export const dynamic = 'force-dynamic'
 
@@ -17,22 +19,26 @@ export default async function HomePage() {
   const trendingProducts = await api.recommendations.getTrendingRecommendations(8)
 
   return (
-    <div className="container prose mt-10 mb-10 px-0">
-      <div className='mb-20'>
-        {Boolean(popularProducts.data.length) &&
+    <>
+      {/* <HeroSection /> */}
+      
+      <CustomContainer className="mt-10 mb-10 px-0">
+        <div className='mb-20'>
+          {Boolean(popularProducts.data.length) &&
+              <ProductCardList
+                  title='Популярные'
+                  products={popularProducts.data.slice(0,4)}
+              />
+          }
+        </div>
+
+        {Boolean(trendingProducts.data.length) &&
             <ProductCardList
-                title='Популярные'
-                products={popularProducts.data.slice(0,4)}
+                title='В тренде'
+                products={trendingProducts.data.slice(0,4)}
             />
         }
-      </div>
-
-      {Boolean(trendingProducts.data.length) &&
-          <ProductCardList
-              title='В тренде'
-              products={trendingProducts.data.slice(0,4)}
-          />
-      }
-    </div>
+      </CustomContainer>
+    </>
   )
 } 

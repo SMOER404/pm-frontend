@@ -5,6 +5,7 @@ import {useState} from "react";
 import {ProductGallery} from "@/widgets/product-page/ui/ProductGallery";
 import {ProductInfo} from "@/widgets/product-page/ui/ProductInfo";
 import {ProductActions} from "@/widgets/product-page/ui/ProductActions";
+import { CustomContainer } from "@poizon/ui-kit";
 
 interface ProductPageProps {
     params: {
@@ -55,7 +56,7 @@ export default async function ProductPage({params}: ProductPageProps) {
 
 
     return (
-        <div className="container mt-10 mb-10 px-0">
+        <CustomContainer className="mt-10 mb-10 px-0">
             <Breadcrumbs
                 items={[
                     {label: 'Каталог', href: '/catalog'},
@@ -71,7 +72,6 @@ export default async function ProductPage({params}: ProductPageProps) {
                     {label: product.name}
                 ]}
             />
-            <CustomButton />
             <div className="product-page mt-10">
                 <div className="product-row flex">
                     <ProductGallery
@@ -105,6 +105,6 @@ export default async function ProductPage({params}: ProductPageProps) {
                     </div>
                 </div>
             </div>
-        </div>
+        </CustomContainer>
     );
 }

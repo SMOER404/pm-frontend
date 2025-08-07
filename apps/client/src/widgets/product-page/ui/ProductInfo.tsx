@@ -33,9 +33,9 @@ export const ProductInfo = ({
                                 onSizeChange,
                             }: ProductInfoProps) => (
     <div className="product-info uppercase">
-        <CustomTypography variant="body2" className='text-primary-light mb-4'>ПОВСЕДНЕВНАЯ ОБУВЬ</CustomTypography>
+        <CustomTypography variant="body" size="sm" className='text-primary-light mb-4'>ПОВСЕДНЕВНАЯ ОБУВЬ</CustomTypography>
         <CustomTypography variant="h1" className='font-medium'>{title}</CustomTypography>
-        <CustomTypography variant="body1" className='mb-2'>{description}</CustomTypography>
+        <CustomTypography variant="body" size="md" className='mb-2'>{description}</CustomTypography>
         <Price value={price} oldValue={oldPrice} className='mb-2'/>
         <div className="mb-4">
             <ColorPicker

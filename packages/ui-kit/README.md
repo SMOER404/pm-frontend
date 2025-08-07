@@ -1,208 +1,238 @@
-# UI Kit
+# POIZON UI Kit
 
-Кастомная UI библиотека компонентов с скошенными углами в стиле Material UI.
+Современная библиотека компонентов для создания адаптивных и доступных пользовательских интерфейсов.
 
-## Компоненты
+## 📚 Документация
 
-### CustomButton
-Кнопка со скошенными углами с поддержкой различных вариантов, размеров и состояний.
+### Основные гайды
 
-**Варианты:** `primary`, `secondary`, `outlined`, `ghost`, `danger`
-**Размеры:** `xs`, `sm`, `md`, `lg`, `xl`
+- **[Гайд по позиционированию и адаптивности](./LAYOUT_GUIDE.md)** - Подробное руководство по созданию адаптивных макетов
+- **[Архитектурные улучшения](./ARCHITECTURE_IMPROVEMENTS.md)** - Планы по улучшению архитектуры
+- **[Улучшения дизайн-токенов](./DESIGN_TOKENS_IMPROVEMENTS.md)** - Система дизайн-токенов
+- **[Отсутствующие компоненты](./MISSING_COMPONENTS.md)** - Список компонентов для разработки
+- **[Дорожная карта](./ROADMAP.md)** - Планы развития библиотеки
 
-```tsx
-import CustomButton from "./components/custom-button"
+## 🚀 Быстрый старт
 
-<CustomButton variant="primary" size="md">
-  Click me
-</CustomButton>
-```
+### Установка
 
-### CustomBadge
-Бейдж для отображения статуса, количества или меток.
-
-**Варианты:** `default`, `primary`, `secondary`, `success`, `warning`, `error`
-**Размеры:** `sm`, `md`, `lg`
-
-```tsx
-import CustomBadge from "./components/custom-badge"
-
-<CustomBadge variant="primary">New</CustomBadge>
-```
-
-### CustomInput
-Кастомное поле ввода с поддержкой различных типов и состояний.
-
-**Варианты:** `outlined`, `filled`
-**Размеры:** `sm`, `md`, `lg`
-
-```tsx
-import CustomInput from "./components/custom-input"
-
-<CustomInput 
-  label="Email" 
-  type="email" 
-  placeholder="example@email.com" 
-/>
-```
-
-### CustomCard
-Кастомная карточка с скошенными углами для группировки контента.
-
-**Варианты:** `default`, `outlined`, `elevated`
-**Отступы:** `none`, `sm`, `md`, `lg`
-
-```tsx
-import CustomCard from "./components/custom-card"
-
-<CustomCard variant="outlined" padding="md">
-  <h3>Card Title</h3>
-  <p>Card content</p>
-</CustomCard>
-```
-
-### CustomTypography
-Компонент для типографики с различными вариантами стилей текста.
-
-**Варианты:** `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `subtitle1`, `subtitle2`, `body1`, `body2`, `caption`, `overline`
-**Цвета:** `primary`, `secondary`, `disabled`, `inherit`
-
-```tsx
-import CustomTypography from "./components/custom-typography"
-
-<CustomTypography variant="h1" color="primary">
-  Heading
-</CustomTypography>
-```
-
-### CustomModal
-Модальное окно со скошенными углами с поддержкой различных размеров и позиций.
-
-**Размеры:** `sm`, `md`, `lg`, `xl`, `full`
-**Позиции:** `center`, `top`, `bottom`
-
-```tsx
-import CustomModal from "./components/custom-modal"
-
-<CustomModal open={isOpen} onClose={() => setIsOpen(false)}>
-  <div>Modal content</div>
-</CustomModal>
-```
-
-### CustomAccordion
-Аккордеон с скошенными углами для группировки контента.
-
-**Варианты:** `default`, `outlined`
-
-```tsx
-import CustomAccordion, { CustomAccordionItem } from "./components/custom-accordion"
-
-<CustomAccordion>
-  <CustomAccordionItem title="Заголовок" defaultExpanded>
-    Содержимое секции
-  </CustomAccordionItem>
-</CustomAccordion>
-```
-
-### CustomBox
-Универсальный компонент Box для создания контейнеров с кастомными стилями.
-
-```tsx
-import CustomBox from "./components/custom-box"
-
-<CustomBox 
-  padding={16} 
-  backgroundColor="#f0f0f0" 
-  borderRadius={8}
->
-  Содержимое
-</CustomBox>
-```
-
-### CustomSelect
-Кастомный селект с скошенными углами для выбора опций.
-
-**Варианты:** `outlined`, `filled`
-**Размеры:** `sm`, `md`, `lg`
-
-```tsx
-import CustomSelect from "./components/custom-select"
-
-<CustomSelect
-  options={[
-    { value: "option1", label: "Опция 1" },
-    { value: "option2", label: "Опция 2" },
-  ]}
-  placeholder="Выберите опцию"
-/>
-```
-
-### CustomTabs
-Компонент вкладок с скошенными углами для организации контента.
-
-**Варианты:** `default`, `outlined`, `pills`
-**Ориентация:** `horizontal`, `vertical`
-
-```tsx
-import CustomTabs, { CustomTab, CustomTabPanel } from "./components/custom-tabs"
-
-<CustomTabs defaultValue="tab1">
-  <CustomTab label="Вкладка 1" value="tab1" />
-  <CustomTab label="Вкладка 2" value="tab2" />
-  <CustomTabPanel value="tab1">Содержимое 1</CustomTabPanel>
-  <CustomTabPanel value="tab2">Содержимое 2</CustomTabPanel>
-</CustomTabs>
-```
-
-## Установка и запуск
-
-### Зависимости
 ```bash
-npm install
+npm install @poizon/ui-kit
 ```
+
+### Использование
+
+```tsx
+import { 
+  CustomContainer, 
+  CustomGrid, 
+  CustomBox, 
+  CustomTypography,
+  CustomButton 
+} from "@poizon/ui-kit"
+
+function App() {
+  return (
+    <CustomContainer maxWidth="lg">
+      <CustomTypography variant="h1">Добро пожаловать</CustomTypography>
+      
+      <CustomGrid container spacing={2}>
+        <CustomGrid item xs={12} sm={6} md={4}>
+          <CustomBox padding={16} backgroundColor="#f5f5f5">
+            <CustomTypography variant="h3">Карточка 1</CustomTypography>
+            <CustomTypography variant="body">Описание карточки</CustomTypography>
+          </CustomBox>
+        </CustomGrid>
+      </CustomGrid>
+      
+      <CustomButton variant="primary">Нажми меня</CustomButton>
+    </CustomContainer>
+  )
+}
+```
+
+## 🎨 Компоненты
+
+### Layout компоненты
+
+- **CustomContainer** - Адаптивные контейнеры с автоматическими отступами
+- **CustomGrid** - Система сеток для создания макетов
+- **CustomBox** - Универсальный компонент для создания блоков
+
+### Typography
+
+- **CustomTypography** - Система типографики с различными вариантами и размерами
+
+### Form компоненты
+
+- **CustomButton** - Кнопки с различными вариантами и размерами
+- **CustomInput** - Поля ввода
+- **CustomSelect** - Выпадающие списки
+- **CustomCheckbox** - Чекбоксы
+- **CustomRadio** - Радио кнопки
+- **CustomTextarea** - Многострочные поля ввода
+
+### Navigation
+
+- **CustomBreadcrumbs** - Хлебные крошки
+- **CustomMenu** - Меню навигации
+- **CustomTabs** - Вкладки
+
+### Feedback
+
+- **CustomModal** - Модальные окна
+- **CustomDialog** - Диалоговые окна
+- **CustomDrawer** - Боковые панели
+- **CustomAlert** - Уведомления
+
+### Data Display
+
+- **CustomCard** - Карточки
+- **CustomList** - Списки
+- **CustomTable** - Таблицы
+- **CustomBadge** - Бейджи
+- **CustomSkeleton** - Скелетоны загрузки
+
+### Overlay
+
+- **CustomAccordion** - Аккордеоны
+- **CustomTooltip** - Подсказки
+- **CustomPopover** - Всплывающие панели
+
+## 📱 Адаптивность
+
+Все компоненты следуют принципу **Mobile-First** и поддерживают адаптивность:
+
+```tsx
+// Адаптивная сетка
+<CustomGrid container spacing={2}>
+  <CustomGrid item xs={12} sm={6} md={4} lg={3}>
+    <ProductCard />
+  </CustomGrid>
+</CustomGrid>
+
+// Адаптивные контейнеры
+<CustomContainer maxWidth="lg">
+  <Content />
+</CustomContainer>
+```
+
+## 🎯 Breakpoints
+
+| Breakpoint | Размер | Описание |
+|------------|--------|----------|
+| `xs` | < 640px | Мобильные телефоны |
+| `sm` | 640px - 768px | Планшеты (портрет) |
+| `md` | 768px - 1024px | Планшеты (ландшафт) |
+| `lg` | 1024px - 1280px | Десктопы |
+| `xl` | ≥ 1280px | Большие экраны |
+| `2xl` | ≥ 1536px | Очень большие экраны |
+
+## 🛠 Разработка
 
 ### Запуск Storybook
+
 ```bash
 npm run storybook
 ```
 
-Storybook будет доступен по адресу: http://localhost:6006
+### Сборка
 
-### Сборка Storybook
 ```bash
-npm run build-storybook
+npm run build
 ```
 
-## Цветовая схема
+### Тестирование
 
-Библиотека использует следующие основные цвета:
+```bash
+npm run test
+```
 
-- **Brand (Primary):** `#AFEB0F` - основной брендовый цвет
-- **Primary (Dark):** `#292D30` - темный цвет для текста и фона
-- **Secondary:** `#8FBC0B` - темный вариант брендового цвета
-- **Background:** `#FFFFFF` - белый фон
+## 📖 Примеры
 
-## Особенности дизайна
-
-Все компоненты имеют скошенные углы (chamfered corners) для создания современного и уникального внешнего вида. Скосы реализованы с помощью CSS `clip-path`.
-
-## Утилиты
-
-Библиотека использует утилиту `cn` для объединения CSS классов:
+### Адаптивная галерея
 
 ```tsx
-import { cn } from "./lib/utils"
-
-const className = cn("base-class", conditional && "conditional-class")
+const ImageGallery = ({ images }) => (
+  <CustomContainer>
+    <CustomGrid container spacing={2}>
+      {images.map((image, index) => (
+        <CustomGrid 
+          key={index} 
+          item 
+          xs={12} 
+          sm={6} 
+          md={4} 
+          lg={3}
+        >
+          <CustomBox 
+            padding={8} 
+            backgroundColor="#f5f5f5" 
+            borderRadius={8}
+          >
+            <img 
+              src={image.url} 
+              alt={image.alt}
+              className="w-full h-48 object-cover rounded"
+            />
+          </CustomBox>
+        </CustomGrid>
+      ))}
+    </CustomGrid>
+  </CustomContainer>
+)
 ```
 
-## Структура проекта
+### Адаптивная форма
 
+```tsx
+const ContactForm = () => (
+  <CustomContainer maxWidth="md">
+    <CustomBox padding={24} backgroundColor="#fff" borderRadius={12}>
+      <CustomTypography variant="h3" className="mb-6">
+        Связаться с нами
+      </CustomTypography>
+      
+      <CustomGrid container spacing={3}>
+        <CustomGrid item xs={12} sm={6}>
+          <CustomInput label="Имя" fullWidth />
+        </CustomGrid>
+        <CustomGrid item xs={12} sm={6}>
+          <CustomInput label="Фамилия" fullWidth />
+        </CustomGrid>
+        <CustomGrid item xs={12}>
+          <CustomInput label="Email" fullWidth />
+        </CustomGrid>
+        <CustomGrid item xs={12}>
+          <CustomTextarea label="Сообщение" rows={4} fullWidth />
+        </CustomGrid>
+        <CustomGrid item xs={12}>
+          <CustomButton variant="primary" fullWidth>
+            Отправить
+          </CustomButton>
+        </CustomGrid>
+      </CustomGrid>
+    </CustomBox>
+  </CustomContainer>
+)
 ```
-packages/ui-kit/
-├── components/          # React компоненты
-├── stories/            # Storybook истории
-├── lib/               # Утилиты
-├── .storybook/        # Конфигурация Storybook
-└── README.md          # Документация
-``` 
+
+## 🤝 Вклад в проект
+
+1. Форкните репозиторий
+2. Создайте ветку для новой функции (`git checkout -b feature/amazing-feature`)
+3. Зафиксируйте изменения (`git commit -m 'Add amazing feature'`)
+4. Отправьте в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
+
+## 📄 Лицензия
+
+Этот проект лицензирован под MIT License - см. файл [LICENSE](LICENSE) для деталей.
+
+## 🆘 Поддержка
+
+Если у вас есть вопросы или проблемы, создайте issue в репозитории или обратитесь к команде разработки.
+
+---
+
+**POIZON UI Kit** - Создавайте современные интерфейсы с легкостью! 🚀 

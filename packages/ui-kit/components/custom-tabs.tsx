@@ -1,136 +1,234 @@
 "use client"
 
 import React from "react"
-
 import { cn } from "../lib/utils"
-import { useState } from "react"
-import type { ReactNode } from "react"
+import { tokens, type SizeToken } from "../lib/design-tokens"
+import { createChamferStyles, getChamferSizeFromComponentSize } from "../lib/chamfer-utils"
+import {
+  getTabStyles,
+  createTabClasses,
+  getTabsContainerStyles,
+  getTabPanelStyles,
+  getTabBadgeStyles,
+  useTabsState,
+  type TabItem,
+  type TabsVariant,
+  type TabsStyle,
+} from "../lib/tabs-utils"
+
+interface CustomTabsProps {
+  tabs?: TabItem[]
+  variant?: keyof TabsVariant
+  style?: keyof TabsStyle
+  size?: SizeToken
+  orientation?: "horizontal" | "vertical"
+  defaultActiveTab?: string
+  defaultValue?: string
+  controlled?: boolean
+  activeTab?: string
+  onTabChange?: (tabId: string) => void
+  className?: string
+  tabsClassName?: string
+  panelClassName?: string
+  tabClassName?: string
+  children?: React.ReactNode
+}
 
 interface CustomTabProps {
   label: string
   value: string
+  icon?: React.ReactNode
   disabled?: boolean
-  icon?: ReactNode
-}
-
-interface CustomTabsProps {
-  children: ReactNode
-  defaultValue?: string
-  value?: string
-  onChange?: (value: string) => void
-  variant?: "default" | "outlined" | "pills"
-  orientation?: "horizontal" | "vertical"
-  borderColor?: string
-  backgroundColor?: string
-  className?: string
+  badge?: string | number
+  children?: React.ReactNode
 }
 
 interface CustomTabPanelProps {
-  children: ReactNode
   value: string
+  children?: React.ReactNode
+  className?: string
 }
 
-export function CustomTab({ label, value, disabled = false, icon }: CustomTabProps) {
-  // Этот компонент используется только для типизации
+// CustomTab component for compound API
+export function CustomTab({ label, value, icon, disabled, badge, children }: CustomTabProps) {
+  // This component is used for compound API, the actual rendering is handled by CustomTabs
   return null
 }
 
-export function CustomTabPanel({ children, value }: CustomTabPanelProps) {
-  return <div>{children}</div>
+// CustomTabPanel component for compound API
+export function CustomTabPanel({ value, children, className }: CustomTabPanelProps) {
+  // This component is used for compound API, the actual rendering is handled by CustomTabs
+  return null
 }
 
 export default function CustomTabs({
-  children,
-  defaultValue,
-  value: controlledValue,
-  onChange,
+  tabs: propTabs,
   variant = "default",
+  style = "line",
+  size = "md",
   orientation = "horizontal",
-  borderColor,
-  backgroundColor,
+  defaultActiveTab,
+  defaultValue,
+  controlled = false,
+  activeTab: externalActiveTab,
+  onTabChange,
   className,
+  tabsClassName,
+  panelClassName,
+  tabClassName,
+  children,
 }: CustomTabsProps) {
-  const [internalValue, setInternalValue] = useState(defaultValue || "")
-
-  const currentValue = controlledValue !== undefined ? controlledValue : internalValue
-  const setValue = onChange || setInternalValue
-
-  // Извлекаем табы и панели из children
-  const tabs: CustomTabProps[] = []
-  const panels: React.ReactElement[] = []
-
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child)) {
-      if (child.type === CustomTab) {
-        tabs.push(child.props as CustomTabProps)
-      } else if (child.type === CustomTabPanel) {
-        panels.push(child)
-      }
+  // Handle compound component API
+  const [compoundTabs, setCompoundTabs] = React.useState<TabItem[]>([])
+  const [compoundPanels, setCompoundPanels] = React.useState<Record<string, React.ReactNode>>({})
+  
+  React.useEffect(() => {
+    if (children) {
+      const tabs: TabItem[] = []
+      const panels: Record<string, React.ReactNode> = {}
+      
+      React.Children.forEach(children, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === CustomTab) {
+            const { label, value, icon, disabled, badge } = child.props
+            tabs.push({
+              id: value,
+              label,
+              content: null, // Will be set from panels
+              icon,
+              disabled,
+              badge,
+            })
+          } else if (child.type === CustomTabPanel) {
+            const { value, children: panelChildren } = child.props
+            panels[value] = panelChildren
+          }
+        }
+      })
+      
+      setCompoundTabs(tabs)
+      setCompoundPanels(panels)
     }
-  })
+  }, [children])
 
-  // clipPath для скосов (1px)
-  const clipPath = "[clip-path:polygon(8px_0px,100%_0px,100%_calc(100%-8px),calc(100%-8px)_100%,0px_100%,0px_8px)]"
+  // Use compound tabs if no prop tabs provided
+  const tabs = propTabs || compoundTabs
+  const defaultTab = defaultValue || defaultActiveTab
+  
+  // Update tab content from panels
+  const tabsWithContent = tabs.map(tab => ({
+    ...tab,
+    content: compoundPanels[tab.id] || tab.content
+  }))
 
-  const customBorderStyles = {
-    ...(borderColor && { backgroundColor: borderColor }),
+  // Управление состоянием табов
+  const [internalState, internalActions] = useTabsState(tabsWithContent, defaultTab)
+  
+  const state = controlled ? { activeTab: externalActiveTab || "", tabs: tabsWithContent } : internalState
+  const actions = controlled ? { setActiveTab: onTabChange || (() => {}) } : internalActions
+
+  // Получаем стили
+  const containerStyles = getTabsContainerStyles(style, orientation)
+  const panelStyles = getTabPanelStyles(style, orientation)
+
+  // Получаем размеры скосов
+  const chamferSize = getChamferSizeFromComponentSize(size)
+  
+  // Создаем стили для скосов
+  const chamferStyles = createChamferStyles(
+    chamferSize,
+    tokens.colors.primary[300]
+  )
+
+  // Обработчик клика по табу
+  const handleTabClick = (tabId: string, disabled?: boolean) => {
+    if (disabled) return
+    if (controlled && onTabChange) {
+      onTabChange(tabId)
+    } else {
+      actions.setActiveTab(tabId)
+    }
   }
 
-  const customContentStyles = {
-    ...(backgroundColor && { backgroundColor: backgroundColor }),
-  }
+  // Находим активный таб
+  const activeTab = state.tabs.find(tab => tab.id === state.activeTab)
+  const activeTabContent = activeTab?.content
 
   return (
-    <div className={cn("space-y-4", className)}>
-      {/* Tab List */}
-      <div
-        className={cn(
-          "flex",
-          orientation === "horizontal" ? "flex-row border-b border-gray-200" : "flex-col space-y-1",
-          variant === "pills" && "bg-gray-100 p-1 rounded-lg",
-        )}
-      >
-        {tabs.map((tab) => (
-          <button
-            key={tab.value}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200",
-              tab.disabled && "opacity-50 cursor-not-allowed",
-              variant === "default" && [
-                orientation === "horizontal" ? "border-b-2" : "border-r-2",
-                currentValue === tab.value
-                  ? "border-[#AFEB0F] text-[#AFEB0F]"
-                  : "border-transparent text-[#292D30] hover:text-[#AFEB0F]",
-              ],
-              variant === "outlined" && [
-                "border border-gray-300 rounded",
-                currentValue === tab.value
-                  ? "bg-[#AFEB0F] text-[#292D30] border-[#AFEB0F]"
-                  : "bg-white text-[#292D30] hover:border-[#AFEB0F]",
-              ],
-              variant === "pills" && [
-                "rounded-md",
-                currentValue === tab.value ? "bg-white text-[#292D30] shadow-sm" : "text-gray-600 hover:text-[#292D30]",
-              ],
-            )}
-            onClick={() => !tab.disabled && setValue(tab.value)}
-            disabled={tab.disabled}
-          >
-            {tab.icon && <span>{tab.icon}</span>}
-            <span>{tab.label}</span>
-          </button>
-        ))}
+    <div className={cn("w-full", className)}>
+      {/* Контейнер табов */}
+      <div className={cn(containerStyles.className, "relative", tabsClassName)}>
+        {/* Внешняя рамка со скосами */}
+        <div
+          className="absolute inset-0 transition-all duration-200"
+          style={{
+            ...chamferStyles.outer,
+            backgroundColor: tokens.colors.primary[300],
+          }}
+        />
+
+        {/* Внутренний контент */}
+        <div
+          className="relative"
+          style={chamferStyles.inner}
+        >
+          {state.tabs.map((tab) => {
+            const isActive = tab.id === state.activeTab
+            const tabStyles = getTabStyles(variant, style, size, isActive)
+            const tabClasses = createTabClasses(variant, style, isActive, tab.disabled)
+            const badgeStyles = tab.badge ? getTabBadgeStyles(size) : null
+
+            return (
+              <button
+                key={tab.id}
+                className={cn(
+                  tabClasses,
+                  "flex items-center justify-center gap-2 font-medium focus:outline-none focus:ring-1 focus:ring-brand focus:ring-inset",
+                  tabClassName
+                )}
+                style={tabStyles.style}
+                onClick={() => handleTabClick(tab.id, tab.disabled)}
+                disabled={tab.disabled}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`panel-${tab.id}`}
+              >
+                {/* Иконка */}
+                {tab.icon && (
+                  <span 
+                    className="flex-shrink-0"
+                    style={{ fontSize: tabStyles.iconSize }}
+                  >
+                    {tab.icon}
+                  </span>
+                )}
+
+                {/* Лейбл */}
+                <span>{tab.label}</span>
+
+                {/* Бейдж */}
+                {tab.badge && (
+                  <span className={cn("flex-shrink-0", badgeStyles?.className)}>
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      {/* Tab Panels */}
-      <div>
-        {panels.map((panel) => {
-          if (panel.props.value === currentValue) {
-            return <div key={panel.props.value}>{panel.props.children}</div>
-          }
-          return null
-        })}
-      </div>
+      {/* Панель контента */}
+      {activeTabContent && (
+        <div
+          className={cn(panelStyles.className, panelClassName)}
+          role="tabpanel"
+          id={`panel-${state.activeTab}`}
+          aria-labelledby={`tab-${state.activeTab}`}
+        >
+          {activeTabContent}
+        </div>
+      )}
     </div>
   )
-}
+} 

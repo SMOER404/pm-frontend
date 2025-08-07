@@ -1,10 +1,12 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { cn } from "../lib/utils"
 import { useEffect } from "react"
 import { X } from "lucide-react"
 import CustomButton from "./custom-button"
+import { tokens } from "../lib/design-tokens"
+import { createChamferStyles, getChamferSizeFromComponentSize } from "../lib/chamfer-utils"
 
 interface CustomDrawerProps {
   open: boolean
@@ -55,39 +57,14 @@ export default function CustomDrawer({
     bottom: open ? "translate-y-0" : "translate-y-full",
   }
 
-  // Размер скоса для drawer (фиксированный)
-  const chamferSize = 12
-
-  // Точные clip-path для разных позиций drawer'а
-  const getOuterClipPath = () => {
-    switch (anchor) {
-      case "left":
-        return `polygon(0px 0px, calc(100% - ${chamferSize}px) 0px, 100% ${chamferSize}px, 100% 100%, 0px 100%)`
-      case "right":
-        return `polygon(${chamferSize}px 0px, 100% 0px, 100% 100%, 0px 100%, 0px ${chamferSize}px)`
-      case "top":
-        return `polygon(0px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%)`
-      case "bottom":
-        return `polygon(0px ${chamferSize}px, ${chamferSize}px 0px, 100% 0px, 100% 100%, 0px 100%)`
-      default:
-        return `polygon(${chamferSize}px 0px, 100% 0px, 100% calc(100% - ${chamferSize}px), calc(100% - ${chamferSize}px) 100%, 0px 100%, 0px ${chamferSize}px)`
-    }
-  }
-
-  const getInnerClipPath = () => {
-    switch (anchor) {
-      case "left":
-        return `polygon(1px 1px, calc(100% - ${chamferSize - 1}px) 1px, calc(100% - 1px) ${chamferSize + 1}px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px))`
-      case "right":
-        return `polygon(${chamferSize + 1}px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px ${chamferSize + 1}px)`
-      case "top":
-        return `polygon(1px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize + 1}px), calc(100% - ${chamferSize + 1}px) calc(100% - 1px), 1px calc(100% - 1px))`
-      case "bottom":
-        return `polygon(1px ${chamferSize + 1}px, ${chamferSize + 1}px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px))`
-      default:
-        return `polygon(calc(${chamferSize}px + 1px) 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - ${chamferSize}px - 1px), calc(100% - ${chamferSize}px - 1px) calc(100% - 1px), 1px calc(100% - 1px), 1px calc(${chamferSize}px + 1px))`
-    }
-  }
+  // Получаем размеры скосов
+  const chamferSize = getChamferSizeFromComponentSize("md")
+  
+  // Создаем стили для скосов
+  const chamferStyles = createChamferStyles(
+    chamferSize,
+    borderColor || tokens.colors.primary[300]
+  )
 
   // Закрытие по Escape
   useEffect(() => {
@@ -144,11 +121,10 @@ export default function CustomDrawer({
       >
         {/* Внешняя рамка со скосами */}
         <div
-          className="absolute inset-0 transition-colors duration-200"
+          className="absolute inset-0 transition-all duration-200"
           style={{
-            clipPath: getOuterClipPath(),
-            backgroundColor: "#292D30",
-            ...customBorderStyles,
+            ...chamferStyles.outer,
+            backgroundColor: borderColor || tokens.colors.primary[300],
           }}
         />
 
@@ -156,7 +132,7 @@ export default function CustomDrawer({
         <div
           className="relative h-full bg-white"
           style={{
-            clipPath: getInnerClipPath(),
+            ...chamferStyles.inner,
             ...customContentStyles,
           }}
         >

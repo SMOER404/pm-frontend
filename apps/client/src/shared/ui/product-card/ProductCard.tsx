@@ -25,7 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
     console.log('categoryData', props.categoryData)
 
     return (
-        <Link href={linkForProductDetails(props)} className='product-card no-underline hover:no-underline'>
+        <Link href={linkForProductDetails()} className='product-card no-underline hover:no-underline'>
             <div>
                 <Image
                     src={'/static/images/like.svg'}
@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
                     className='mt-6 mb-4 z-10'
                 />
                 <div className="overflow-hidden mt-2 mb-2">
-                    <CustomTypography variant="body1" className='max-h-13 uppercase mb-0'>{name}</CustomTypography>
+                    <CustomTypography variant="body" size="sm" className='max-h-13 uppercase mb-0'>{name}</CustomTypography>
                 </div>
                 <div className="flex items-center">
                     <CustomTypography variant="h6" className='heading mb-0 mr-2'>от
@@ -65,7 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
                             fillColor="#AFEB0F"
                             contentClassName="flex items-center justify-center text-brand uppercase text-primary"
                         >
-                            <CustomTypography variant="body2" className='mb-0 font-bold'>{Math.floor(getPrice(variants) / 2)} ₽</CustomTypography>
+                            <CustomTypography variant="body" size="sm" className='mb-0 font-bold'>{Math.floor(getPrice(variants) / 2)} ₽</CustomTypography>
                         </SkewedBackground>
                         <CustomTypography variant="caption" className="text-xs ml-1 mb-0 uppercase">В сплит</CustomTypography>
                     </div>

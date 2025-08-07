@@ -1,151 +1,201 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { fn } from "@storybook/test"
 import CustomButton from "../components/custom-button"
+import { Home, Download, Settings } from "lucide-react"
 
-const meta = {
-  title: "Components/CustomButton",
+const meta: Meta<typeof CustomButton> = {
+  title: "Components/Button",
   component: CustomButton,
   parameters: {
     layout: "centered",
-    docs: {
-      description: {
-        component:
-          "Кнопка со скошенными углами в стиле Material UI с поддержкой различных вариантов, размеров и состояний.",
-      },
-    },
   },
   tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: "select",
-      options: ["primary", "secondary", "outline", "ghost", "link"],
-      description: "Вариант стиля кнопки",
+      control: { type: "select" },
+      options: ["primary", "secondary", "outlined", "ghost", "text", "danger", "success", "warning"],
     },
     size: {
-      control: "select",
+      control: { type: "select" },
       options: ["xs", "sm", "md", "lg", "xl"],
-      description: "Размер кнопки",
     },
-    leftIcon: {
-      control: "text",
-      description: "Иконка слева",
-    },
-    rightIcon: {
-      control: "text",
-      description: "Иконка справа",
-    },
-    iconOnly: {
-      control: "boolean",
-      description: "Только иконка",
-    },
-    disabled: {
-      control: "boolean",
-      description: "Отключенное состояние",
+    icon: {
+      control: { type: "select" },
+      options: ["none", "home", "download", "settings"],
     },
     loading: {
-      control: "boolean",
-      description: "Состояние загрузки",
+      control: { type: "boolean" },
     },
-    chamferSize: {
-      control: "select",
-      options: ["small", "medium", "large"],
-      description: "Размер скоса",
+    fullWidth: {
+      control: { type: "boolean" },
+    },
+    disabled: {
+      control: { type: "boolean" },
     },
   },
-  args: { onClick: fn() },
-} satisfies Meta<typeof CustomButton>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>
 
+// Базовые варианты кнопок
 export const Primary: Story = {
   args: {
+    children: "Primary",
     variant: "primary",
-    children: "Primary Button",
   },
 }
 
 export const Secondary: Story = {
   args: {
+    children: "Secondary",
     variant: "secondary",
-    children: "Secondary Button",
   },
 }
 
-export const Outline: Story = {
+export const Outlined: Story = {
   args: {
-    variant: "outline",
-    children: "Outline Button",
+    children: "Outlined",
+    variant: "outlined",
   },
 }
 
 export const Ghost: Story = {
   args: {
+    children: "Ghost",
     variant: "ghost",
-    children: "Ghost Button",
   },
 }
 
-export const WithIcon: Story = {
+export const Text: Story = {
   args: {
-    variant: "primary",
-    leftIcon: "⬇️",
-    children: "Download",
+    children: "Text",
+    variant: "text",
   },
 }
 
-export const IconOnly: Story = {
+export const Danger: Story = {
   args: {
-    variant: "primary",
-    leftIcon: "➕",
-    iconOnly: true,
-    children: "",
+    children: "Danger",
+    variant: "danger",
   },
 }
 
-export const Loading: Story = {
+export const Success: Story = {
   args: {
-    variant: "primary",
-    loading: true,
-    children: "Loading...",
+    children: "Success",
+    variant: "success",
   },
 }
 
-export const Disabled: Story = {
+export const Warning: Story = {
   args: {
-    variant: "primary",
-    disabled: true,
-    children: "Disabled Button",
+    children: "Warning",
+    variant: "warning",
   },
 }
 
+// Размеры кнопок
 export const Small: Story = {
   args: {
-    variant: "primary",
+    children: "Small",
     size: "sm",
-    children: "Small Button",
+  },
+}
+
+export const Medium: Story = {
+  args: {
+    children: "Medium",
+    size: "md",
   },
 }
 
 export const Large: Story = {
   args: {
-    variant: "primary",
+    children: "Large",
     size: "lg",
-    children: "Large Button",
-  },
-}
-
-export const Link: Story = {
-  args: {
-    variant: "link",
-    children: "Link Button",
   },
 }
 
 export const ExtraLarge: Story = {
   args: {
-    variant: "primary",
+    children: "Extra Large",
     size: "xl",
-    children: "Extra Large Button",
   },
 }
+
+// Кнопки с иконками
+export const WithIcon: Story = {
+  args: {
+    children: "With Icon",
+    icon: <Home className="w-4 h-4" />,
+  },
+}
+
+export const IconOnly: Story = {
+  args: {
+    icon: <Settings className="w-4 h-4" />,
+    iconOnly: true,
+  },
+}
+
+export const WithIconRight: Story = {
+  args: {
+    children: "Download",
+    icon: <Download className="w-4 h-4" />,
+  },
+}
+
+// Состояния кнопок
+export const Loading: Story = {
+  args: {
+    children: "Loading",
+    loading: true,
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    children: "Disabled",
+    disabled: true,
+  },
+}
+
+export const FullWidth: Story = {
+  args: {
+    children: "Full Width Button",
+    fullWidth: true,
+  },
+}
+
+// Демонстрация всех вариантов
+export const AllVariants: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <div className="flex flex-wrap gap-4">
+        <CustomButton variant="primary">Primary</CustomButton>
+        <CustomButton variant="secondary">Secondary</CustomButton>
+        <CustomButton variant="outlined">Outlined</CustomButton>
+        <CustomButton variant="ghost">Ghost</CustomButton>
+        <CustomButton variant="text">Text</CustomButton>
+        <CustomButton variant="danger">Danger</CustomButton>
+        <CustomButton variant="success">Success</CustomButton>
+        <CustomButton variant="warning">Warning</CustomButton>
+      </div>
+    </div>
+  ),
+}
+
+// Демонстрация всех размеров
+export const AllSizes: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-4">
+        <CustomButton size="xs">Extra Small</CustomButton>
+        <CustomButton size="sm">Small</CustomButton>
+        <CustomButton size="md">Medium</CustomButton>
+        <CustomButton size="lg">Large</CustomButton>
+        <CustomButton size="xl">Extra Large</CustomButton>
+      </div>
+    </div>
+  ),
+} 

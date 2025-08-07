@@ -1,4 +1,4 @@
-import { CustomButton } from "@poizon/ui-kit";
+import { CustomButton, CustomContainer, CustomTypography } from "@poizon/ui-kit";
 import {api} from "@/shared/api";
 import ProductCardList from "@/shared/ui/product-card-list/ProductCardList";
 
@@ -6,7 +6,7 @@ export default async function CatalogPage() {
     const popularProducts = await api.recommendations.getPopularRecommendations(4)
 
   return (
-    <div className='container prose mt-10 mb-10'>
+    <CustomContainer className='mt-10 mb-10'>
       <div className="flex items-center justify-between">
           <div className="flex">
               <div className='mr-4'>
@@ -36,8 +36,12 @@ export default async function CatalogPage() {
               </div>
           </div>
           <div className='flex items-center'>
-              <p className='text-primary-light mr-3'>СОРТИРОВАТЬ ПО:</p>
-              <p>ПОПУЛЯРНОСТИ</p>
+              <CustomTypography variant="body" size="sm" className='text-primary-light mr-3'>
+                СОРТИРОВАТЬ ПО:
+              </CustomTypography>
+              <CustomTypography variant="body" size="sm">
+                ПОПУЛЯРНОСТИ
+              </CustomTypography>
           </div>
       </div>
         <div className='mb-20 mt-20'>
@@ -48,6 +52,6 @@ export default async function CatalogPage() {
                 />
             }
         </div>
-    </div>
+    </CustomContainer>
   );
 } 

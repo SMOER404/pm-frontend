@@ -1,72 +1,54 @@
-export { default as CustomAccordion } from './components/custom-accordion';
-export { default as CustomBadge } from './components/custom-badge';
-export { default as CustomBox } from './components/custom-box';
-export { default as CustomButton } from './components/custom-button';
-export { default as CustomCard } from './components/custom-card';
-export { default as CustomContainer } from './components/custom-container';
-export { default as CustomDialog } from './components/custom-dialog';
-export { default as CustomDrawer } from './components/custom-drawer';
-export { default as CustomGrid } from './components/custom-grid';
-export { default as CustomInput } from './components/custom-input';
-export { default as CustomList } from './components/custom-list';
-export { default as CustomMenu } from './components/custom-menu';
-export { default as CustomModal } from './components/custom-modal';
-export { default as CustomPaper } from './components/custom-paper';
-export { default as CustomRadio } from './components/custom-radio';
-export { default as CustomSelect } from './components/custom-select';
-export { default as CustomSkeleton } from './components/custom-skeleton';
-export { default as CustomTabs } from './components/custom-tabs';
-export { default as CustomTextarea } from './components/custom-textarea';
-export { default as CustomTypography } from './components/custom-typography';
-export { ThemeProvider } from './components/theme-provider';
-export { cn } from './lib/utils';
-export * from './components/ui/accordion';
-export * from './components/ui/alert-dialog';
-export * from './components/ui/alert';
-export * from './components/ui/aspect-ratio';
-export * from './components/ui/avatar';
-export * from './components/ui/badge';
-export * from './components/ui/breadcrumb';
-export * from './components/ui/button';
-export * from './components/ui/calendar';
-export * from './components/ui/card';
-export * from './components/ui/carousel';
-export * from './components/ui/chart';
-export * from './components/ui/checkbox';
-export * from './components/ui/collapsible';
-export * from './components/ui/command';
-export * from './components/ui/context-menu';
-export * from './components/ui/dialog';
-export * from './components/ui/drawer';
-export * from './components/ui/dropdown-menu';
-export * from './components/ui/form';
-export * from './components/ui/hover-card';
-export * from './components/ui/input-otp';
-export * from './components/ui/input';
-export * from './components/ui/label';
-export * from './components/ui/menubar';
-export * from './components/ui/navigation-menu';
-export * from './components/ui/pagination';
-export * from './components/ui/popover';
-export * from './components/ui/progress';
-export * from './components/ui/radio-group';
-export * from './components/ui/resizable';
-export * from './components/ui/scroll-area';
-export * from './components/ui/select';
-export * from './components/ui/separator';
-export * from './components/ui/sheet';
-export * from './components/ui/sidebar';
-export * from './components/ui/skeleton';
-export * from './components/ui/slider';
-export * from './components/ui/sonner';
-export * from './components/ui/switch';
-export * from './components/ui/table';
-export * from './components/ui/tabs';
-export * from './components/ui/textarea';
-export * from './components/ui/toast';
-export { Toaster } from './components/ui/toaster';
-export * from './components/ui/toggle-group';
-export * from './components/ui/toggle';
-export * from './components/ui/tooltip';
-export * from './components/ui/use-mobile';
-export * from './components/ui/use-toast'; 
+// UI Kit V2 - Основные компоненты
+export { default as CustomButton } from './components/custom-button'
+export { default as CustomInput } from './components/custom-input'
+export { default as CustomSelect } from './components/custom-select'
+export { default as CustomContainer } from './components/custom-container'
+export { default as CustomModal } from './components/custom-modal'
+export { default as CustomCard } from './components/custom-card'
+export { default as CustomBadge } from './components/custom-badge'
+export { default as CustomCheckbox } from './components/custom-checkbox'
+export { default as CustomBox } from './components/custom-box'
+export { default as CustomHeroSection } from './components/custom-hero-section'
+export { default as CustomTabs } from './components/custom-tabs'
+export { default as CustomAccordion } from './components/custom-accordion'
+export { default as CustomSpinner } from './components/custom-spinner'
+export { default as CustomRating } from './components/custom-rating'
+export { default as CustomFallback } from './components/custom-fallback'
+export { default as CustomNavigationLoader } from './components/custom-navigation-loader'
+export { default as CustomBreadcrumbs } from './components/custom-breadcrumbs'
+export { default as CustomPrice } from './components/custom-price'
+export { default as CustomSvg } from './components/custom-svg'
+export { default as CustomSeoHead } from './components/custom-seo-head'
+export { default as CustomSkewedBackground } from './components/custom-skewed-background'
+export { default as CustomColorPicker } from './components/custom-color-picker'
+export { default as CustomSizeSelector } from './components/custom-size-selector'
+export { default as CustomProductCard } from './components/custom-product-card'
+export { default as CustomProductCardList } from './components/custom-product-card-list'
+export { default as CustomLayout } from './components/custom-layout'
+export { default as CustomHeader } from './components/custom-header'
+export { default as CustomFooter } from './components/custom-footer'
+export { default as CustomProductGallery } from './components/custom-product-gallery'
+export { default as CustomProductActions } from './components/custom-product-actions'
+export { default as CustomProductInfo } from './components/custom-product-info'
+export { default as CustomUnauthorizedState } from './components/custom-unauthorized-state'
+export { default as CustomLoading } from './components/custom-loading'
+export { default as CustomNotFound } from './components/custom-not-found'
+export { default as CustomHeroSectionWrapper } from './components/custom-hero-section-wrapper'
+export { CustomTypography, Heading, Paragraph, Code, Blockquote, Link, List, Highlight } from './components/custom-typography'
+
+// Утилиты
+export * from './lib/design-tokens'
+export * from './lib/chamfer-utils'
+export * from './lib/with-states'
+export * from './lib/validation'
+export * from './lib/input-masks'
+export * from './lib/select-utils'
+export * from './lib/modal-utils'
+export * from './lib/card-utils'
+export * from './lib/badge-utils'
+export * from './lib/tabs-utils'
+export * from './lib/accordion-utils'
+export * from './lib/typography-utils'
+
+// Общие утилиты
+export * from './lib/utils' 

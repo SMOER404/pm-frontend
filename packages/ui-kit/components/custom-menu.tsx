@@ -1,8 +1,10 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { cn } from "../lib/utils"
 import { useState, useRef, useEffect } from "react"
+import { tokens } from "../lib/design-tokens"
+import { createChamferStyles, getChamferSizeFromComponentSize } from "../lib/chamfer-utils"
 
 interface CustomMenuItemProps {
   children: React.ReactNode
@@ -57,14 +59,14 @@ export default function CustomMenu({
   const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen
   const setIsOpen = onOpenChange || setInternalOpen
 
-  // clipPath для скосов (1px)
-  const clipPath = "[clip-path:polygon(8px_0px,100%_0px,100%_calc(100%-8px),calc(100%-8px)_100%,0px_100%,0px_8px)]"
-  const contentClipPath =
-    "[clip-path:polygon(7px_1px,calc(100%-1px)_1px,calc(100%-1px)_calc(100%-7px),calc(100%-7px)_calc(100%-1px),1px_calc(100%-1px),1px_7px)]"
-
-  const customBorderStyles = {
-    ...(borderColor && { backgroundColor: borderColor }),
-  }
+  // Получаем размеры скосов
+  const chamferSize = getChamferSizeFromComponentSize("sm")
+  
+  // Создаем стили для скосов
+  const chamferStyles = createChamferStyles(
+    chamferSize,
+    borderColor || tokens.colors.primary[300]
+  )
 
   const customContentStyles = {
     ...(backgroundColor && { backgroundColor: backgroundColor }),
@@ -106,13 +108,22 @@ export default function CustomMenu({
       {/* Menu */}
       {isOpen && (
         <div ref={menuRef} className={cn("absolute z-50 min-w-[200px]", placements[placement])}>
-          {/* Border */}
-          <div className={cn("absolute inset-0 bg-[#292D30]", clipPath)} style={customBorderStyles} />
-
-          {/* Content */}
+          {/* Внешняя рамка со скосами */}
           <div
-            className={cn("relative bg-white py-2 shadow-lg max-h-60 overflow-auto", contentClipPath)}
-            style={customContentStyles}
+            className="absolute inset-0 transition-all duration-200"
+            style={{
+              ...chamferStyles.outer,
+              backgroundColor: borderColor || tokens.colors.primary[300],
+            }}
+          />
+
+          {/* Внутренний контент */}
+          <div
+            className="relative bg-white py-2 shadow-lg max-h-60 overflow-auto"
+            style={{
+              ...chamferStyles.inner,
+              ...customContentStyles,
+            }}
           >
             {children}
           </div>

@@ -1,3 +1,5 @@
+"use client"
+
 // Утилиты для работы с Select компонентами
 import { useState } from "react"
 
@@ -49,6 +51,12 @@ export function filterSelectData(
   searchValue: string,
   searchFields: ('label' | 'description')[] = ['label']
 ): SelectData {
+  // Проверяем, что data определен
+  if (!data) {
+    console.error('filterSelectData: data is undefined or null')
+    return []
+  }
+
   if (!searchValue.trim()) {
     return data
   }
@@ -82,6 +90,12 @@ export function filterSelectData(
  * @returns массив всех опций
  */
 export function getAllOptions(data: SelectData): SelectOption[] {
+  // Проверяем, что data определен
+  if (!data) {
+    console.error('getAllOptions: data is undefined or null')
+    return []
+  }
+
   if (Array.isArray(data) && data.length > 0 && 'options' in data[0]) {
     // Группированные данные
     return (data as SelectGroup[]).flatMap(group => group.options)

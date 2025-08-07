@@ -1,17 +1,22 @@
 import { Breadcrumbs } from "../../../../shared/ui/Breadcrumbs";
+import { CustomContainer, CustomTypography } from "@poizon/ui-kit";
 
 export default function SubCategoryPage({ params }: { params: { categorySlug: string; subCategorySlug: string } }) {
   const { categorySlug, subCategorySlug } = params;
 
   return (
-    <div>
+    <CustomContainer>
       <Breadcrumbs items={[
         { label: "Каталог", href: "/catalog" },
         { label: categorySlug, href: `/catalog/${categorySlug}` },
         { label: subCategorySlug }
       ]} />
-      <h1>Подкатегория: {subCategorySlug}</h1>
-      <p>Здесь будет список брендов.</p>
-    </div>
+      <CustomTypography variant="h1" className="mt-6 mb-4">
+        Подкатегория: {subCategorySlug}
+      </CustomTypography>
+      <CustomTypography variant="body" size="md">
+        Здесь будет список брендов.
+      </CustomTypography>
+    </CustomContainer>
   );
 } 

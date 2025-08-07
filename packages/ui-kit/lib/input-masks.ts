@@ -73,46 +73,48 @@ export function applyMask(
   }
 
   let result = ''
+  let displayResult = ''
   let valueIndex = 0
-  let newCursorPosition = cursorPosition
+  let newCursorPosition = 0
 
-  for (let i = 0; i < mask.length && valueIndex < value.length; i++) {
+  for (let i = 0; i < mask.length; i++) {
     const maskChar = mask[i]
     
     if (typeof maskChar === 'string') {
       // Фиксированный символ маски
       result += maskChar
-      if (cursorPosition > i) {
-        newCursorPosition++
+      displayResult += maskChar
+      if (cursorPosition >= result.length) {
+        newCursorPosition = result.length
       }
     } else if (maskChar instanceof RegExp) {
       // Регулярное выражение
-      const char = value[valueIndex]
-      if (maskChar.test(char)) {
-        result += char
-        valueIndex++
-        if (cursorPosition > i) {
-          newCursorPosition++
+      if (valueIndex < value.length) {
+        const char = value[valueIndex]
+        if (maskChar.test(char)) {
+          result += char
+          displayResult += char
+          valueIndex++
+          if (cursorPosition >= result.length) {
+            newCursorPosition = result.length
+          }
+        } else {
+          // Пропускаем невалидный символ
+          valueIndex++
         }
       } else {
-        // Пропускаем невалидный символ
-        valueIndex++
-        if (cursorPosition > i) {
-          newCursorPosition--
+        // Нет больше символов в значении
+        if (guide && placeholder[i]) {
+          displayResult += placeholder[i]
         }
       }
     }
   }
 
-  // Добавляем placeholder если включен guide
-  if (guide && result.length < placeholder.length) {
-    result += placeholder.slice(result.length)
-  }
-
   return {
     value: result,
-    displayValue: result,
-    cursorPosition: Math.min(newCursorPosition, result.length),
+    displayValue: displayResult,
+    cursorPosition: newCursorPosition
   }
 }
 

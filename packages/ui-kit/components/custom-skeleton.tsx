@@ -1,5 +1,7 @@
 "use client"
 import { cn } from "../lib/utils"
+import { tokens } from "../lib/design-tokens"
+import { createChamferStyles, getChamferSizeFromComponentSize } from "../lib/chamfer-utils"
 
 interface CustomSkeletonProps {
   variant?: "text" | "rectangular" | "circular"
@@ -30,18 +32,44 @@ export default function CustomSkeleton({
     circular: "rounded-full",
   }
 
-  // clipPath для скосов (1px) только для rectangular
-  const clipPath =
-    variant === "rectangular"
-      ? "[clip-path:polygon(8px_0px,100%_0px,100%_calc(100%-8px),calc(100%-8px)_100%,0px_100%,0px_8px)]"
-      : ""
+  // Получаем стили для скосов только для rectangular
+  const chamferSize = getChamferSizeFromComponentSize("sm")
+  const chamferStyles = variant === "rectangular" ? createChamferStyles(
+    chamferSize,
+    tokens.colors.primary[300]
+  ) : null
 
   const styles = {
     ...(width && { width: typeof width === "number" ? `${width}px` : width }),
     ...(height && { height: typeof height === "number" ? `${height}px` : height }),
   }
 
+  // Для rectangular используем структуру со скосами
+  if (variant === "rectangular" && chamferStyles) {
+    return (
+      <div className={cn("relative", className)} style={styles}>
+        {/* Внешняя рамка со скосами */}
+        <div
+          className="absolute inset-0 transition-all duration-200"
+          style={{
+            ...chamferStyles.outer,
+            backgroundColor: tokens.colors.primary[300],
+          }}
+        />
+
+        {/* Внутренний контент */}
+        <div
+          className={cn("relative bg-gray-200", animations[animation])}
+          style={{
+            ...chamferStyles.inner,
+          }}
+        />
+      </div>
+    )
+  }
+
+  // Для остальных вариантов обычный рендер
   return (
-    <div className={cn("bg-gray-200", variants[variant], animations[animation], clipPath, className)} style={styles} />
+    <div className={cn("bg-gray-200", variants[variant], animations[animation], className)} style={styles} />
   )
 }
