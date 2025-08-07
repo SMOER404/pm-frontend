@@ -13,6 +13,13 @@ interface User {
   updatedAt: string;
 }
 
+interface UpdateProfileDto {
+  name: string;
+  email: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 export class AuthStore {
   isAuthenticated = false
   user: User | null = null
@@ -180,6 +187,41 @@ export class AuthStore {
     } catch (error) {
       this.logout()
       return false
+    }
+  }
+
+  async updateProfile(updateData: UpdateProfileDto) {
+    try {
+      runInAction(() => {
+        this.isLoading = true
+        this.error = null
+      })
+
+      if (!this.user) {
+        throw new Error('Пользователь не авторизован')
+      }
+
+      // Обновляем состояние в сторе
+      runInAction(() => {
+        if (this.user) {
+          this.user = {
+            ...this.user,
+            name: updateData.name,
+            email: updateData.email,
+            updatedAt: new Date().toISOString()
+          }
+        }
+      })
+      return true
+    } catch (error) {
+      runInAction(() => {
+        this.setError('Ошибка при обновлении профиля')
+      })
+      return false
+    } finally {
+      runInAction(() => {
+        this.isLoading = false
+      })
     }
   }
 

@@ -31,6 +31,12 @@ export interface CreateBrandDto {
      * @type {string}
      * @memberof CreateBrandDto
      */
+    'slug': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateBrandDto
+     */
     'logoUrl'?: string;
 }
 

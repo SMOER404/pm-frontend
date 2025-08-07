@@ -1,0 +1,1 @@
+export { CustomSkewedBackground as SkewedBackground } from "@poizon/ui-kit";

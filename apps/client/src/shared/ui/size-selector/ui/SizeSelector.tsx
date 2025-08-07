@@ -1,0 +1,1 @@
+export { CustomSizeSelector as SizeSelector } from "@poizon/ui-kit";

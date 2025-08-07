@@ -24,58 +24,76 @@ import type { ProductVariantDto } from './product-variant-dto';
  */
 export interface ProductResponseDto {
     /**
+     * ID товара
+     * @type {string}
+     * @memberof ProductResponseDto
+     */
+    'id': string;
+    /**
      * Название товара
      * @type {string}
      * @memberof ProductResponseDto
      */
     'name': string;
     /**
-     * ID бренда товара
+     * Описание товара
      * @type {string}
      * @memberof ProductResponseDto
      */
-    'brand': string;
+    'description': string;
     /**
-     * ID категории товара
+     * Цена товара
+     * @type {number}
+     * @memberof ProductResponseDto
+     */
+    'price': number;
+    /**
+     * Изображения товара
+     * @type {Array<string>}
+     * @memberof ProductResponseDto
+     */
+    'images': Array<string>;
+    /**
+     * Категория товара
      * @type {string}
      * @memberof ProductResponseDto
      */
     'category': string;
     /**
-     * Описание товара
+     * Бренд товара
      * @type {string}
      * @memberof ProductResponseDto
      */
-    'description'?: string;
-    /**
-     * Медиафайлы товара (изображения, видео)
-     * @type {object}
-     * @memberof ProductResponseDto
-     */
-    'media': object;
-    /**
-     * Уникальный идентификатор товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'id': string;
-    /**
-     * Дата создания товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'createdAt': string;
-    /**
-     * Дата последнего обновления товара
-     * @type {string}
-     * @memberof ProductResponseDto
-     */
-    'updatedAt': string;
+    'brand': string;
     /**
      * Варианты товара
      * @type {Array<ProductVariantDto>}
      * @memberof ProductResponseDto
      */
-    'variants': Array<ProductVariantDto>;
+    'variants'?: Array<ProductVariantDto>;
+    /**
+     * Рейтинг товара
+     * @type {number}
+     * @memberof ProductResponseDto
+     */
+    'rating'?: number;
+    /**
+     * Количество отзывов
+     * @type {number}
+     * @memberof ProductResponseDto
+     */
+    'reviewsCount'?: number;
+    /**
+     * Дата создания
+     * @type {string}
+     * @memberof ProductResponseDto
+     */
+    'createdAt': string;
+    /**
+     * Дата обновления
+     * @type {string}
+     * @memberof ProductResponseDto
+     */
+    'updatedAt': string;
 }
 

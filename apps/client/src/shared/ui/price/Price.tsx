@@ -1,0 +1,1 @@
+export { CustomPrice as Price } from "@poizon/ui-kit";

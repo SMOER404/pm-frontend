@@ -31,6 +31,12 @@ export interface CreateCategoryDto {
      * @type {string}
      * @memberof CreateCategoryDto
      */
+    'slug': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCategoryDto
+     */
     'parentId'?: string;
 }
 

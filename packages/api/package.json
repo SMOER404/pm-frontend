@@ -1,22 +1,30 @@
 {
   "name": "@poizon/api",
   "version": "1.0.0",
-  "private": true,
+  "description": "OpenAPI client for @poizon/api",
+  "author": "OpenAPI-Generator Contributors",
+  "keywords": [
+    "axios",
+    "typescript",
+    "openapi-client",
+    "openapi-generator",
+    "@poizon/api"
+  ],
+  "license": "Unlicense",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rimraf dist",
-    "generate": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api --additional-properties=supportsES6=true,npmName=@poizon/api,npmVersion=1.0.0,separateModelsAndApi=true,modelPackage=models,apiPackage=services,withSeparateModelsAndApi=true"
+    "build": "tsc --outDir dist/",
+    "prepare": "npm run build",
+    "generate": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api --additional-properties=supportsES6=true,npmName=@poizon/api,npmVersion=1.0.0,separateModelsAndApi=true,withSeparateModelsAndApi=true,modelPackage=models,apiPackage=services,useTags=true"
   },
   "dependencies": {
-    "axios": "^1.6.7"
+    "axios": "^1.6.2",
+    "tailwind-merge": "^3.2.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
-    "rimraf": "^5.0.5",
-    "@types/node": "^20.11.19",
-    "@openapitools/openapi-generator-cli": "^2.7.0"
+    "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@types/node": "^20.10.4",
+    "typescript": "^5.3.3"
   }
-} 
+}

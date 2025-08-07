@@ -27,12 +27,6 @@ export interface AddToCartDto {
      */
     'productVariantId': string;
     /**
-     * Размер товара
-     * @type {string}
-     * @memberof AddToCartDto
-     */
-    'size': string;
-    /**
      * Количество товара
      * @type {number}
      * @memberof AddToCartDto

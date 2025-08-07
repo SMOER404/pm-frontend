@@ -99,16 +99,16 @@ export const CategoriesApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @summary Get category by id
-         * @param {string} id 
+         * @summary Get category by slug
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCategoryById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getCategoryById', 'id', id)
-            const localVarPath = `/categories/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getCategoryBySlug: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('getCategoryBySlug', 'slug', slug)
+            const localVarPath = `/categories/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -134,15 +134,15 @@ export const CategoriesApiAxiosParamCreator = function (configuration?: Configur
         /**
          * 
          * @summary Get products by category
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProductsByCategory: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getProductsByCategory', 'id', id)
-            const localVarPath = `/categories/{id}/products`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getProductsByCategory: async (slug: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            assertParamExists('getProductsByCategory', 'slug', slug)
+            const localVarPath = `/categories/{slug}/products`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -202,26 +202,26 @@ export const CategoriesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get category by id
-         * @param {string} id 
+         * @summary Get category by slug
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCategoryById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CategoryDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategoryById(id, options);
+        async getCategoryBySlug(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CategoryDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategoryBySlug(slug, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoriesApi.getCategoryById']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoriesApi.getCategoryBySlug']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Get products by category
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProductsByCategory(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductsByCategory(id, options);
+        async getProductsByCategory(slug: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductsByCategory(slug, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoriesApi.getProductsByCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -257,23 +257,23 @@ export const CategoriesApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @summary Get category by id
-         * @param {string} id 
+         * @summary Get category by slug
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCategoryById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<CategoryDto> {
-            return localVarFp.getCategoryById(id, options).then((request) => request(axios, basePath));
+        getCategoryBySlug(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<CategoryDto> {
+            return localVarFp.getCategoryBySlug(slug, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get products by category
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProductsByCategory(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.getProductsByCategory(id, options).then((request) => request(axios, basePath));
+        getProductsByCategory(slug: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.getProductsByCategory(slug, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -310,26 +310,26 @@ export class CategoriesApi extends BaseAPI {
 
     /**
      * 
-     * @summary Get category by id
-     * @param {string} id 
+     * @summary Get category by slug
+     * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoriesApi
      */
-    public getCategoryById(id: string, options?: RawAxiosRequestConfig) {
-        return CategoriesApiFp(this.configuration).getCategoryById(id, options).then((request) => request(this.axios, this.basePath));
+    public getCategoryBySlug(slug: string, options?: RawAxiosRequestConfig) {
+        return CategoriesApiFp(this.configuration).getCategoryBySlug(slug, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get products by category
-     * @param {string} id 
+     * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoriesApi
      */
-    public getProductsByCategory(id: string, options?: RawAxiosRequestConfig) {
-        return CategoriesApiFp(this.configuration).getProductsByCategory(id, options).then((request) => request(this.axios, this.basePath));
+    public getProductsByCategory(slug: string, options?: RawAxiosRequestConfig) {
+        return CategoriesApiFp(this.configuration).getProductsByCategory(slug, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -16,9 +16,6 @@
 // May contain unused imports in some cases
 // @ts-ignore
 import type { ProductDto } from './product-dto';
-// May contain unused imports in some cases
-// @ts-ignore
-import type { SizeAndPriceDto } from './size-and-price-dto';
 
 /**
  * 
@@ -39,11 +36,29 @@ export interface VariantDto {
      */
     'productId': string;
     /**
+     * Размер
+     * @type {string}
+     * @memberof VariantDto
+     */
+    'size': string;
+    /**
      * Цвет
      * @type {string}
      * @memberof VariantDto
      */
     'color': string;
+    /**
+     * Артикул
+     * @type {string}
+     * @memberof VariantDto
+     */
+    'sku': string;
+    /**
+     * Цена в CNY
+     * @type {number}
+     * @memberof VariantDto
+     */
+    'priceCny': number;
     /**
      * URL изображений
      * @type {Array<string>}
@@ -51,11 +66,11 @@ export interface VariantDto {
      */
     'imageUrls': Array<string>;
     /**
-     * Размеры и цены
-     * @type {Array<SizeAndPriceDto>}
+     * Статус наличия
+     * @type {string}
      * @memberof VariantDto
      */
-    'sizesAndPrices': Array<SizeAndPriceDto>;
+    'stockStatus': string;
     /**
      * Дата создания
      * @type {string}

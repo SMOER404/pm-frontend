@@ -1,0 +1,1 @@
+export { CustomSvg as PublicSvg } from "@poizon/ui-kit";
