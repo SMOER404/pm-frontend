@@ -17,7 +17,7 @@ const meta: Meta<typeof Input> = {
     },
     variant: {
       control: { type: 'select' },
-      options: ['default', 'filled', 'outlined', 'ghost', 'bevel'],
+      options: ['default', 'filled', 'outlined', 'ghost'],
     },
     size: {
       control: { type: 'select' },
@@ -33,9 +33,6 @@ const meta: Meta<typeof Input> = {
       control: { type: 'boolean' },
     },
     loading: {
-      control: { type: 'boolean' },
-    },
-    bevelBox: {
       control: { type: 'boolean' },
     },
     bevelSize: {
@@ -101,7 +98,6 @@ export const Variants: Story = {
       <Input variant="filled" placeholder="Filled variant" />
       <Input variant="outlined" placeholder="Outlined variant" />
       <Input variant="ghost" placeholder="Ghost variant" />
-      <Input variant="bevel" bevelBox={true} placeholder="Bevel variant" />
     </div>
   ),
 };
@@ -281,32 +277,33 @@ export const DifferentTypes: Story = {
   ),
 };
 
-export const BevelBoxVariants: Story = {
+export const BevelSizes: Story = {
   render: () => (
     <div className="grid w-full max-w-sm gap-4">
       <Input
+        label="Extra Small Bevel"
+        bevelSize="xs"
+        placeholder="XS bevel size"
+      />
+      <Input
         label="Small Bevel"
-        bevelBox={true}
         bevelSize="sm"
-        placeholder="Small bevel input"
+        placeholder="Small bevel size"
       />
       <Input
         label="Medium Bevel"
-        bevelBox={true}
         bevelSize="md"
-        placeholder="Medium bevel input"
+        placeholder="Medium bevel size"
       />
       <Input
         label="Large Bevel"
-        bevelBox={true}
         bevelSize="lg"
-        placeholder="Large bevel input"
+        placeholder="Large bevel size"
       />
       <Input
         label="Extra Large Bevel"
-        bevelBox={true}
         bevelSize="xl"
-        placeholder="Extra large bevel input"
+        placeholder="XL bevel size"
       />
     </div>
   ),

@@ -3,23 +3,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Eye, EyeOff, Search, X, Loader2 } from "lucide-react"
 import { InputError } from "./input-error"
+import { BevelShape } from "./bevel-shape"
 
 const inputVariants = cva(
-  "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ease-in-out font-azorath",
+  "relative w-full overflow-hidden transition-all duration-200 ease-in-out font-azorath",
   {
     variants: {
       variant: {
-        default: "border-input hover:border-ring focus-visible:border-ring",
-        filled: "border-transparent bg-muted hover:bg-muted/80 focus-visible:bg-background focus-visible:border-ring",
-        outlined: "border-2 border-input hover:border-ring focus-visible:border-ring",
-        ghost: "border-transparent bg-transparent hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:border-ring",
-        bevel: "border-2 border-[#AFEB0F] bg-transparent hover:border-[#292D30] focus-visible:border-[#AFEB0F] relative", // Bevel styling
+        default: "",
+        filled: "",
+        outlined: "",
+        ghost: "",
       },
       size: {
-        sm: "h-8 px-2 text-xs",
-        default: "h-10 px-3 py-2",
-        lg: "h-12 px-4 text-base",
-        xl: "h-14 px-5 text-lg",
+        sm: "h-8",
+        default: "h-10",
+        lg: "h-12",
+        xl: "h-14",
       },
       fullWidth: {
         true: "w-full",
@@ -58,7 +58,6 @@ export interface InputProps
     required?: boolean
     custom?: (value: string) => string | null
   }
-  bevelBox?: boolean
   bevelSize?: "xs" | "sm" | "md" | "lg" | "xl"
 }
 
@@ -85,8 +84,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     mask,
     maskPlaceholder = "_",
     validation,
-    bevelBox = false,
-    bevelSize = "md",
+    bevelSize = "sm",
     ...props 
   }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)
@@ -185,18 +183,51 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     // Determine input type
     const inputType = type === "password" && showPassword ? "text" : type
     
-    // Get bevel clip-path based on size
-    const getBevelClipPath = () => {
-      const sizes = {
-        xs: 0.1,
-        sm: 0.15, 
-        md: 0.2,
-        lg: 0.25,
-        xl: 0.3
+    // Get colors based on variant and error state
+    const getColors = () => {
+      const colors = {
+        brand: "#AFEB0F",
+        primary: "#292D30",
+        error: "#EF4444",
       }
-      const size = sizes[bevelSize || "md"]
-      return `polygon(0 0, calc(100% - ${size * 100}%) 0, 100% ${size * 100}%, 100% 100%, ${size * 100}% 100%, 0 calc(100% - ${size * 100}%))`
+      
+      if (error || validationError) {
+        return {
+          fill: "transparent",
+          stroke: colors.error,
+        }
+      }
+      
+      switch (variant) {
+        case "default":
+          return {
+            fill: "transparent",
+            stroke: colors.brand,
+          }
+        case "filled":
+          return {
+            fill: colors.primary + "1A", // 10% opacity
+            stroke: colors.brand,
+          }
+        case "outlined":
+          return {
+            fill: "transparent",
+            stroke: colors.brand,
+          }
+        case "ghost":
+          return {
+            fill: colors.primary + "1A", // 10% opacity
+            stroke: "transparent",
+          }
+        default:
+          return {
+            fill: "transparent",
+            stroke: colors.brand,
+          }
+      }
     }
+    
+    const colors = getColors()
     
     // Render left content (prefix or icon)
     const renderLeftContent = () => {
@@ -279,9 +310,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const finalError = error || !!validationError
     const finalErrorMessage = errorMessage || validationError
     
-    // Determine variant and bevel styling
-    const inputVariant = bevelBox ? "bevel" : variant
-    
     return (
       <div className={cn("w-full", !fullWidth && "w-auto")}>
         {label && (
@@ -289,29 +317,38 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <div className="relative">
-          <input
-            type={inputType}
-            className={cn(
-              inputVariants({ variant: inputVariant, size, fullWidth, className }),
-              hasLeftContent && "pl-10",
-              hasRightContent && "pr-10",
-              finalError && "border-destructive focus-visible:ring-destructive",
-              "peer"
-            )}
-            style={bevelBox ? { clipPath: getBevelClipPath() } : undefined}
-            ref={inputRef}
-            value={currentValue}
-            onChange={handleChange}
-            aria-invalid={finalError}
-            aria-describedby={finalErrorMessage ? `${props.id || 'input'}-error` : undefined}
-            {...props}
+        <div className={cn(inputVariants({ variant, size, fullWidth, className }))}>
+          {/* Beveled background using BevelShape component */}
+          <BevelShape
+            bevelSize={bevelSize}
+            fill={colors.fill}
+            stroke={colors.stroke}
+            strokeWidth={finalError ? 2 : 1}
           />
-          {type === "search" && !leftIcon && !prefix && (
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={16} />
-          )}
-          {renderLeftContent()}
-          {renderRightContent()}
+          
+          {/* Input content - positioned like in BevelBox */}
+          <div className="relative z-10 h-full flex items-center">
+            <input
+              type={inputType}
+              className={cn(
+                "w-full h-full bg-transparent border-none outline-none px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+                hasLeftContent && "pl-10",
+                hasRightContent && "pr-10",
+                "peer"
+              )}
+              ref={inputRef}
+              value={currentValue}
+              onChange={handleChange}
+              aria-invalid={finalError}
+              aria-describedby={finalErrorMessage ? `${props.id || 'input'}-error` : undefined}
+              {...props}
+            />
+            {type === "search" && !leftIcon && !prefix && (
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={16} />
+            )}
+            {renderLeftContent()}
+            {renderRightContent()}
+          </div>
         </div>
         <InputError 
           error={finalErrorMessage}
