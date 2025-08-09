@@ -53,17 +53,22 @@ const BevelShape = React.forwardRef<SVGSVGElement, BevelShapeProps>(
 
     // Generate SVG path with bevels
     const getPathData = () => {
-      const bevelX = sizeRatio * 100
-      const bevelY = sizeRatio * 100
+      // Calculate bevel size - for 45-degree angles, bevel should be equal in both directions
+      // Default (md) should be 20% of height, which means bevelSize = 0.2
+      // For a 45-degree angle, both X and Y offsets should be equal
+      const bevelSize = sizeRatio * 100
       
-      // Create beveled path: top-left and bottom-right corners are beveled
+      // Create beveled path with 45-degree angles
+      // Top-left corner: beveled from (bevelSize, 0) to (0, bevelSize) - 45 degrees down-left
+      // Bottom-right corner: beveled from (100-bevelSize, 100) to (100, 100-bevelSize) - 45 degrees up-right
+      // Path should go: start -> top edge -> right edge -> bottom-right bevel -> bottom edge -> left edge -> top-left bevel -> close
       return `
-        M ${bevelX},0 
+        M ${bevelSize},0 
         L 100,0 
-        L 100,${100 - bevelY} 
-        L ${100 - bevelX},100 
+        L 100,${100 - bevelSize} 
+        L ${100 - bevelSize},100 
         L 0,100 
-        L 0,${bevelY} 
+        L 0,${bevelSize} 
         Z
       `.trim()
     }
