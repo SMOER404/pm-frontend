@@ -36,6 +36,10 @@ export { default as CustomNotFound } from './components/custom-not-found'
 export { default as CustomHeroSectionWrapper } from './components/custom-hero-section-wrapper'
 export { CustomTypography, Heading, Paragraph, Code, Blockquote, Link, List, Highlight } from './components/custom-typography'
 
+// UI Components (shadcn/ui based)
+export { Button, buttonVariants } from "./components/ui/button"
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./components/ui/card"
+
 // Утилиты
 export * from './lib/design-tokens'
 export * from './lib/chamfer-utils'

@@ -37,14 +37,42 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  hover?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, hover = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
+    // Get hover classes based on variant
+    const getHoverClasses = () => {
+      if (!hover) return ""
+      
+      switch (variant) {
+        case "default":
+          return "group-hover:bg-[#292D30] group-hover:text-[#AFEB0F]"
+        case "secondary":
+          return "group-hover:bg-[#AFEB0F] group-hover:text-[#292D30]"
+        case "outline":
+          return "group-hover:border-[#AFEB0F] group-hover:text-[#AFEB0F]"
+        case "ghost":
+          return "group-hover:bg-[#AFEB0F] group-hover:text-[#292D30]"
+        case "link":
+          return "group-hover:text-[#AFEB0F]"
+        default:
+          return ""
+      }
+    }
+
+    const hoverClasses = getHoverClasses()
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          hover && "group",
+          hoverClasses
+        )}
         ref={ref}
         {...props}
       />
