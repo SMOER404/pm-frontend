@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Eye, EyeOff, Search, X, Loader2 } from "lucide-react"
-import { BevelBox } from "./bevel-box"
+import { InputError } from "./input-error"
 
 const inputVariants = cva(
   "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ease-in-out font-azorath",
@@ -13,7 +13,7 @@ const inputVariants = cva(
         filled: "border-transparent bg-muted hover:bg-muted/80 focus-visible:bg-background focus-visible:border-ring",
         outlined: "border-2 border-input hover:border-ring focus-visible:border-ring",
         ghost: "border-transparent bg-transparent hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:border-ring",
-        bevel: "border-transparent bg-transparent", // Special variant for BevelBox integration
+        bevel: "border-2 border-[#AFEB0F] bg-transparent hover:border-[#292D30] focus-visible:border-[#AFEB0F] relative", // Bevel styling
       },
       size: {
         sm: "h-8 px-2 text-xs",
@@ -185,13 +185,26 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     // Determine input type
     const inputType = type === "password" && showPassword ? "text" : type
     
+    // Get bevel clip-path based on size
+    const getBevelClipPath = () => {
+      const sizes = {
+        xs: 0.1,
+        sm: 0.15, 
+        md: 0.2,
+        lg: 0.25,
+        xl: 0.3
+      }
+      const size = sizes[bevelSize || "md"]
+      return `polygon(0 0, calc(100% - ${size * 100}%) 0, 100% ${size * 100}%, 100% 100%, ${size * 100}% 100%, 0 calc(100% - ${size * 100}%))`
+    }
+    
     // Render left content (prefix or icon)
     const renderLeftContent = () => {
       if (prefix) {
-        return <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">{prefix}</div>
+        return <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium z-20">{prefix}</div>
       }
       if (leftIcon) {
-        return <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{leftIcon}</div>
+        return <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-20">{leftIcon}</div>
       }
       return null
     }
@@ -203,7 +216,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       // Loading spinner
       if (loading) {
         elements.push(
-          <div key="loading" className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div key="loading" className="absolute right-3 top-1/2 -translate-y-1/2 z-20">
             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
           </div>
         )
@@ -216,7 +229,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             key="password-toggle"
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-20"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -231,7 +244,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             key="clear"
             type="button"
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-20"
             aria-label="Clear input"
           >
             <X size={16} />
@@ -242,7 +255,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       // Custom right icon
       if (rightIcon && elements.length === 0) {
         elements.push(
-          <div key="custom-right" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+          <div key="custom-right" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground z-20">
             {rightIcon}
           </div>
         )
@@ -251,7 +264,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       // Suffix
       if (suffix && elements.length === 0) {
         elements.push(
-          <div key="suffix" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
+          <div key="suffix" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium z-20">
             {suffix}
           </div>
         )
@@ -266,42 +279,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const finalError = error || !!validationError
     const finalErrorMessage = errorMessage || validationError
     
-    // Input content
-    const inputContent = (
-      <div className="relative">
-        <input
-          type={inputType}
-          className={cn(
-            inputVariants({ variant: bevelBox ? "bevel" : variant, size, fullWidth, className }),
-            hasLeftContent && "pl-10",
-            hasRightContent && "pr-10",
-            finalError && "border-destructive focus-visible:ring-destructive",
-            bevelBox && "border-transparent bg-transparent",
-            "peer"
-          )}
-          ref={inputRef}
-          value={currentValue}
-          onChange={handleChange}
-          aria-invalid={finalError}
-          aria-describedby={finalErrorMessage ? `${props.id || 'input'}-error` : undefined}
-          {...props}
-        />
-        {type === "search" && !leftIcon && !prefix && (
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-        )}
-        {renderLeftContent()}
-        {renderRightContent()}
-      </div>
-    )
-    
-    // Wrapper with or without BevelBox
-    const inputWrapper = bevelBox ? (
-      <BevelBox variant="default" bevelSize={bevelSize} className="w-full">
-        {inputContent}
-      </BevelBox>
-    ) : (
-      inputContent
-    )
+    // Determine variant and bevel styling
+    const inputVariant = bevelBox ? "bevel" : variant
     
     return (
       <div className={cn("w-full", !fullWidth && "w-auto")}>
@@ -310,19 +289,35 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        {inputWrapper}
-        {(finalErrorMessage || helperText) && (
-          <p 
+        <div className="relative">
+          <input
+            type={inputType}
             className={cn(
-              "mt-1 text-xs",
-              finalError ? "text-destructive" : "text-muted-foreground"
+              inputVariants({ variant: inputVariant, size, fullWidth, className }),
+              hasLeftContent && "pl-10",
+              hasRightContent && "pr-10",
+              finalError && "border-destructive focus-visible:ring-destructive",
+              "peer"
             )}
-            id={finalErrorMessage ? `${props.id || 'input'}-error` : undefined}
-            role={finalErrorMessage ? "alert" : undefined}
-          >
-            {finalErrorMessage || helperText}
-          </p>
-        )}
+            style={bevelBox ? { clipPath: getBevelClipPath() } : undefined}
+            ref={inputRef}
+            value={currentValue}
+            onChange={handleChange}
+            aria-invalid={finalError}
+            aria-describedby={finalErrorMessage ? `${props.id || 'input'}-error` : undefined}
+            {...props}
+          />
+          {type === "search" && !leftIcon && !prefix && (
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={16} />
+          )}
+          {renderLeftContent()}
+          {renderRightContent()}
+        </div>
+        <InputError 
+          error={finalErrorMessage}
+          helperText={helperText}
+          id={finalErrorMessage ? `${props.id || 'input'}-error` : undefined}
+        />
       </div>
     )
   }
