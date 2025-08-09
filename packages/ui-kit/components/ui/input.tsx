@@ -6,7 +6,7 @@ import { InputError } from "./input-error"
 import { BevelShape } from "./bevel-shape"
 
 const inputVariants = cva(
-  "relative w-full overflow-hidden transition-all duration-200 ease-in-out font-azorath",
+  "relative w-full overflow-hidden transition-all duration-200 ease-in-out font-azorath border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -16,10 +16,10 @@ const inputVariants = cva(
         ghost: "",
       },
       size: {
-        sm: "h-8",
-        default: "h-10",
-        lg: "h-12",
-        xl: "h-14",
+        sm: "h-8 px-2 text-xs",
+        default: "h-10 px-3 py-2",
+        lg: "h-12 px-4 text-base",
+        xl: "h-14 px-5 text-lg",
       },
       fullWidth: {
         true: "w-full",
@@ -324,6 +324,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             fill={colors.fill}
             stroke={colors.stroke}
             strokeWidth={finalError ? 2 : 1}
+            className="absolute inset-0"
           />
           
           {/* Input content - positioned like in BevelBox */}
@@ -331,7 +332,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <input
               type={inputType}
               className={cn(
-                "w-full h-full bg-transparent border-none outline-none px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+                "w-full h-full bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-0",
                 hasLeftContent && "pl-10",
                 hasRightContent && "pr-10",
                 "peer"
@@ -344,7 +345,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {...props}
             />
             {type === "search" && !leftIcon && !prefix && (
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={16} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-20" size={16} />
             )}
             {renderLeftContent()}
             {renderRightContent()}
