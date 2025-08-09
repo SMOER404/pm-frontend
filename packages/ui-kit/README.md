@@ -4,40 +4,6 @@ A modern React UI component library built with TypeScript, Tailwind CSS, and sha
 
 ## Components
 
-### BevelShape
-
-A reusable SVG component that creates beveled shapes with customizable sizes and colors. This is the core branding component used across the UI kit.
-
-#### Features
-
-- **Bevel Sizes**: `xs`, `sm`, `md`, `lg`, `xl`
-- **Customizable**: Fill, stroke, stroke width
-- **Responsive**: Scales with container
-- **Accessible**: Proper SVG attributes
-
-#### Usage
-
-```tsx
-import { BevelShape } from '@/components/ui/bevel-shape'
-
-// Basic usage
-<BevelShape fill="#AFEB0F" stroke="#AFEB0F" />
-
-// With different bevel sizes
-<BevelShape bevelSize="sm" fill="#AFEB0F" stroke="#AFEB0F" />
-<BevelShape bevelSize="lg" fill="#292D30" stroke="#292D30" />
-
-// Outlined style
-<BevelShape fill="transparent" stroke="#AFEB0F" strokeWidth={2} />
-
-// With custom styling
-<BevelShape 
-  fill="#AFEB0F" 
-  stroke="#AFEB0F" 
-  pathClassName="hover:fill-[#292D30] transition-colors"
-/>
-```
-
 ### Button
 
 A versatile button component with multiple variants, sizes, and states.

@@ -1,39 +1,9 @@
 import React from 'react';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input, BevelShape } from './index';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from './index';
 
 export default function Demo() {
   return (
     <div className="p-8 space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold mb-4">BevelShape Component</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="w-32 h-16 relative">
-            <BevelShape bevelSize="xs" fill="#AFEB0F" stroke="#AFEB0F" />
-            <div className="absolute inset-0 flex items-center justify-center text-xs text-black font-bold">
-              XS
-            </div>
-          </div>
-          <div className="w-32 h-16 relative">
-            <BevelShape bevelSize="sm" fill="#AFEB0F" stroke="#AFEB0F" />
-            <div className="absolute inset-0 flex items-center justify-center text-xs text-black font-bold">
-              SM
-            </div>
-          </div>
-          <div className="w-32 h-16 relative">
-            <BevelShape bevelSize="md" fill="#AFEB0F" stroke="#AFEB0F" />
-            <div className="absolute inset-0 flex items-center justify-center text-xs text-black font-bold">
-              MD
-            </div>
-          </div>
-          <div className="w-32 h-16 relative">
-            <BevelShape bevelSize="lg" fill="#AFEB0F" stroke="#AFEB0F" />
-            <div className="absolute inset-0 flex items-center justify-center text-xs text-black font-bold">
-              LG
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div>
         <h2 className="text-2xl font-bold mb-4">Button Component</h2>
         <div className="flex flex-wrap gap-4">
