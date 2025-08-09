@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../components/ui/input';
-import { Search, Mail, Lock, User, Phone } from 'lucide-react';
+import { Search, Mail, Lock, User, Phone, DollarSign, Hash } from 'lucide-react';
 
 const meta: Meta<typeof Input> = {
   title: 'UI/Input',
@@ -17,7 +17,7 @@ const meta: Meta<typeof Input> = {
     },
     variant: {
       control: { type: 'select' },
-      options: ['default', 'filled', 'outlined', 'ghost'],
+      options: ['default', 'filled', 'outlined', 'ghost', 'bevel'],
     },
     size: {
       control: { type: 'select' },
@@ -31,6 +31,16 @@ const meta: Meta<typeof Input> = {
     },
     fullWidth: {
       control: { type: 'boolean' },
+    },
+    loading: {
+      control: { type: 'boolean' },
+    },
+    bevelBox: {
+      control: { type: 'boolean' },
+    },
+    bevelSize: {
+      control: { type: 'select' },
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
   },
 };
@@ -71,6 +81,19 @@ export const WithError: Story = {
   },
 };
 
+export const WithValidation: Story = {
+  args: {
+    label: 'Username',
+    placeholder: 'Enter username',
+    validation: {
+      required: true,
+      minLength: 3,
+      maxLength: 20,
+      pattern: /^[a-zA-Z0-9_]+$/,
+    },
+  },
+};
+
 export const Variants: Story = {
   render: () => (
     <div className="grid w-full max-w-sm gap-4">
@@ -78,6 +101,7 @@ export const Variants: Story = {
       <Input variant="filled" placeholder="Filled variant" />
       <Input variant="outlined" placeholder="Outlined variant" />
       <Input variant="ghost" placeholder="Ghost variant" />
+      <Input variant="bevel" bevelBox={true} placeholder="Bevel variant" />
     </div>
   ),
 };
@@ -115,6 +139,32 @@ export const WithIcons: Story = {
   ),
 };
 
+export const WithPrefixAndSuffix: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        prefix="$"
+        placeholder="0.00"
+        type="number"
+      />
+      <Input
+        suffix="kg"
+        placeholder="0"
+        type="number"
+      />
+      <Input
+        prefix="@"
+        suffix=".com"
+        placeholder="username"
+      />
+      <Input
+        prefix={<Hash size={14} />}
+        placeholder="Enter tag"
+      />
+    </div>
+  ),
+};
+
 export const PasswordWithToggle: Story = {
   args: {
     label: 'Password',
@@ -139,6 +189,14 @@ export const WithClearButton: Story = {
   },
 };
 
+export const WithLoading: Story = {
+  args: {
+    label: 'Searching...',
+    placeholder: 'Search in progress',
+    loading: true,
+  },
+};
+
 export const Disabled: Story = {
   args: {
     label: 'Disabled Input',
@@ -154,6 +212,31 @@ export const NotFullWidth: Story = {
     fullWidth: false,
     style: { width: '200px' },
   },
+};
+
+export const WithMask: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        label="Phone Number"
+        placeholder="(555) 123-4567"
+        mask="(000) 000-0000"
+        type="tel"
+      />
+      <Input
+        label="Credit Card"
+        placeholder="1234 5678 9012 3456"
+        mask="0000 0000 0000 0000"
+        type="text"
+      />
+      <Input
+        label="Date"
+        placeholder="MM/DD/YYYY"
+        mask="00/00/0000"
+        type="text"
+      />
+    </div>
+  ),
 };
 
 export const DifferentTypes: Story = {
@@ -198,6 +281,37 @@ export const DifferentTypes: Story = {
   ),
 };
 
+export const BevelBoxVariants: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        label="Small Bevel"
+        bevelBox={true}
+        bevelSize="sm"
+        placeholder="Small bevel input"
+      />
+      <Input
+        label="Medium Bevel"
+        bevelBox={true}
+        bevelSize="md"
+        placeholder="Medium bevel input"
+      />
+      <Input
+        label="Large Bevel"
+        bevelBox={true}
+        bevelSize="lg"
+        placeholder="Large bevel input"
+      />
+      <Input
+        label="Extra Large Bevel"
+        bevelBox={true}
+        bevelSize="xl"
+        placeholder="Extra large bevel input"
+      />
+    </div>
+  ),
+};
+
 export const ComplexExample: Story = {
   render: () => (
     <div className="grid w-full max-w-md gap-6 p-6 border rounded-lg">
@@ -208,6 +322,7 @@ export const ComplexExample: Story = {
             label="Full Name"
             leftIcon={<User size={16} />}
             placeholder="Enter your full name"
+            validation={{ required: true, minLength: 2 }}
           />
           <Input
             label="Email"
@@ -215,23 +330,53 @@ export const ComplexExample: Story = {
             leftIcon={<Mail size={16} />}
             placeholder="Enter your email"
             helperText="We'll never share your email"
+            validation={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
           />
           <Input
             label="Password"
             type="password"
             leftIcon={<Lock size={16} />}
             placeholder="Enter your password"
-            error={true}
-            errorMessage="Password must be at least 8 characters"
+            validation={{ required: true, minLength: 8 }}
           />
           <Input
             label="Phone Number"
             type="tel"
             leftIcon={<Phone size={16} />}
-            placeholder="Enter your phone number"
+            placeholder="(555) 123-4567"
+            mask="(000) 000-0000"
+          />
+          <Input
+            label="Salary"
+            type="number"
+            prefix={<DollarSign size={14} />}
+            placeholder="0"
+            helperText="Annual salary in USD"
           />
         </div>
       </div>
+    </div>
+  ),
+};
+
+export const AccessibleExample: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        id="accessible-input"
+        label="Accessible Input"
+        placeholder="This input has proper ARIA attributes"
+        aria-describedby="accessible-input-help"
+        helperText="This input demonstrates proper accessibility features"
+      />
+      <Input
+        id="error-input"
+        label="Input with Error"
+        placeholder="This will show an error"
+        error={true}
+        errorMessage="This is an error message with proper ARIA attributes"
+        aria-invalid={true}
+      />
     </div>
   ),
 };
