@@ -1,6 +1,5 @@
-import type { Preview } from "@storybook/react"
-import "./fonts.css"
-import "./storybook.css"
+import type { Preview } from "@storybook/react";
+import "../dist/styles.css";
 
 const preview: Preview = {
   parameters: {
@@ -12,49 +11,24 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: "light",
+      default: 'light',
       values: [
         {
-          name: "light",
-          value: "#f9fafb",
+          name: 'light',
+          value: '#ffffff',
         },
         {
-          name: "dark",
-          value: "#292D30",
+          name: 'dark',
+          value: '#1a1a1a',
         },
         {
-          name: "white",
-          value: "#ffffff",
+          name: 'gray',
+          value: '#f5f5f5',
         },
       ],
     },
-    viewport: {
-      viewports: {
-        mobile: {
-          name: "Mobile",
-          styles: {
-            width: "375px",
-            height: "667px",
-          },
-        },
-        tablet: {
-          name: "Tablet",
-          styles: {
-            width: "768px",
-            height: "1024px",
-          },
-        },
-        desktop: {
-          name: "Desktop",
-          styles: {
-            width: "1024px",
-            height: "768px",
-          },
-        },
-      },
-    },
+    layout: 'centered',
   },
+};
 
-}
-
-export default preview
+export default preview;

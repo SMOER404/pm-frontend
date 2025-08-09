@@ -1,238 +1,107 @@
 # POIZON UI Kit
 
-Современная библиотека компонентов для создания адаптивных и доступных пользовательских интерфейсов.
+Современная компонентная библиотека для создания пользовательского интерфейса.
 
-## 📚 Документация
+## 🎨 Компоненты
 
-### Основные гайды
-
-- **[Гайд по позиционированию и адаптивности](./LAYOUT_GUIDE.md)** - Подробное руководство по созданию адаптивных макетов
-- **[Архитектурные улучшения](./ARCHITECTURE_IMPROVEMENTS.md)** - Планы по улучшению архитектуры
-- **[Улучшения дизайн-токенов](./DESIGN_TOKENS_IMPROVEMENTS.md)** - Система дизайн-токенов
-- **[Отсутствующие компоненты](./MISSING_COMPONENTS.md)** - Список компонентов для разработки
-- **[Дорожная карта](./ROADMAP.md)** - Планы развития библиотеки
+### UI Components
+- **Button** - Кнопки с различными вариантами и размерами
+- **Card** - Карточки с заголовком, описанием и содержимым
+- **Input** - Поля ввода с поддержкой различных типов
 
 ## 🚀 Быстрый старт
 
 ### Установка
-
 ```bash
 npm install @poizon/ui-kit
 ```
 
 ### Использование
-
 ```tsx
-import { 
-  CustomContainer, 
-  CustomGrid, 
-  CustomBox, 
-  CustomTypography,
-  CustomButton 
-} from "@poizon/ui-kit"
+import { Button, Card, CardHeader, CardTitle, CardContent, Input } from '@poizon/ui-kit'
 
-function App() {
-  return (
-    <CustomContainer maxWidth="lg">
-      <CustomTypography variant="h1">Добро пожаловать</CustomTypography>
-      
-      <CustomGrid container spacing={2}>
-        <CustomGrid item xs={12} sm={6} md={4}>
-          <CustomBox padding={16} backgroundColor="#f5f5f5">
-            <CustomTypography variant="h3">Карточка 1</CustomTypography>
-            <CustomTypography variant="body">Описание карточки</CustomTypography>
-          </CustomBox>
-        </CustomGrid>
-      </CustomGrid>
-      
-      <CustomButton variant="primary">Нажми меня</CustomButton>
-    </CustomContainer>
-  )
-}
+// Кнопки
+<Button variant="default">Primary Button</Button>
+<Button variant="secondary">Secondary Button</Button>
+<Button variant="outline">Outline Button</Button>
+
+// Карточки
+<Card>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p>Card content goes here.</p>
+  </CardContent>
+</Card>
+
+// Поля ввода
+<Input placeholder="Enter your name" />
+<Input type="email" placeholder="Enter your email" />
 ```
 
-## 🎨 Компоненты
+## 🎯 Примеры
 
-### Layout компоненты
-
-- **CustomContainer** - Адаптивные контейнеры с автоматическими отступами
-- **CustomGrid** - Система сеток для создания макетов
-- **CustomBox** - Универсальный компонент для создания блоков
-
-### Typography
-
-- **CustomTypography** - Система типографики с различными вариантами и размерами
-
-### Form компоненты
-
-- **CustomButton** - Кнопки с различными вариантами и размерами
-- **CustomInput** - Поля ввода
-- **CustomSelect** - Выпадающие списки
-- **CustomCheckbox** - Чекбоксы
-- **CustomRadio** - Радио кнопки
-- **CustomTextarea** - Многострочные поля ввода
-
-### Navigation
-
-- **CustomBreadcrumbs** - Хлебные крошки
-- **CustomMenu** - Меню навигации
-- **CustomTabs** - Вкладки
-
-### Feedback
-
-- **CustomModal** - Модальные окна
-- **CustomDialog** - Диалоговые окна
-- **CustomDrawer** - Боковые панели
-- **CustomAlert** - Уведомления
-
-### Data Display
-
-- **CustomCard** - Карточки
-- **CustomList** - Списки
-- **CustomTable** - Таблицы
-- **CustomBadge** - Бейджи
-- **CustomSkeleton** - Скелетоны загрузки
-
-### Overlay
-
-- **CustomAccordion** - Аккордеоны
-- **CustomTooltip** - Подсказки
-- **CustomPopover** - Всплывающие панели
-
-## 📱 Адаптивность
-
-Все компоненты следуют принципу **Mobile-First** и поддерживают адаптивность:
-
+### Кнопки
 ```tsx
-// Адаптивная сетка
-<CustomGrid container spacing={2}>
-  <CustomGrid item xs={12} sm={6} md={4} lg={3}>
-    <ProductCard />
-  </CustomGrid>
-</CustomGrid>
+import { Button } from '@poizon/ui-kit'
 
-// Адаптивные контейнеры
-<CustomContainer maxWidth="lg">
-  <Content />
-</CustomContainer>
+// Варианты
+<Button variant="default">Default</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="link">Link</Button>
+
+// Размеры
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
 ```
 
-## 🎯 Breakpoints
+### Карточки
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@poizon/ui-kit'
 
-| Breakpoint | Размер | Описание |
-|------------|--------|----------|
-| `xs` | < 640px | Мобильные телефоны |
-| `sm` | 640px - 768px | Планшеты (портрет) |
-| `md` | 768px - 1024px | Планшеты (ландшафт) |
-| `lg` | 1024px - 1280px | Десктопы |
-| `xl` | ≥ 1280px | Большие экраны |
-| `2xl` | ≥ 1536px | Очень большие экраны |
+<Card>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+    <CardDescription>Card Description</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>This is the card content.</p>
+  </CardContent>
+</Card>
+```
 
-## 🛠 Разработка
+### Поля ввода
+```tsx
+import { Input } from '@poizon/ui-kit'
 
-### Запуск Storybook
+<Input placeholder="Enter your name" />
+<Input type="email" placeholder="Enter your email" />
+<Input type="password" placeholder="Enter your password" />
+<Input disabled placeholder="Disabled input" />
+```
 
+## 🔧 Разработка
+
+### Установка зависимостей
 ```bash
-npm run storybook
+npm install
 ```
 
 ### Сборка
-
 ```bash
 npm run build
 ```
 
-### Тестирование
-
+### Storybook
 ```bash
-npm run test
+npm run storybook
 ```
-
-## 📖 Примеры
-
-### Адаптивная галерея
-
-```tsx
-const ImageGallery = ({ images }) => (
-  <CustomContainer>
-    <CustomGrid container spacing={2}>
-      {images.map((image, index) => (
-        <CustomGrid 
-          key={index} 
-          item 
-          xs={12} 
-          sm={6} 
-          md={4} 
-          lg={3}
-        >
-          <CustomBox 
-            padding={8} 
-            backgroundColor="#f5f5f5" 
-            borderRadius={8}
-          >
-            <img 
-              src={image.url} 
-              alt={image.alt}
-              className="w-full h-48 object-cover rounded"
-            />
-          </CustomBox>
-        </CustomGrid>
-      ))}
-    </CustomGrid>
-  </CustomContainer>
-)
-```
-
-### Адаптивная форма
-
-```tsx
-const ContactForm = () => (
-  <CustomContainer maxWidth="md">
-    <CustomBox padding={24} backgroundColor="#fff" borderRadius={12}>
-      <CustomTypography variant="h3" className="mb-6">
-        Связаться с нами
-      </CustomTypography>
-      
-      <CustomGrid container spacing={3}>
-        <CustomGrid item xs={12} sm={6}>
-          <CustomInput label="Имя" fullWidth />
-        </CustomGrid>
-        <CustomGrid item xs={12} sm={6}>
-          <CustomInput label="Фамилия" fullWidth />
-        </CustomGrid>
-        <CustomGrid item xs={12}>
-          <CustomInput label="Email" fullWidth />
-        </CustomGrid>
-        <CustomGrid item xs={12}>
-          <CustomTextarea label="Сообщение" rows={4} fullWidth />
-        </CustomGrid>
-        <CustomGrid item xs={12}>
-          <CustomButton variant="primary" fullWidth>
-            Отправить
-          </CustomButton>
-        </CustomGrid>
-      </CustomGrid>
-    </CustomBox>
-  </CustomContainer>
-)
-```
-
-## 🤝 Вклад в проект
-
-1. Форкните репозиторий
-2. Создайте ветку для новой функции (`git checkout -b feature/amazing-feature`)
-3. Зафиксируйте изменения (`git commit -m 'Add amazing feature'`)
-4. Отправьте в ветку (`git push origin feature/amazing-feature`)
-5. Откройте Pull Request
 
 ## 📄 Лицензия
 
-Этот проект лицензирован под MIT License - см. файл [LICENSE](LICENSE) для деталей.
-
-## 🆘 Поддержка
-
-Если у вас есть вопросы или проблемы, создайте issue в репозитории или обратитесь к команде разработки.
-
----
-
-**POIZON UI Kit** - Создавайте современные интерфейсы с легкостью! 🚀 
+MIT License
