@@ -1,0 +1,82 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# POIZON UI Kit
+
+Современная дизайн-система для создания потрясающих интерфейсов.
+
+## 🎨 Компоненты
+
+### UI Components
+- **Button** - Кнопки с различными вариантами и размерами
+- **Card** - Карточки с заголовком, описанием и содержимым
+- **Input** - Поля ввода с поддержкой различных типов
+
+## 🔧 Утилиты
+
+### cn()
+```tsx
+import { cn } from '@poizon/ui-kit'
+
+<div className={cn("base-class", conditional && "conditional-class")}>
+  Контент
+</div>
+```
+
+## 🎯 Примеры использования
+
+### Кнопки
+```tsx
+import { Button } from '@poizon/ui-kit'
+
+<Button variant="default">Primary Button</Button>
+<Button variant="secondary">Secondary Button</Button>
+<Button variant="outline">Outline Button</Button>
+<Button variant="ghost">Ghost Button</Button>
+```
+
+### Карточки
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@poizon/ui-kit'
+
+<Card>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+    <CardDescription>Card Description</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Card content goes here.</p>
+  </CardContent>
+</Card>
+```
+
+### Поля ввода
+```tsx
+import { Input } from '@poizon/ui-kit'
+
+<Input placeholder="Enter your name" />
+<Input type="email" placeholder="Enter your email" />
+<Input type="password" placeholder="Enter your password" />
+```
+
+## 🚀 Разработка
+
+### Установка зависимостей
+```bash
+npm install
+```
+
+### Сборка
+```bash
+npm run build
+```
+
+### Storybook
+```bash
+npm run storybook
+```
+
+## 📄 Лицензия
+
+MIT License

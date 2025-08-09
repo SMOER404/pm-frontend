@@ -1,37 +1,14 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup"
 
 export default defineConfig({
-  entry: ['index.ts'],
-  format: ['esm', 'cjs'],
+  entry: ["index.ts"],
+  format: ["cjs", "esm"],
   dts: true,
-  outDir: 'dist',
-  clean: true,
-  minify: false,
+  splitting: false,
   sourcemap: true,
-  skipNodeModulesBundle: true,
-  external: [
-    'react',
-    'react-dom',
-    'next',
-    '@radix-ui/*',
-    'sonner',
-    'date-fns',
-    'clsx',
-    'zod',
-    'geist',
-    'cmdk',
-    'lucide-react',
-    'embla-carousel-react',
-    'recharts',
-    'input-otp',
-    'vaul',
-    'class-variance-authority',
-    'tailwind-merge',
-    'tailwindcss-animate',
-    '@hookform/resolvers',
-    'react-hook-form',
-    'react-day-picker',
-    'react-resizable-panels',
-    'next-themes',
-  ],
-}); 
+  clean: true,
+  external: ["react", "react-dom"],
+  treeshake: true,
+  // Добавляем сборку стилей
+  outDir: "dist",
+})
