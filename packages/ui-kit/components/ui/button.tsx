@@ -7,23 +7,23 @@ import { cn } from "@/lib/utils"
 import { BevelShape } from "./bevel-shape"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative overflow-hidden",
+  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative overflow-hidden font-azorath",
   {
     variants: {
       variant: {
-        default: "btn btn-default",
-        secondary: "btn btn-secondary", 
-        outlined: "btn btn-outlined",
-        ghost: "btn btn-ghost",
+        default: "text-[#292D30] hover:text-[#AFEB0F]",
+        secondary: "text-[#AFEB0F] hover:text-[#292D30]", 
+        outlined: "text-[#292D30] hover:text-[#AFEB0F]",
+        ghost: "text-[#292D30] hover:text-[#292D30]",
       },
       size: {
-        sm: "btn-sm",
-        default: "btn-default",
-        lg: "btn-lg",
-        xl: "btn-xl",
-        icon: "btn-icon",
-        "icon-sm": "btn-icon-sm",
-        "icon-lg": "btn-icon-lg",
+        sm: "h-8 px-3 text-xs",
+        default: "h-10 px-4 py-2",
+        lg: "h-12 px-8 text-base",
+        xl: "h-14 px-10 text-lg",
+        icon: "h-10 w-10 p-0",
+        "icon-sm": "h-8 w-8 p-0",
+        "icon-lg": "h-12 w-12 p-0",
       },
       fullWidth: {
         true: "w-full",
@@ -127,7 +127,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({ variant, size, fullWidth, className }),
-          loading && "btn-loading"
+          loading && "cursor-wait"
         )}
         ref={ref}
         disabled={isDisabled}
