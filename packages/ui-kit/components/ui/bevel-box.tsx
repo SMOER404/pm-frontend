@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
+import { BevelShape } from "./bevel-shape"
 
 const bevelBoxVariants = cva(
   "relative w-full h-full transition-all duration-200 ease-in-out",
@@ -36,15 +37,6 @@ export interface BevelBoxProps
 
 const BevelBox = React.forwardRef<HTMLDivElement, BevelBoxProps>(
   ({ className, variant = "default", bevelSize = "md", hover = false, children, ...props }, ref) => {
-    // Bevel size ratios
-    const bevelSizes = {
-      xs: 0.1,
-      sm: 0.15,
-      md: 0.2,
-      lg: 0.25,
-      xl: 0.3,
-    }
-
     // Color definitions
     const colors = {
       brand: "#AFEB0F",
@@ -76,24 +68,6 @@ const BevelBox = React.forwardRef<HTMLDivElement, BevelBoxProps>(
     }
 
     const currentVariant = variants[variant || "default"]
-    const sizeRatio = bevelSizes[bevelSize || "md"]
-
-    // Generate SVG path with bevels
-    const getPathData = () => {
-      const bevelX = sizeRatio * 100
-      const bevelY = sizeRatio * 100
-      
-      // Create beveled path: top-left and bottom-right corners are beveled
-      return `
-        M ${bevelX},0 
-        L 100,0 
-        L 100,${100 - bevelY} 
-        L ${100 - bevelX},100 
-        L 0,100 
-        L 0,${bevelY} 
-        Z
-      `.trim()
-    }
 
     // Get hover classes based on variant
     const getHoverClasses = () => {
@@ -137,26 +111,12 @@ const BevelBox = React.forwardRef<HTMLDivElement, BevelBoxProps>(
         style={{ color: currentVariant.textColor }}
         {...props}
       >
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="absolute inset-0 w-full h-full pointer-events-none"
-        >
-          <path
-            d={getPathData()}
-            fill={currentVariant.fill}
-            stroke={currentVariant.stroke}
-            strokeWidth="1"
-            vectorEffect="non-scaling-stroke"
-            strokeLinejoin="bevel"
-            strokeLinecap="butt"
-            strokeMiterlimit="1"
-            className={cn(
-              "transition-all duration-200 ease-in-out",
-              pathClasses
-            )}
-          />
-        </svg>
+        <BevelShape
+          bevelSize={bevelSize}
+          fill={currentVariant.fill}
+          stroke={currentVariant.stroke}
+          pathClassName={pathClasses}
+        />
         <div className={cn(
           "relative z-10 h-full p-4",
           textClasses

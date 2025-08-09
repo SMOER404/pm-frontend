@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        azorath: ["Azorath", "system-ui", "sans-serif"],
+      },
       colors: {
         primary: {
           DEFAULT: "#AFEB0F",
