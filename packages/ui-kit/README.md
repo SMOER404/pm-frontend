@@ -4,6 +4,40 @@ A modern React UI component library built with TypeScript, Tailwind CSS, and sha
 
 ## Components
 
+### BevelShape
+
+A reusable SVG component that creates beveled shapes with customizable sizes and colors. This is the core branding component used across the UI kit.
+
+#### Features
+
+- **Bevel Sizes**: `xs`, `sm`, `md`, `lg`, `xl`
+- **Customizable**: Fill, stroke, stroke width
+- **Responsive**: Scales with container
+- **Accessible**: Proper SVG attributes
+
+#### Usage
+
+```tsx
+import { BevelShape } from '@/components/ui/bevel-shape'
+
+// Basic usage
+<BevelShape fill="#AFEB0F" stroke="#AFEB0F" />
+
+// With different bevel sizes
+<BevelShape bevelSize="sm" fill="#AFEB0F" stroke="#AFEB0F" />
+<BevelShape bevelSize="lg" fill="#292D30" stroke="#292D30" />
+
+// Outlined style
+<BevelShape fill="transparent" stroke="#AFEB0F" strokeWidth={2} />
+
+// With custom styling
+<BevelShape 
+  fill="#AFEB0F" 
+  stroke="#AFEB0F" 
+  pathClassName="hover:fill-[#292D30] transition-colors"
+/>
+```
+
 ### Button
 
 A versatile button component with multiple variants, sizes, and states.
@@ -16,7 +50,7 @@ A versatile button component with multiple variants, sizes, and states.
 - **Icons**: Support for left/right icons and start/end icons
 - **Layout**: Full width support
 - **Accessibility**: Full ARIA support and keyboard navigation
-- **Beveled Design**: Unique beveled corners using CSS clip-path
+- **Beveled Design**: Uses BevelShape component for consistent branding
 
 #### Usage
 
@@ -83,7 +117,7 @@ The button component follows the project's design system:
 - **Brand Color**: `#AFEB0F` (lime green)
 - **Primary Color**: `#292D30` (dark gray)
 - **Typography**: Azorath font family
-- **Bevel Effect**: 15% bevel on top-left and bottom-right corners
+- **Bevel Effect**: Uses BevelShape component for consistent branding
 - **Transitions**: 200ms ease-in-out for all interactions
 
 #### Accessibility

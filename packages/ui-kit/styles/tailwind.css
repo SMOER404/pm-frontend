@@ -19,66 +19,50 @@
     position: relative;
     overflow: hidden;
     font-family: Azorath, system-ui, sans-serif;
-    clip-path: polygon(
-      15% 0%,
-      100% 0%,
-      100% 85%,
-      85% 100%,
-      0% 100%,
-      0% 15%
-    );
   }
 
   /* Default button - брендовый фон, брендовая рамка, основной текст */
   .btn-default {
-    background-color: #AFEB0F;
+    background-color: transparent;
     color: #292D30;
-    border: 1px solid #AFEB0F;
   }
 
   .btn-default:hover {
-    background-color: #292D30;
+    background-color: transparent;
     color: #AFEB0F;
-    border-color: #292D30;
   }
 
   /* Secondary button - основной фон, основная рамка, брендовый текст */
   .btn-secondary {
-    background-color: #292D30;
+    background-color: transparent;
     color: #AFEB0F;
-    border: 1px solid #292D30;
   }
 
   .btn-secondary:hover {
-    background-color: #AFEB0F;
+    background-color: transparent;
     color: #292D30;
-    border-color: #AFEB0F;
   }
 
   /* Outlined button - прозрачный фон, брендовая рамка, основной текст */
   .btn-outlined {
     background-color: transparent;
     color: #292D30;
-    border: 1px solid #AFEB0F;
   }
 
   .btn-outlined:hover {
     background-color: transparent;
     color: #AFEB0F;
-    border-color: #AFEB0F;
   }
 
   /* Ghost button - основной фон с прозрачностью 0.2 */
   .btn-ghost {
-    background-color: rgba(41, 45, 48, 0.2);
+    background-color: transparent;
     color: #292D30;
-    border: 1px solid transparent;
   }
 
   .btn-ghost:hover {
-    background-color: rgba(41, 45, 48, 0.2);
+    background-color: transparent;
     color: #292D30;
-    border-color: rgba(41, 45, 48, 0.8);
   }
 
   /* Size variants */

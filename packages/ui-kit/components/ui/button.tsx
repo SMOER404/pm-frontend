@@ -4,6 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { BevelShape } from "./bevel-shape"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative overflow-hidden",
@@ -73,6 +74,54 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // Use startIcon/endIcon if provided, otherwise fall back to leftIcon/rightIcon for backward compatibility
     const iconStart = startIcon || leftIcon
     const iconEnd = endIcon || rightIcon
+
+    // Get colors based on variant
+    const getColors = () => {
+      const colors = {
+        brand: "#AFEB0F",
+        primary: "#292D30",
+      }
+      
+      switch (variant) {
+        case "default":
+          return {
+            fill: colors.brand,
+            stroke: colors.brand,
+            hoverFill: colors.primary,
+            hoverStroke: colors.primary,
+          }
+        case "secondary":
+          return {
+            fill: colors.primary,
+            stroke: colors.primary,
+            hoverFill: colors.brand,
+            hoverStroke: colors.brand,
+          }
+        case "outlined":
+          return {
+            fill: "transparent",
+            stroke: colors.brand,
+            hoverFill: "transparent",
+            hoverStroke: colors.brand,
+          }
+        case "ghost":
+          return {
+            fill: `${colors.primary}33`, // 20% opacity
+            stroke: "transparent",
+            hoverFill: `${colors.primary}33`,
+            hoverStroke: `${colors.primary}CC`, // 80% opacity
+          }
+        default:
+          return {
+            fill: colors.brand,
+            stroke: colors.brand,
+            hoverFill: colors.primary,
+            hoverStroke: colors.primary,
+          }
+      }
+    }
+
+    const colors = getColors()
     
     return (
       <Comp
@@ -84,26 +133,41 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         {...props}
       >
-        {loading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {loadingText || children}
-          </>
-        ) : (
-          <>
-            {iconStart && (
-              <span className="mr-2" aria-hidden="true">
-                {iconStart}
-              </span>
-            )}
-            {children}
-            {iconEnd && (
-              <span className="ml-2" aria-hidden="true">
-                {iconEnd}
-              </span>
-            )}
-          </>
-        )}
+        {/* Beveled background using BevelShape component */}
+        <BevelShape
+          bevelSize="sm"
+          fill={colors.fill}
+          stroke={colors.stroke}
+          pathClassName="group-hover:fill-[var(--hover-fill)] group-hover:stroke-[var(--hover-stroke)]"
+          style={{
+            '--hover-fill': colors.hoverFill,
+            '--hover-stroke': colors.hoverStroke,
+          } as React.CSSProperties}
+        />
+        
+        {/* Content */}
+        <div className="relative z-10 flex items-center justify-center">
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {loadingText || children}
+            </>
+          ) : (
+            <>
+              {iconStart && (
+                <span className="mr-2" aria-hidden="true">
+                  {iconStart}
+                </span>
+              )}
+              {children}
+              {iconEnd && (
+                <span className="ml-2" aria-hidden="true">
+                  {iconEnd}
+                </span>
+              )}
+            </>
+          )}
+        </div>
       </Comp>
     )
   }
