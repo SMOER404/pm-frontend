@@ -14,61 +14,131 @@
     font-weight: 500;
     transition: all 0.2s ease-in-out;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    padding: 8px 16px;
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    font-family: Azorath, system-ui, sans-serif;
+    clip-path: polygon(
+      15% 0%,
+      100% 0%,
+      100% 85%,
+      85% 100%,
+      0% 100%,
+      0% 15%
+    );
   }
 
+  /* Default button - брендовый фон, брендовая рамка, основной текст */
   .btn-default {
     background-color: #AFEB0F;
     color: #292D30;
+    border: 1px solid #AFEB0F;
   }
 
   .btn-default:hover {
     background-color: #292D30;
-    color: #FFFFFF;
+    color: #AFEB0F;
+    border-color: #292D30;
   }
 
+  /* Secondary button - основной фон, основная рамка, брендовый текст */
   .btn-secondary {
     background-color: #292D30;
-    color: #FFFFFF;
+    color: #AFEB0F;
+    border: 1px solid #292D30;
   }
 
   .btn-secondary:hover {
     background-color: #AFEB0F;
     color: #292D30;
+    border-color: #AFEB0F;
   }
 
-  .btn-outline {
+  /* Outlined button - прозрачный фон, брендовая рамка, основной текст */
+  .btn-outlined {
     background-color: transparent;
     color: #292D30;
-    border: 1px solid #292D30;
+    border: 1px solid #AFEB0F;
   }
 
-  .btn-outline:hover {
-    background-color: #292D30;
-    color: #FFFFFF;
+  .btn-outlined:hover {
+    background-color: transparent;
+    color: #AFEB0F;
+    border-color: #AFEB0F;
   }
 
+  /* Ghost button - основной фон с прозрачностью 0.2 */
   .btn-ghost {
-    background-color: transparent;
+    background-color: rgba(41, 45, 48, 0.2);
     color: #292D30;
+    border: 1px solid transparent;
   }
 
   .btn-ghost:hover {
-    background-color: #F5F5F5;
-  }
-
-  .btn-link {
-    background-color: transparent;
+    background-color: rgba(41, 45, 48, 0.2);
     color: #292D30;
-    text-decoration: underline;
+    border-color: rgba(41, 45, 48, 0.8);
   }
 
-  .btn-link:hover {
-    color: #AFEB0F;
-    text-decoration: none;
+  /* Size variants */
+  .btn-sm {
+    height: 2rem;
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-default {
+    height: 2.5rem;
+    padding: 0 1rem;
+  }
+
+  .btn-lg {
+    height: 3rem;
+    padding: 0 2rem;
+    font-size: 1rem;
+  }
+
+  .btn-xl {
+    height: 3.5rem;
+    padding: 0 2.5rem;
+    font-size: 1.125rem;
+  }
+
+  /* Icon button sizes */
+  .btn-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+  }
+
+  .btn-icon-sm {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+  }
+
+  .btn-icon-lg {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+  }
+
+  /* Focus states */
+  .btn:focus-visible {
+    outline: 2px solid #AFEB0F;
+    outline-offset: 2px;
+  }
+
+  /* Disabled state */
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Loading state */
+  .btn-loading {
+    cursor: wait;
   }
 }
 

@@ -9,10 +9,8 @@ export default function Demo() {
         <div className="flex flex-wrap gap-4">
           <Button variant="default">Default Button</Button>
           <Button variant="secondary">Secondary Button</Button>
-          <Button variant="outline">Outline Button</Button>
+          <Button variant="outlined">Outlined Button</Button>
           <Button variant="ghost">Ghost Button</Button>
-          <Button variant="destructive">Destructive Button</Button>
-          <Button variant="link">Link Button</Button>
         </div>
       </div>
 
@@ -22,6 +20,52 @@ export default function Demo() {
           <Button size="sm">Small</Button>
           <Button size="default">Default</Button>
           <Button size="lg">Large</Button>
+          <Button size="xl">Extra Large</Button>
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Button with Icons</h2>
+        <div className="flex flex-wrap gap-4">
+          <Button leftIcon={<span>❤️</span>}>Like</Button>
+          <Button rightIcon={<span>→</span>}>Continue</Button>
+          <Button size="icon">🎯</Button>
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Button with Start/End Icons</h2>
+        <div className="flex flex-wrap gap-4">
+          <Button startIcon={<span>⬇️</span>}>Download</Button>
+          <Button endIcon={<span>⬆️</span>}>Upload</Button>
+          <Button startIcon={<span>❤️</span>} endIcon={<span>→</span>}>
+            Like & Continue
+          </Button>
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Full Width Buttons</h2>
+        <div className="w-full max-w-md space-y-4">
+          <Button fullWidth>Full Width Button</Button>
+          <Button fullWidth variant="secondary">
+            Full Width Secondary
+          </Button>
+          <Button fullWidth variant="outlined">
+            Full Width Outlined
+          </Button>
+          <Button fullWidth variant="ghost">
+            Full Width Ghost
+          </Button>
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Loading States</h2>
+        <div className="flex flex-wrap gap-4">
+          <Button loading>Loading...</Button>
+          <Button loading variant="secondary">Processing</Button>
+          <Button loading variant="outlined">Submitting</Button>
         </div>
       </div>
 
