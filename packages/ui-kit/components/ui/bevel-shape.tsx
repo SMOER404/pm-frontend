@@ -40,7 +40,7 @@ const BevelShape = React.forwardRef<SVGSVGElement, BevelShapeProps>(
     pathClassName,
     ...props 
   }, ref) => {
-    const [dimensions, setDimensions] = React.useState({ width: 100, height: 100 })
+    const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 })
     const svgRef = React.useRef<SVGSVGElement>(null)
 
     // Expose the ref
@@ -61,10 +61,27 @@ const BevelShape = React.forwardRef<SVGSVGElement, BevelShapeProps>(
     React.useEffect(() => {
       if (!svgRef.current) return
 
+      // Get initial dimensions
+      const getInitialDimensions = () => {
+        const rect = svgRef.current?.getBoundingClientRect()
+        if (rect && rect.width > 0 && rect.height > 0) {
+          setDimensions({ width: rect.width, height: rect.height })
+        } else {
+          // If dimensions are not available immediately, try again on next frame
+          requestAnimationFrame(getInitialDimensions)
+        }
+      }
+
+      // Get initial dimensions immediately
+      getInitialDimensions()
+
+      // Set up ResizeObserver for changes
       const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           const { width, height } = entry.contentRect
-          setDimensions({ width, height })
+          if (width > 0 && height > 0) {
+            setDimensions({ width, height })
+          }
         }
       })
 
@@ -78,6 +95,11 @@ const BevelShape = React.forwardRef<SVGSVGElement, BevelShapeProps>(
     // Generate SVG path with bevels
     const getPathData = () => {
       const { width, height } = dimensions
+      
+      // Don't render if dimensions are not available
+      if (width === 0 || height === 0) {
+        return ""
+      }
       
       // Calculate bevel size based on the height (as requested by user)
       // Default (md) should be 20% of height
@@ -101,7 +123,7 @@ const BevelShape = React.forwardRef<SVGSVGElement, BevelShapeProps>(
     return (
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        viewBox={dimensions.width > 0 && dimensions.height > 0 ? `0 0 ${dimensions.width} ${dimensions.height}` : "0 0 100 100"}
         preserveAspectRatio="none"
         className={cn(bevelShapeVariants({ bevelSize, className }))}
         {...props}
