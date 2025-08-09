@@ -135,7 +135,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {/* Beveled background using BevelShape component */}
         <BevelShape
-          bevelSize="sm"
+          bevelSize="md"
           fill={colors.fill}
           stroke={colors.stroke}
           pathClassName="group-hover:fill-[var(--hover-fill)] group-hover:stroke-[var(--hover-stroke)]"

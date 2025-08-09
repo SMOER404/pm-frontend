@@ -84,7 +84,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     mask,
     maskPlaceholder = "_",
     validation,
-    bevelSize = "sm",
+    bevelSize = "md",
     ...props 
   }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)
