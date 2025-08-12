@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const headingVariants = cva(
-  "font-druktext font-bold tracking-tight",
+  "tracking-tight",
   {
     variants: {
       level: {

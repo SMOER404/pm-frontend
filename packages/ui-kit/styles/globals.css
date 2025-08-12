@@ -4,7 +4,45 @@
     font-family: Azorath, system-ui, sans-serif;
   }
   
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
     font-family: DrukTextCyr, system-ui, sans-serif;
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: bold;
+  }
+  
+  h2 {
+    font-family: DrukTextCyr, system-ui, sans-serif;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: bold;
+  }
+  
+  h3 {
+    font-family: DrukTextCyr, system-ui, sans-serif;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: bold;
+  }
+  
+  h4 {
+    font-family: DrukTextCyr, system-ui, sans-serif;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: bold;
+  }
+  
+  h5 {
+    font-family: DrukTextCyr, system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: bold;
+  }
+  
+  h6 {
+    font-family: DrukTextCyr, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
   }
 }
