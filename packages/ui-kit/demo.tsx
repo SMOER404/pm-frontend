@@ -1,107 +1,232 @@
-import React from 'react';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from './index';
+import React from 'react'
+import { Heading } from './components/ui/heading'
+import { Text } from './components/ui/text'
+import { Link } from './components/ui/link'
+import { List } from './components/ui/list'
+import { Star, ArrowRight, Check } from 'lucide-react'
 
-export default function Demo() {
+export default function TypographyDemo() {
   return (
-    <div className="p-8 space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Button Component</h2>
-        <div className="flex flex-wrap gap-4">
-          <Button variant="default">Default Button</Button>
-          <Button variant="secondary">Secondary Button</Button>
-          <Button variant="outlined">Outlined Button</Button>
-          <Button variant="ghost">Ghost Button</Button>
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Button Sizes</h2>
-        <div className="flex flex-wrap items-center gap-4">
-          <Button size="sm">Small</Button>
-          <Button size="default">Default</Button>
-          <Button size="lg">Large</Button>
-          <Button size="xl">Extra Large</Button>
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Button with Icons</h2>
-        <div className="flex flex-wrap gap-4">
-          <Button leftIcon={<span>❤️</span>}>Like</Button>
-          <Button rightIcon={<span>→</span>}>Continue</Button>
-          <Button size="icon">🎯</Button>
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Button with Start/End Icons</h2>
-        <div className="flex flex-wrap gap-4">
-          <Button startIcon={<span>⬇️</span>}>Download</Button>
-          <Button endIcon={<span>⬆️</span>}>Upload</Button>
-          <Button startIcon={<span>❤️</span>} endIcon={<span>→</span>}>
-            Like & Continue
-          </Button>
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Full Width Buttons</h2>
-        <div className="w-full max-w-md space-y-4">
-          <Button fullWidth>Full Width Button</Button>
-          <Button fullWidth variant="secondary">
-            Full Width Secondary
-          </Button>
-          <Button fullWidth variant="outlined">
-            Full Width Outlined
-          </Button>
-          <Button fullWidth variant="ghost">
-            Full Width Ghost
-          </Button>
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Loading States</h2>
-        <div className="flex flex-wrap gap-4">
-          <Button loading>Loading...</Button>
-          <Button loading variant="secondary">Processing</Button>
-          <Button loading variant="outlined">Submitting</Button>
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Card Component</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>This is the card content.</p>
-            </CardContent>
-          </Card>
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-4xl mx-auto space-y-12">
+        
+        {/* Заголовки */}
+        <section className="space-y-6">
+          <Heading level="h1" color="brand" align="center" iconLeft={<Star className="h-8 w-8" />}>
+            Компоненты типографии
+          </Heading>
           
-          <Card>
-            <CardHeader>
-              <CardTitle>Another Card</CardTitle>
-              <CardDescription>Another description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>More card content here.</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Heading level="h2" color="primary">Заголовки (Heading)</Heading>
+              <div className="space-y-2">
+                <Heading level="h1">H1 - Главный заголовок</Heading>
+                <Heading level="h2">H2 - Подзаголовок</Heading>
+                <Heading level="h3">H3 - Секция</Heading>
+                <Heading level="h4">H4 - Подсекция</Heading>
+                <Heading level="h5">H5 - Мелкий заголовок</Heading>
+                <Heading level="h6">H6 - Самый мелкий</Heading>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <Heading level="h2" color="primary">Варианты стилизации</Heading>
+              <div className="space-y-2">
+                <Heading level="h3" color="primary">Основной цвет</Heading>
+                <Heading level="h3" color="secondary">Вторичный цвет</Heading>
+                <Heading level="h3" color="brand">Брендовый цвет</Heading>
+                <Heading level="h3" color="error">Цвет ошибки</Heading>
+                <Heading level="h3" align="center">По центру</Heading>
+                <Heading level="h3" align="right">По правому краю</Heading>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Input Component</h2>
-        <div className="space-y-4 max-w-md">
-          <Input placeholder="Enter your name" />
-          <Input type="email" placeholder="Enter your email" />
-          <Input type="password" placeholder="Enter your password" />
-        </div>
+        {/* Текст */}
+        <section className="space-y-6">
+          <Heading level="h2" color="primary">Текст (Text)</Heading>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Heading level="h3">Типы текста</Heading>
+              <div className="space-y-2">
+                <Text type="body" size="md">
+                  Основной текст (body) - используется для основного контента страницы. 
+                  Имеет расслабленную высоту строки для лучшей читаемости.
+                </Text>
+                <Text type="caption" size="sm">
+                  Подпись (caption) - используется для небольших подписей и комментариев.
+                </Text>
+                <Text type="secondary" size="md">
+                  Вторичный текст (secondary) - используется для дополнительной информации.
+                </Text>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <Heading level="h3">Размеры и веса</Heading>
+              <div className="space-y-2">
+                <Text size="sm" weight="normal">Маленький обычный (14px)</Text>
+                <Text size="md" weight="normal">Средний обычный (16px)</Text>
+                <Text size="lg" weight="bold">Большой жирный (18px)</Text>
+                <Text size="md" weight="bold" color="primary">Жирный основной цвет</Text>
+                <Text size="md" color="secondary">Вторичный цвет</Text>
+                <Text size="md" color="muted">Приглушенный цвет</Text>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Ссылки */}
+        <section className="space-y-6">
+          <Heading level="h2" color="primary">Ссылки (Link)</Heading>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Heading level="h3">Варианты подчёркивания</Heading>
+              <div className="space-y-2">
+                <Link href="#" underline="none">Без подчёркивания</Link>
+                <br />
+                <Link href="#" underline="always">Всегда подчёркнутая</Link>
+                <br />
+                <Link href="#" underline="hover">Подчёркивание при наведении</Link>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <Heading level="h3">Цвета и внешние ссылки</Heading>
+              <div className="space-y-2">
+                <Link href="#" color="primary">Основной цвет</Link>
+                <br />
+                <Link href="#" color="secondary">Вторичный цвет</Link>
+                <br />
+                <Link href="#" color="muted">Приглушенный цвет</Link>
+                <br />
+                <Link href="https://example.com" target="_blank">
+                  Внешняя ссылка с иконкой
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Списки */}
+        <section className="space-y-6">
+          <Heading level="h2" color="primary">Списки (List)</Heading>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Heading level="h3">Маркированные списки</Heading>
+              <div className="space-y-4">
+                <div>
+                  <Text weight="bold" size="sm">С точками:</Text>
+                  <List type="unordered" marker="dot" spacing="md">
+                    <li>Первый элемент с точкой</li>
+                    <li>Второй элемент с точкой</li>
+                    <li>Третий элемент с точкой</li>
+                  </List>
+                </div>
+                
+                <div>
+                  <Text weight="bold" size="sm">С галочками:</Text>
+                  <List type="unordered" marker="check" spacing="md">
+                    <li>Выполненная задача</li>
+                    <li>Ещё одна выполненная задача</li>
+                    <li>И ещё одна выполненная задача</li>
+                  </List>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <Heading level="h3">Нумерованные списки</Heading>
+              <div className="space-y-4">
+                <div>
+                  <Text weight="bold" size="sm">Обычный нумерованный:</Text>
+                  <List type="ordered" spacing="md">
+                    <li>Первый пронумерованный элемент</li>
+                    <li>Второй пронумерованный элемент</li>
+                    <li>Третий пронумерованный элемент</li>
+                  </List>
+                </div>
+                
+                <div>
+                  <Text weight="bold" size="sm">Без маркеров:</Text>
+                  <List type="unordered" marker="none" spacing="md">
+                    <li>Элемент без маркера</li>
+                    <li>Ещё один элемент без маркера</li>
+                    <li>И ещё один элемент без маркера</li>
+                  </List>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Комплексный пример */}
+        <section className="space-y-6">
+          <Heading level="h2" color="primary" align="center">
+            Комплексный пример использования
+          </Heading>
+          
+          <div className="bg-card border rounded-lg p-6 space-y-6">
+            <Heading level="h3" color="brand" iconLeft={<Check className="h-5 w-5" />}>
+              Статья о компонентах типографии
+            </Heading>
+            
+            <Text type="body" size="md">
+              В этой статье мы рассмотрим создание компонентов типографии на базе shadcn/ui. 
+              Компоненты обеспечивают единообразное отображение текста во всём приложении.
+            </Text>
+            
+            <div className="space-y-4">
+              <Heading level="h4">Основные возможности:</Heading>
+              <List type="unordered" marker="check" spacing="md">
+                <li>Поддержка всех уровней заголовков (h1-h6)</li>
+                <li>Различные варианты подчёркивания ссылок</li>
+                <li>Автоматическая иконка для внешних ссылок</li>
+                <li>Множественные типы маркеров списков</li>
+                <li>Настраиваемые отступы и интервалы</li>
+              </List>
+            </div>
+            
+            <div className="space-y-4">
+              <Heading level="h4">Порядок внедрения:</Heading>
+              <List type="ordered" spacing="md">
+                <li>Создать базовые компоненты</li>
+                <li>Добавить варианты стилизации</li>
+                <li>Написать Storybook истории</li>
+                <li>Протестировать доступность</li>
+              </List>
+            </div>
+            
+            <Text type="secondary" size="sm">
+              Для получения дополнительной информации посетите{' '}
+              <Link href="https://example.com" target="_blank">
+                нашу документацию
+              </Link>
+              {' '}или свяжитесь с командой разработки.
+            </Text>
+          </div>
+        </section>
+
+        {/* Футер */}
+        <footer className="border-t pt-8">
+          <div className="flex items-center justify-between">
+            <Text type="caption" color="muted">
+              © 2024 UI Kit. Все права защищены.
+            </Text>
+            <div className="flex items-center gap-4">
+              <Link href="#" color="secondary">Политика конфиденциальности</Link>
+              <Link href="#" color="secondary">Условия использования</Link>
+              <Link href="https://github.com" target="_blank" color="brand">
+                GitHub
+              </Link>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
-  );
+  )
 }

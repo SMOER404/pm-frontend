@@ -11,6 +11,18 @@ const config: Config = {
     extend: {
       fontFamily: {
         azorath: ["Azorath", "system-ui", "sans-serif"],
+        druktext: ["DrukTextCyr", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        'sm': ['14px', { lineHeight: '20px' }],
+        'md': ['16px', { lineHeight: '24px' }],
+        'lg': ['18px', { lineHeight: '28px' }],
+        'h1': ['32px', { lineHeight: '40px' }],
+        'h2': ['28px', { lineHeight: '36px' }],
+        'h3': ['24px', { lineHeight: '32px' }],
+        'h4': ['20px', { lineHeight: '28px' }],
+        'h5': ['18px', { lineHeight: '24px' }],
+        'h6': ['16px', { lineHeight: '20px' }],
       },
       colors: {
         primary: {
@@ -26,6 +38,11 @@ const config: Config = {
         muted: {
           DEFAULT: "#F5F5F5",
           foreground: "#6B7280",
+        },
+        text: {
+          primary: "#292D30",
+          secondary: "#6B7280",
+          muted: "#9CA3AF",
         },
         accent: {
           DEFAULT: "#AFEB0F",
