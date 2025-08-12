@@ -113,11 +113,11 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
         {...props}
       >
         {marker === "check" && type === "unordered" && (
-          <Check className="h-4 w-4 text-[#AFEB0F] flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
         )}
         {marker === "dot" && type === "unordered" && (
           <svg 
-            className="h-4 w-4 text-[#AFEB0F] flex-shrink-0 mt-0.5" 
+            className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" 
             viewBox="0 0 6.9707 7" 
             fill="currentColor"
             aria-hidden="true"

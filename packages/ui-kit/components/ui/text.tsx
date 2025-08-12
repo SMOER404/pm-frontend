@@ -21,9 +21,9 @@ const textVariants = cva(
         bold: "font-bold",
       },
       color: {
-        primary: "text-[#292D30]",
-        secondary: "text-[#6B7280]",
-        muted: "text-[#9CA3AF]",
+        primary: "text-text-primary",
+        secondary: "text-text-secondary",
+        muted: "text-text-muted",
       },
     },
     defaultVariants: {

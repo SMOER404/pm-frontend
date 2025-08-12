@@ -15,9 +15,9 @@ const headingVariants = cva(
         h6: "text-h6",
       },
       color: {
-        primary: "text-[#292D30]",
-        secondary: "text-[#AFEB0F]", 
-        error: "text-red-500",
+        primary: "text-text-primary",
+        secondary: "text-primary", 
+        error: "text-destructive",
       },
       align: {
         left: "text-left",
