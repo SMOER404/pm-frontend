@@ -13,9 +13,9 @@ const linkVariants = cva(
         hover: "no-underline hover:underline hover:underline-offset-4",
       },
       color: {
-        primary: "text-primary hover:text-primary/80",
-        secondary: "text-text-secondary hover:text-text-primary",
-        muted: "text-text-muted hover:text-text-secondary",
+        primary: "text-[#AFEB0F] hover:text-[#AFEB0F]/80",
+        secondary: "text-[#6B7280] hover:text-[#292D30]",
+        muted: "text-[#9CA3AF] hover:text-[#6B7280]",
       },
     },
     defaultVariants: {

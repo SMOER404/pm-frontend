@@ -15,10 +15,9 @@ const headingVariants = cva(
         h6: "text-h6",
       },
       color: {
-        primary: "text-text-primary",
-        secondary: "text-text-secondary", 
-        brand: "text-primary",
-        error: "text-destructive",
+        primary: "text-[#292D30]",
+        secondary: "text-[#AFEB0F]", 
+        error: "text-red-500",
       },
       align: {
         left: "text-left",
@@ -38,7 +37,7 @@ export interface HeadingProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof headingVariants> {
   level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-  color?: "primary" | "secondary" | "brand" | "error"
+  color?: "primary" | "secondary" | "error"
   align?: "left" | "center" | "right"
   iconLeft?: React.ReactNode
   iconRight?: React.ReactNode
@@ -53,7 +52,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     }
     
     const content = (
-      <span className="flex items-center gap-2">
+      <span className="flex items-center gap-3">
         {iconLeft && (
           <span className="flex-shrink-0" aria-hidden="true">
             {iconLeft}
