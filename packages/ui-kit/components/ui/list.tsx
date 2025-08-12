@@ -12,9 +12,9 @@ const listVariants = cva(
         unordered: "list-none",
       },
       spacing: {
-        sm: "",
-        md: "",
-        lg: "",
+        sm: "space-y-1",
+        md: "space-y-2",
+        lg: "space-y-3",
       },
     },
     defaultVariants: {
@@ -37,16 +37,10 @@ const listItemVariants = cva(
         check: "",
         none: "",
       },
-      spacing: {
-        sm: "mb-1 last:mb-0",
-        md: "mb-2 last:mb-0",
-        lg: "mb-3 last:mb-0",
-      },
     },
     defaultVariants: {
       type: "unordered",
       marker: "dot",
-      spacing: "md",
     },
   }
 )
@@ -78,7 +72,7 @@ const List = React.forwardRef<HTMLUListElement | HTMLOListElement, ListProps>(
     const renderItems = () => {
       if (items) {
         return items.map((item, index) => (
-          <ListItem key={index} type={type} marker={marker} spacing={spacing}>
+          <ListItem key={index} type={type} marker={marker}>
             {item}
           </ListItem>
         ))
@@ -108,14 +102,13 @@ export interface ListItemProps
     VariantProps<typeof listItemVariants> {
   type?: "ordered" | "unordered"
   marker?: "dot" | "check" | "none"
-  spacing?: "sm" | "md" | "lg"
 }
 
 const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
-  ({ className, type = "unordered", marker = "dot", spacing = "md", children, ...props }, ref) => {
+  ({ className, type = "unordered", marker = "dot", children, ...props }, ref) => {
     return (
       <li
-        className={cn(listItemVariants({ type, marker, spacing }), className)}
+        className={cn(listItemVariants({ type, marker }), className)}
         ref={ref}
         {...props}
       >
@@ -125,11 +118,11 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
         {marker === "dot" && type === "unordered" && (
           <svg 
             className="h-4 w-4 text-[#AFEB0F] flex-shrink-0 mt-0.5" 
-            viewBox="0 0 24 24" 
+            viewBox="0 0 6.9707 7" 
             fill="currentColor"
             aria-hidden="true"
           >
-            <circle cx="12" cy="12" r="6" />
+            <path d="M4.37 0L2.79993 0L1.75 0L0 1.75L0 7L2.59998 7L4.16992 7L5.21997 7L6.96997 5.25L6.96997 0L4.37 0Z" />
           </svg>
         )}
         <span>{children}</span>
