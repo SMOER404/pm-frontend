@@ -1,3 +1,74 @@
+/* Подключение шрифтов */
+@font-face {
+  font-family: 'Azorath';
+  src: url('./fonts/AzorathRegular.woff2') format('woff2'),
+       url('./fonts/AzorathRegular.woff') format('woff'),
+       url('./fonts/AzorathRegular.eot') format('embedded-opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azorath';
+  src: url('./fonts/AzorathLight.woff2') format('woff2'),
+       url('./fonts/AzorathLight.woff') format('woff'),
+       url('./fonts/AzorathLight.eot') format('embedded-opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azorath';
+  src: url('./fonts/AzorathMedium.woff2') format('woff2'),
+       url('./fonts/AzorathMedium.woff') format('woff'),
+       url('./fonts/AzorathMedium.eot') format('embedded-opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azorath';
+  src: url('./fonts/AzorathBold.woff2') format('woff2'),
+       url('./fonts/AzorathBold.woff') format('woff'),
+       url('./fonts/AzorathBold.eot') format('embedded-opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DrukTextCyr';
+  src: url('./fonts/druktextcyr-medium.woff2') format('woff2'),
+       url('./fonts/druktextcyr-medium.woff') format('woff'),
+       url('./fonts/druktextcyr-medium.eot') format('embedded-opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DrukTextCyr';
+  src: url('./fonts/druktextcyr-bold.woff2') format('woff2'),
+       url('./fonts/druktextcyr-bold.woff') format('woff'),
+       url('./fonts/druktextcyr-bold.eot') format('embedded-opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DrukTextCyr';
+  src: url('./fonts/druktextcyr-super.woff2') format('woff2'),
+       url('./fonts/druktextcyr-super.woff') format('woff'),
+       url('./fonts/druktextcyr-super.eot') format('embedded-opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Базовые стили */
 @layer base {
   html {
