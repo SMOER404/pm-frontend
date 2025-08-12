@@ -33,7 +33,7 @@ const listItemVariants = cva(
         unordered: "",
       },
       marker: {
-        dot: "before:content-['•'] before:text-[#AFEB0F] before:font-bold before:flex-shrink-0 before:mt-0.5",
+        dot: "",
         check: "",
         none: "",
       },

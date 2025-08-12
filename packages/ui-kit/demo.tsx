@@ -2,7 +2,7 @@ import React from 'react'
 import { Heading } from './components/ui/heading'
 import { Text } from './components/ui/text'
 import { Link } from './components/ui/link'
-import { List } from './components/ui/list'
+import { List, ListItem } from './components/ui/list'
 import { Star, ArrowRight, Check } from 'lucide-react'
 
 export default function TypographyDemo() {
@@ -12,7 +12,7 @@ export default function TypographyDemo() {
         
         {/* Заголовки */}
         <section className="space-y-6">
-          <Heading level="h1" color="brand" align="center" iconLeft={<Star className="h-8 w-8" />}>
+          <Heading level="h1" color="secondary" align="center" iconLeft={<Star className="h-8 w-8" />}>
             Компоненты типографии
           </Heading>
           
@@ -34,7 +34,6 @@ export default function TypographyDemo() {
               <div className="space-y-2">
                 <Heading level="h3" color="primary">Основной цвет</Heading>
                 <Heading level="h3" color="secondary">Вторичный цвет</Heading>
-                <Heading level="h3" color="brand">Брендовый цвет</Heading>
                 <Heading level="h3" color="error">Цвет ошибки</Heading>
                 <Heading level="h3" align="center">По центру</Heading>
                 <Heading level="h3" align="right">По правому краю</Heading>
@@ -122,18 +121,18 @@ export default function TypographyDemo() {
                 <div>
                   <Text weight="bold" size="sm">С точками:</Text>
                   <List type="unordered" marker="dot" spacing="md">
-                    <li>Первый элемент с точкой</li>
-                    <li>Второй элемент с точкой</li>
-                    <li>Третий элемент с точкой</li>
+                    <ListItem>Первый элемент списка</ListItem>
+                    <ListItem>Второй элемент списка</ListItem>
+                    <ListItem>Третий элемент списка</ListItem>
                   </List>
                 </div>
                 
                 <div>
                   <Text weight="bold" size="sm">С галочками:</Text>
                   <List type="unordered" marker="check" spacing="md">
-                    <li>Выполненная задача</li>
-                    <li>Ещё одна выполненная задача</li>
-                    <li>И ещё одна выполненная задача</li>
+                    <ListItem>Выполненная задача</ListItem>
+                    <ListItem>Ещё одна выполненная задача</ListItem>
+                    <ListItem>И ещё одна выполненная задача</ListItem>
                   </List>
                 </div>
               </div>
@@ -145,18 +144,18 @@ export default function TypographyDemo() {
                 <div>
                   <Text weight="bold" size="sm">Обычный нумерованный:</Text>
                   <List type="ordered" spacing="md">
-                    <li>Первый пронумерованный элемент</li>
-                    <li>Второй пронумерованный элемент</li>
-                    <li>Третий пронумерованный элемент</li>
+                    <ListItem>Первый пронумерованный элемент</ListItem>
+                    <ListItem>Второй пронумерованный элемент</ListItem>
+                    <ListItem>Третий пронумерованный элемент</ListItem>
                   </List>
                 </div>
                 
                 <div>
                   <Text weight="bold" size="sm">Без маркеров:</Text>
                   <List type="unordered" marker="none" spacing="md">
-                    <li>Элемент без маркера</li>
-                    <li>Ещё один элемент без маркера</li>
-                    <li>И ещё один элемент без маркера</li>
+                    <ListItem>Элемент без маркера</ListItem>
+                    <ListItem>Ещё один элемент без маркера</ListItem>
+                    <ListItem>И ещё один элемент без маркера</ListItem>
                   </List>
                 </div>
               </div>
@@ -171,7 +170,7 @@ export default function TypographyDemo() {
           </Heading>
           
           <div className="bg-card border rounded-lg p-6 space-y-6">
-            <Heading level="h3" color="brand" iconLeft={<Check className="h-5 w-5" />}>
+            <Heading level="h3" color="secondary" iconLeft={<Check className="h-5 w-5" />}>
               Статья о компонентах типографии
             </Heading>
             
@@ -183,21 +182,21 @@ export default function TypographyDemo() {
             <div className="space-y-4">
               <Heading level="h4">Основные возможности:</Heading>
               <List type="unordered" marker="check" spacing="md">
-                <li>Поддержка всех уровней заголовков (h1-h6)</li>
-                <li>Различные варианты подчёркивания ссылок</li>
-                <li>Автоматическая иконка для внешних ссылок</li>
-                <li>Множественные типы маркеров списков</li>
-                <li>Настраиваемые отступы и интервалы</li>
+                <ListItem>Поддержка всех уровней заголовков (h1-h6)</ListItem>
+                <ListItem>Различные варианты подчёркивания ссылок</ListItem>
+                <ListItem>Автоматическая иконка для внешних ссылок</ListItem>
+                <ListItem>Множественные типы маркеров списков</ListItem>
+                <ListItem>Настраиваемые отступы и интервалы</ListItem>
               </List>
             </div>
             
             <div className="space-y-4">
               <Heading level="h4">Порядок внедрения:</Heading>
               <List type="ordered" spacing="md">
-                <li>Создать базовые компоненты</li>
-                <li>Добавить варианты стилизации</li>
-                <li>Написать Storybook истории</li>
-                <li>Протестировать доступность</li>
+                <ListItem>Создать базовые компоненты</ListItem>
+                <ListItem>Добавить варианты стилизации</ListItem>
+                <ListItem>Написать Storybook истории</ListItem>
+                <ListItem>Протестировать доступность</ListItem>
               </List>
             </div>
             
@@ -220,7 +219,7 @@ export default function TypographyDemo() {
             <div className="flex items-center gap-4">
               <Link href="#" color="secondary">Политика конфиденциальности</Link>
               <Link href="#" color="secondary">Условия использования</Link>
-              <Link href="https://github.com" target="_blank" color="brand">
+              <Link href="https://github.com" target="_blank" color="primary">
                 GitHub
               </Link>
             </div>
