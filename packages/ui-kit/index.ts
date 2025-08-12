@@ -1,58 +1,10 @@
-// UI Kit V2 - Основные компоненты
-export { default as CustomButton } from './components/custom-button'
-export { default as CustomInput } from './components/custom-input'
-export { default as CustomSelect } from './components/custom-select'
-export { default as CustomContainer } from './components/custom-container'
-export { default as CustomModal } from './components/custom-modal'
-export { default as CustomCard } from './components/custom-card'
-export { default as CustomBadge } from './components/custom-badge'
-export { default as CustomCheckbox } from './components/custom-checkbox'
-export { default as CustomBox } from './components/custom-box'
-export { default as CustomHeroSection } from './components/custom-hero-section'
-export { default as CustomTabs } from './components/custom-tabs'
-export { default as CustomAccordion } from './components/custom-accordion'
-export { default as CustomSpinner } from './components/custom-spinner'
-export { default as CustomRating } from './components/custom-rating'
-export { default as CustomFallback } from './components/custom-fallback'
-export { default as CustomNavigationLoader } from './components/custom-navigation-loader'
-export { default as CustomBreadcrumbs } from './components/custom-breadcrumbs'
-export { default as CustomPrice } from './components/custom-price'
-export { default as CustomSvg } from './components/custom-svg'
-export { default as CustomSeoHead } from './components/custom-seo-head'
-export { default as CustomSkewedBackground } from './components/custom-skewed-background'
-export { default as CustomColorPicker } from './components/custom-color-picker'
-export { default as CustomSizeSelector } from './components/custom-size-selector'
-export { default as CustomProductCard } from './components/custom-product-card'
-export { default as CustomProductCardList } from './components/custom-product-card-list'
-export { default as CustomLayout } from './components/custom-layout'
-export { default as CustomHeader } from './components/custom-header'
-export { default as CustomFooter } from './components/custom-footer'
-export { default as CustomProductGallery } from './components/custom-product-gallery'
-export { default as CustomProductActions } from './components/custom-product-actions'
-export { default as CustomProductInfo } from './components/custom-product-info'
-export { default as CustomUnauthorizedState } from './components/custom-unauthorized-state'
-export { default as CustomLoading } from './components/custom-loading'
-export { default as CustomNotFound } from './components/custom-not-found'
-export { default as CustomHeroSectionWrapper } from './components/custom-hero-section-wrapper'
-export { CustomTypography, Heading, Paragraph, Code, Blockquote, Link, List, Highlight } from './components/custom-typography'
-
 // UI Components (shadcn/ui based)
 export { Button, buttonVariants } from "./components/ui/button"
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./components/ui/card"
+export { Input, inputVariants } from "./components/ui/input"
+export { InputError } from "./components/ui/input-error"
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, cardVariants } from "./components/ui/card"
+export { BevelBox, bevelBoxVariants } from "./components/ui/bevel-box"
+export { BevelShape, bevelShapeVariants } from "./components/ui/bevel-shape"
 
-// Утилиты
-export * from './lib/design-tokens'
-export * from './lib/chamfer-utils'
-export * from './lib/with-states'
-export * from './lib/validation'
-export * from './lib/input-masks'
-export * from './lib/select-utils'
-export * from './lib/modal-utils'
-export * from './lib/card-utils'
-export * from './lib/badge-utils'
-export * from './lib/tabs-utils'
-export * from './lib/accordion-utils'
-export * from './lib/typography-utils'
-
-// Общие утилиты
-export * from './lib/utils' 
+// Utils
+export { cn } from "./lib/utils"

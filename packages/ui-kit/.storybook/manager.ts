@@ -1,1 +1,0 @@
-// Manager configuration for Storybook 

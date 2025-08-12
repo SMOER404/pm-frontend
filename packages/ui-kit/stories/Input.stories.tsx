@@ -1,297 +1,379 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import { useState } from "react"
-import CustomInput from "../components/custom-input"
-import { masks } from "../lib/input-masks"
-import { validationSchemas } from "../lib/validation"
-import { User, Search, Calendar, Phone, Mail, Lock, CreditCard } from "lucide-react"
+import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Input } from '../components/ui/input';
+import { Search, Mail, Lock, User, Phone, DollarSign, Hash } from 'lucide-react';
 
-const meta: Meta<typeof CustomInput> = {
-  title: "Components/Input V2",
-  component: CustomInput,
+const meta: Meta<typeof Input> = {
+  title: 'UI/Input',
+  component: Input,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
-    size: {
-      control: { type: "select" },
-      options: ["xs", "sm", "md", "lg", "xl"],
+    type: {
+      control: { type: 'select' },
+      options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
     },
     variant: {
-      control: { type: "select" },
-      options: ["outlined", "filled"],
+      control: { type: 'select' },
+      options: ['default', 'filled', 'outlined', 'ghost'],
     },
-    type: {
-      control: { type: "select" },
-      options: ["text", "email", "password", "tel", "search", "date", "number"],
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'default', 'lg', 'xl'],
     },
-    iconPosition: {
-      control: { type: "select" },
-      options: ["left", "right"],
+    error: {
+      control: { type: 'boolean' },
     },
-    disabled: {
-      control: { type: "boolean" },
+    clearable: {
+      control: { type: 'boolean' },
     },
-    showPasswordToggle: {
-      control: { type: "boolean" },
+    fullWidth: {
+      control: { type: 'boolean' },
+    },
+    loading: {
+      control: { type: 'boolean' },
+    },
+    bevelSize: {
+      control: { type: 'select' },
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof CustomInput>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    label: "Input Label",
-    placeholder: "Enter text...",
+    placeholder: 'Enter text...',
   },
-}
+};
 
-export const Sizes: Story = {
-  render: () => (
-    <div className="space-y-4 w-80">
-      <CustomInput label="Extra Small" size="xs" placeholder="xs size" />
-      <CustomInput label="Small" size="sm" placeholder="sm size" />
-      <CustomInput label="Medium" size="md" placeholder="md size" />
-      <CustomInput label="Large" size="lg" placeholder="lg size" />
-      <CustomInput label="Extra Large" size="xl" placeholder="xl size" />
-    </div>
-  ),
-}
+export const WithLabel: Story = {
+  args: {
+    label: 'Email',
+    type: 'email',
+    placeholder: 'Enter your email',
+  },
+};
+
+export const WithHelperText: Story = {
+  args: {
+    label: 'Password',
+    type: 'password',
+    placeholder: 'Enter your password',
+    helperText: 'Password must be at least 8 characters long',
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    label: 'Email',
+    type: 'email',
+    placeholder: 'Enter your email',
+    error: true,
+    errorMessage: 'Please enter a valid email address',
+  },
+};
+
+export const WithValidation: Story = {
+  args: {
+    label: 'Username',
+    placeholder: 'Enter username',
+    validation: {
+      required: true,
+      minLength: 3,
+      maxLength: 20,
+      pattern: /^[a-zA-Z0-9_]+$/,
+    },
+  },
+};
 
 export const Variants: Story = {
   render: () => (
-    <div className="space-y-4 w-80">
-      <CustomInput label="Outlined" variant="outlined" placeholder="Outlined variant" />
-      <CustomInput label="Filled" variant="filled" placeholder="Filled variant" />
+    <div className="grid w-full max-w-sm gap-4">
+      <Input variant="default" placeholder="Default variant" />
+      <Input variant="filled" placeholder="Filled variant" />
+      <Input variant="outlined" placeholder="Outlined variant" />
+      <Input variant="ghost" placeholder="Ghost variant" />
     </div>
   ),
-}
+};
+
+export const Sizes: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input size="sm" placeholder="Small size" />
+      <Input size="default" placeholder="Default size" />
+      <Input size="lg" placeholder="Large size" />
+      <Input size="xl" placeholder="Extra large size" />
+    </div>
+  ),
+};
 
 export const WithIcons: Story = {
   render: () => (
-    <div className="space-y-4 w-80">
-      <CustomInput 
-        label="User Name" 
-        icon={<User className="w-4 h-4" />}
-        placeholder="Enter your name"
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        leftIcon={<Search size={16} />}
+        placeholder="Search..."
       />
-      <CustomInput 
-        label="Search" 
+      <Input
+        leftIcon={<Mail size={16} />}
+        placeholder="Enter email"
+        type="email"
+      />
+      <Input
+        leftIcon={<User size={16} />}
+        rightIcon={<Phone size={16} />}
+        placeholder="Enter phone number"
+        type="tel"
+      />
+    </div>
+  ),
+};
+
+export const WithPrefixAndSuffix: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        prefix="$"
+        placeholder="0.00"
+        type="number"
+      />
+      <Input
+        suffix="kg"
+        placeholder="0"
+        type="number"
+      />
+      <Input
+        prefix="@"
+        suffix=".com"
+        placeholder="username"
+      />
+      <Input
+        prefix={<Hash size={14} />}
+        placeholder="Enter tag"
+      />
+    </div>
+  ),
+};
+
+export const PasswordWithToggle: Story = {
+  args: {
+    label: 'Password',
+    type: 'password',
+    placeholder: 'Enter your password',
+  },
+};
+
+export const SearchWithClear: Story = {
+  args: {
+    type: 'search',
+    placeholder: 'Search...',
+    clearable: true,
+  },
+};
+
+export const WithClearButton: Story = {
+  args: {
+    label: 'Search',
+    placeholder: 'Enter search term...',
+    clearable: true,
+  },
+};
+
+export const WithLoading: Story = {
+  args: {
+    label: 'Searching...',
+    placeholder: 'Search in progress',
+    loading: true,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    label: 'Disabled Input',
+    placeholder: 'This input is disabled',
+    disabled: true,
+  },
+};
+
+export const NotFullWidth: Story = {
+  args: {
+    label: 'Not Full Width',
+    placeholder: 'This input has custom width',
+    fullWidth: false,
+    style: { width: '200px' },
+  },
+};
+
+export const WithMask: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        label="Phone Number"
+        placeholder="(555) 123-4567"
+        mask="(000) 000-0000"
+        type="tel"
+      />
+      <Input
+        label="Credit Card"
+        placeholder="1234 5678 9012 3456"
+        mask="0000 0000 0000 0000"
+        type="text"
+      />
+      <Input
+        label="Date"
+        placeholder="MM/DD/YYYY"
+        mask="00/00/0000"
+        type="text"
+      />
+    </div>
+  ),
+};
+
+export const DifferentTypes: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        label="Text"
+        type="text"
+        placeholder="Enter text"
+      />
+      <Input
+        label="Email"
+        type="email"
+        placeholder="Enter email"
+      />
+      <Input
+        label="Password"
+        type="password"
+        placeholder="Enter password"
+      />
+      <Input
+        label="Number"
+        type="number"
+        placeholder="Enter number"
+      />
+      <Input
+        label="Phone"
+        type="tel"
+        placeholder="Enter phone number"
+      />
+      <Input
+        label="URL"
+        type="url"
+        placeholder="Enter URL"
+      />
+      <Input
+        label="Search"
         type="search"
         placeholder="Search..."
       />
-      <CustomInput 
-        label="Email" 
-        type="email"
-        placeholder="Enter your email"
-      />
-      <CustomInput 
-        label="Phone" 
-        type="tel"
-        placeholder="Enter your phone"
-      />
-      <CustomInput 
-        label="Date" 
-        type="date"
-        placeholder="Select date"
-      />
     </div>
   ),
-}
+};
 
-export const WithValidation: Story = {
-  render: () => {
-    const [email, setEmail] = useState("")
-    const [emailError, setEmailError] = useState("")
-    const [password, setPassword] = useState("")
-    const [passwordError, setPasswordError] = useState("")
-
-    return (
-      <div className="space-y-4 w-80">
-        <CustomInput
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          validation={validationSchemas.email}
-          onValidationChange={(isValid, error) => setEmailError(error || "")}
-          error={emailError}
-          placeholder="Enter your email"
-        />
-        <CustomInput
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          validation={validationSchemas.password}
-          onValidationChange={(isValid, error) => setPasswordError(error || "")}
-          error={passwordError}
-          showPasswordToggle
-          placeholder="Enter your password"
-        />
-      </div>
-    )
-  },
-}
-
-export const WithMasks: Story = {
-  render: () => {
-    const [phone, setPhone] = useState("")
-    const [card, setCard] = useState("")
-    const [date, setDate] = useState("")
-
-    return (
-      <div className="space-y-4 w-80">
-        <CustomInput
-          label="Phone Number"
-          type="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          mask={masks.phone}
-          placeholder="Enter phone number"
-        />
-        <CustomInput
-          label="Card Number"
-          value={card}
-          onChange={(e) => setCard(e.target.value)}
-          mask={masks.card}
-          icon={<CreditCard className="w-4 h-4" />}
-          placeholder="Enter card number"
-        />
-        <CustomInput
-          label="Date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          mask={masks.date}
-          placeholder="DD.MM.YYYY"
-        />
-      </div>
-    )
-  },
-}
-
-export const PasswordToggle: Story = {
-  render: () => {
-    const [password, setPassword] = useState("")
-
-    return (
-      <div className="space-y-4 w-80">
-        <CustomInput
-          label="Password with Toggle"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          showPasswordToggle
-          placeholder="Enter password"
-        />
-        <CustomInput
-          label="Password without Toggle"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password"
-        />
-      </div>
-    )
-  },
-}
-
-export const States: Story = {
+export const BevelSizes: Story = {
   render: () => (
-    <div className="space-y-4 w-80">
-      <CustomInput label="Normal" placeholder="Normal state" />
-      <CustomInput label="Disabled" disabled placeholder="Disabled state" />
-      <CustomInput label="With Error" error="This field has an error" placeholder="Error state" />
-      <CustomInput label="With Helper" helperText="This is helper text" placeholder="Helper text" />
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        label="Extra Small Bevel"
+        bevelSize="xs"
+        placeholder="XS bevel size"
+      />
+      <Input
+        label="Small Bevel"
+        bevelSize="sm"
+        placeholder="Small bevel size"
+      />
+      <Input
+        label="Medium Bevel"
+        bevelSize="md"
+        placeholder="Medium bevel size"
+      />
+      <Input
+        label="Large Bevel"
+        bevelSize="lg"
+        placeholder="Large bevel size"
+      />
+      <Input
+        label="Extra Large Bevel"
+        bevelSize="xl"
+        placeholder="XL bevel size"
+      />
     </div>
   ),
-}
+};
 
-export const InteractiveValidation: Story = {
-  render: () => {
-    const [username, setUsername] = useState("")
-    const [usernameError, setUsernameError] = useState("")
-    const [url, setUrl] = useState("")
-    const [urlError, setUrlError] = useState("")
-
-    return (
-      <div className="space-y-4 w-80">
-        <CustomInput
-          label="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          validation={validationSchemas.username}
-          onValidationChange={(isValid, error) => setUsernameError(error || "")}
-          error={usernameError}
-          placeholder="3-20 characters, letters, numbers, underscores"
-        />
-        <CustomInput
-          label="Website URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          validation={validationSchemas.url}
-          onValidationChange={(isValid, error) => setUrlError(error || "")}
-          error={urlError}
-          placeholder="https://example.com"
-        />
+export const ComplexExample: Story = {
+  render: () => (
+    <div className="grid w-full max-w-md gap-6 p-6 border rounded-lg">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Registration Form</h3>
+        <div className="space-y-4">
+          <Input
+            label="Full Name"
+            leftIcon={<User size={16} />}
+            placeholder="Enter your full name"
+            validation={{ required: true, minLength: 2 }}
+          />
+          <Input
+            label="Email"
+            type="email"
+            leftIcon={<Mail size={16} />}
+            placeholder="Enter your email"
+            helperText="We'll never share your email"
+            validation={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
+          />
+          <Input
+            label="Password"
+            type="password"
+            leftIcon={<Lock size={16} />}
+            placeholder="Enter your password"
+            validation={{ required: true, minLength: 8 }}
+          />
+          <Input
+            label="Phone Number"
+            type="tel"
+            leftIcon={<Phone size={16} />}
+            placeholder="(555) 123-4567"
+            mask="(000) 000-0000"
+          />
+          <Input
+            label="Salary"
+            type="number"
+            prefix={<DollarSign size={14} />}
+            placeholder="0"
+            helperText="Annual salary in USD"
+          />
+        </div>
       </div>
-    )
-  },
-}
+    </div>
+  ),
+};
 
-export const CustomValidation: Story = {
-  render: () => {
-    const [customValue, setCustomValue] = useState("")
-    const [customError, setCustomError] = useState("")
-
-    const customValidation = {
-      required: true,
-      minLength: 5,
-      custom: (value: string) => {
-        if (value.includes("admin")) {
-          return "Username cannot contain 'admin'"
-        }
-        if (value.includes("test")) {
-          return "Username cannot contain 'test'"
-        }
-        return null
-      }
-    }
-
-    return (
-      <div className="space-y-4 w-80">
-        <CustomInput
-          label="Custom Validation"
-          value={customValue}
-          onChange={(e) => setCustomValue(e.target.value)}
-          validation={customValidation}
-          onValidationChange={(isValid, error) => setCustomError(error || "")}
-          error={customError}
-          placeholder="Cannot contain 'admin' or 'test'"
-        />
-      </div>
-    )
-  },
-}
-
-export const ControlledInput: Story = {
-  render: () => {
-    const [value, setValue] = useState("")
-
-    return (
-      <div className="space-y-4 w-80">
-        <CustomInput
-          label="Controlled Input"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="This is controlled"
-        />
-        <p className="text-sm text-gray-600">
-          Current value: <span className="font-mono">{value || "(empty)"}</span>
-        </p>
-      </div>
-    )
-  },
-} 
+export const AccessibleExample: Story = {
+  render: () => (
+    <div className="grid w-full max-w-sm gap-4">
+      <Input
+        id="accessible-input"
+        label="Accessible Input"
+        placeholder="This input has proper ARIA attributes"
+        aria-describedby="accessible-input-help"
+        helperText="This input demonstrates proper accessibility features"
+      />
+      <Input
+        id="error-input"
+        label="Input with Error"
+        placeholder="This will show an error"
+        error={true}
+        errorMessage="This is an error message with proper ARIA attributes"
+        aria-invalid={true}
+      />
+    </div>
+  ),
+};
