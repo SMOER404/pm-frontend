@@ -30,6 +30,29 @@ const config: StorybookConfig = {
         '@': path.resolve(__dirname, '../'),
       };
     }
+
+    // Добавляем поддержку PostCSS для Tailwind CSS
+    if (config.module && config.module.rules) {
+      config.module.rules.push({
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
+              },
+            },
+          },
+        ],
+      });
+    }
+
     return config;
   },
 };
