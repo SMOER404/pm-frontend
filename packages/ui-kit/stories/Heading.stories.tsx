@@ -16,7 +16,7 @@ const meta: Meta<typeof Heading> = {
     },
     color: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'brand', 'error'],
+      options: ['primary', 'secondary', 'error'],
     },
     align: {
       control: { type: 'select' },
@@ -52,7 +52,6 @@ export const Colors: Story = {
     <div className="space-y-4">
       <Heading color="primary">Основной цвет</Heading>
       <Heading color="secondary">Вторичный цвет</Heading>
-      <Heading color="brand">Брендовый цвет</Heading>
       <Heading color="error">Цвет ошибки</Heading>
     </div>
   ),
@@ -92,7 +91,7 @@ export const Interactive: Story = {
     <div className="space-y-4">
       <Heading 
         level="h2" 
-        color="brand" 
+        color="secondary" 
         align="center"
         iconLeft={<Star className="h-6 w-6" />}
       >

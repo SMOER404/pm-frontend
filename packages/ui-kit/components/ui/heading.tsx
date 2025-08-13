@@ -3,16 +3,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const headingVariants = cva(
-  "font-druktext tracking-tight",
+  "font-druktext font-bold tracking-tight",
   {
     variants: {
       level: {
-        h1: "text-h1",
-        h2: "text-h2", 
-        h3: "text-h3",
-        h4: "text-h4",
-        h5: "text-h5",
-        h6: "text-h6",
+        h1: "text-h1 leading-[40px]",
+        h2: "text-h2 leading-[36px]", 
+        h3: "text-h3 leading-[32px]",
+        h4: "text-h4 leading-[28px]",
+        h5: "text-h5 leading-[24px]",
+        h6: "text-h6 leading-[20px]",
       },
       color: {
         primary: "text-text-primary",
