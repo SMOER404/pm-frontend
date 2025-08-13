@@ -70,11 +70,34 @@ export const UnorderedWithoutMarkers: Story = {
 
 export const Ordered: Story = {
   render: () => (
-    <List type="ordered" spacing="md">
-      <ListItem>Первый пронумерованный элемент</ListItem>
-      <ListItem>Второй пронумерованный элемент</ListItem>
-      <ListItem>Третий пронумерованный элемент</ListItem>
-    </List>
+    <div className="space-y-6">
+      <div>
+        <h3 className="mb-2">Ordered с маркером dot</h3>
+        <List type="ordered" marker="dot" spacing="md">
+          <ListItem>Первый пронумерованный элемент</ListItem>
+          <ListItem>Второй пронумерованный элемент</ListItem>
+          <ListItem>Третий пронумерованный элемент</ListItem>
+        </List>
+      </div>
+      
+      <div>
+        <h3 className="mb-2">Ordered с маркером check</h3>
+        <List type="ordered" marker="check" spacing="md">
+          <ListItem>Первый пронумерованный элемент</ListItem>
+          <ListItem>Второй пронумерованный элемент</ListItem>
+          <ListItem>Третий пронумерованный элемент</ListItem>
+        </List>
+      </div>
+      
+      <div>
+        <h3 className="mb-2">Ordered без маркера</h3>
+        <List type="ordered" marker="none" spacing="md">
+          <ListItem>Первый пронумерованный элемент</ListItem>
+          <ListItem>Второй пронумерованный элемент</ListItem>
+          <ListItem>Третий пронумерованный элемент</ListItem>
+        </List>
+      </div>
+    </div>
   ),
 }
 

@@ -69,11 +69,11 @@ export const Colors: Story = {
 export const ExternalLinks: Story = {
   render: () => (
     <div className="space-y-4">
-      <Link href="https://example.com" target="_blank">
-        Внешняя ссылка с иконкой
+      <Link href="https://example.com" target="_blank" showExternalIcon={true}>
+        Внешняя ссылка с иконкой (showExternalIcon=true)
       </Link>
       <Link href="https://example.com" target="_blank" showExternalIcon={false}>
-        Внешняя ссылка без иконки
+        Внешняя ссылка без иконки (showExternalIcon=false)
       </Link>
       <Link href="/internal-page">
         Внутренняя ссылка

@@ -44,15 +44,15 @@ export const Default: Story = {
 export const Types: Story = {
   render: () => (
     <div className="space-y-4 max-w-md">
-      <Text type="body">
+      <Text type="body" size="md">
         Основной текст (body) - используется для основного контента страницы. 
         Имеет расслабленную высоту строки для лучшей читаемости.
       </Text>
-      <Text type="caption">
+      <Text type="caption" size="sm">
         Подпись (caption) - используется для небольших подписей и комментариев. 
         Имеет плотную высоту строки.
       </Text>
-      <Text type="secondary">
+      <Text type="secondary" size="sm">
         Вторичный текст (secondary) - используется для дополнительной информации. 
         Имеет нормальную высоту строки.
       </Text>

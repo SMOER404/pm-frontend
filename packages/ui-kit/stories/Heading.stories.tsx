@@ -10,7 +10,7 @@ const meta: Meta<typeof Heading> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    level: {
+    size: {
       control: { type: 'select' },
       options: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
@@ -34,15 +34,15 @@ export const Default: Story = {
   },
 }
 
-export const AllLevels: Story = {
+export const AllSizes: Story = {
   render: () => (
     <div className="space-y-4">
-      <Heading level="h1">Заголовок H1 (32px)</Heading>
-      <Heading level="h2">Заголовок H2 (28px)</Heading>
-      <Heading level="h3">Заголовок H3 (24px)</Heading>
-      <Heading level="h4">Заголовок H4 (20px)</Heading>
-      <Heading level="h5">Заголовок H5 (18px)</Heading>
-      <Heading level="h6">Заголовок H6 (16px)</Heading>
+      <Heading size="h1">Заголовок H1 (32px)</Heading>
+      <Heading size="h2">Заголовок H2 (28px)</Heading>
+      <Heading size="h3">Заголовок H3 (24px)</Heading>
+      <Heading size="h4">Заголовок H4 (20px)</Heading>
+      <Heading size="h5">Заголовок H5 (18px)</Heading>
+      <Heading size="h6">Заголовок H6 (16px)</Heading>
     </div>
   ),
 }
@@ -90,7 +90,7 @@ export const Interactive: Story = {
   render: () => (
     <div className="space-y-4">
       <Heading 
-        level="h2" 
+        size="h2" 
         color="secondary" 
         align="center"
         iconLeft={<Star className="h-6 w-6" />}

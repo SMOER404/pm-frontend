@@ -106,16 +106,20 @@ export interface ListItemProps
 
 const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
   ({ className, type = "unordered", marker = "dot", children, ...props }, ref) => {
-    return (
-      <li
-        className={cn(listItemVariants({ type, marker }), className)}
-        ref={ref}
-        {...props}
-      >
-        {marker === "check" && type === "unordered" && (
+    const renderMarker = () => {
+      // Для ordered списков не показываем дополнительные маркеры
+      if (type === "ordered") return null
+      
+      if (marker === "none") return null
+      
+      if (marker === "check") {
+        return (
           <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-        )}
-        {marker === "dot" && type === "unordered" && (
+        )
+      }
+      
+      if (marker === "dot") {
+        return (
           <svg 
             className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" 
             viewBox="0 0 6.9707 7" 
@@ -124,7 +128,19 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
           >
             <path d="M4.37 0L2.79993 0L1.75 0L0 1.75L0 7L2.59998 7L4.16992 7L5.21997 7L6.96997 5.25L6.96997 0L4.37 0Z" />
           </svg>
-        )}
+        )
+      }
+      
+      return null
+    }
+
+    return (
+      <li
+        className={cn(listItemVariants({ type, marker }), className)}
+        ref={ref}
+        {...props}
+      >
+        {renderMarker()}
         <span>{children}</span>
       </li>
     )

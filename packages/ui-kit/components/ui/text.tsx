@@ -22,7 +22,7 @@ const textVariants = cva(
       },
       color: {
         primary: "text-text-primary",
-        secondary: "text-text-secondary",
+        secondary: "text-primary",
         muted: "text-text-muted",
       },
     },

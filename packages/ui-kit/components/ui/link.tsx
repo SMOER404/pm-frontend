@@ -13,8 +13,8 @@ const linkVariants = cva(
         hover: "no-underline hover:underline hover:underline-offset-4",
       },
       color: {
-        primary: "text-primary hover:text-primary/80",
-        secondary: "text-text-secondary hover:text-text-primary",
+        primary: "text-text-primary hover:text-primary",
+        secondary: "text-primary hover:text-primary/80",
         muted: "text-text-muted hover:text-text-secondary",
       },
     },
@@ -38,14 +38,22 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     className, 
     underline, 
     color, 
-    showExternalIcon = true,
+    showExternalIcon = false,
     href, 
     target, 
     rel, 
     children, 
     ...props 
   }, ref) => {
-    const isExternal = target === "_blank" || href?.startsWith("http")
+    // Улучшенная логика определения внешней ссылки
+    const isExternal = React.useMemo(() => {
+      if (!href) return false
+      if (target === "_blank") return true
+      if (href.startsWith("http://") || href.startsWith("https://")) return true
+      if (href.startsWith("//")) return true
+      return false
+    }, [href, target])
+    
     const shouldShowIcon = showExternalIcon && isExternal
     
     const finalRel = React.useMemo(() => {

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "tsup index.ts --dts --format esm,cjs --out-dir dist && npm run build:styles && npm run copy:fonts",
-    "build:styles": "tailwindcss -i ./styles/tailwind.css -o ./dist/styles.css --minify",
+    "build:styles": "tailwindcss -i ./styles/globals.css -o ./dist/styles.css --minify",
     "copy:fonts": "xcopy fonts dist\\fonts /E /I /Y",
     "dev": "tsup index.ts --dts --format esm,cjs --out-dir dist --watch",
     "lint": "eslint . --ext .ts,.tsx",

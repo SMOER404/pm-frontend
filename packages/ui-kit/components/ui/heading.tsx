@@ -6,13 +6,13 @@ const headingVariants = cva(
   "font-druktext font-bold tracking-tight",
   {
     variants: {
-      level: {
-        h1: "text-h1 leading-[40px]",
-        h2: "text-h2 leading-[36px]", 
-        h3: "text-h3 leading-[32px]",
-        h4: "text-h4 leading-[28px]",
-        h5: "text-h5 leading-[24px]",
-        h6: "text-h6 leading-[20px]",
+      size: {
+        h1: "heading-h1",
+        h2: "heading-h2", 
+        h3: "heading-h3",
+        h4: "heading-h4",
+        h5: "heading-h5",
+        h6: "heading-h6",
       },
       color: {
         primary: "text-text-primary",
@@ -26,7 +26,7 @@ const headingVariants = cva(
       },
     },
     defaultVariants: {
-      level: "h1",
+      size: "h1",
       color: "primary",
       align: "left",
     },
@@ -36,7 +36,7 @@ const headingVariants = cva(
 export interface HeadingProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof headingVariants> {
-  level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  size?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
   color?: "primary" | "secondary" | "error"
   align?: "left" | "center" | "right"
   iconLeft?: React.ReactNode
@@ -44,14 +44,19 @@ export interface HeadingProps
 }
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ className, level = "h1", color, align, iconLeft, iconRight, children, ...props }, ref) => {
+  ({ className, size = "h1", color, align, iconLeft, iconRight, children, ...props }, ref) => {
+    const variantClasses = headingVariants({ size, color, align })
+    const finalClassName = cn(variantClasses, className)
+    
     const baseProps = {
-      className: cn(headingVariants({ level, color, align }), className),
+      className: finalClassName,
       ref,
       ...props,
     }
     
-    const content = (
+    const hasIcons = iconLeft || iconRight
+    
+    const content = hasIcons ? (
       <span className="flex items-center gap-3">
         {iconLeft && (
           <span className="flex-shrink-0" aria-hidden="true">
@@ -65,9 +70,11 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           </span>
         )}
       </span>
+    ) : (
+      children
     )
     
-    switch (level) {
+    switch (size) {
       case 'h1':
         return <h1 {...baseProps}>{content}</h1>
       case 'h2':
