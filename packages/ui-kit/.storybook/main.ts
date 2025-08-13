@@ -31,49 +31,27 @@ const config: StorybookConfig = {
       };
     }
 
-          // Обновляем правила для CSS файлов
-      if (config.module && config.module.rules) {
-        // Удаляем существующие правила для CSS
-        config.module.rules = config.module.rules.filter(rule => {
-          if (typeof rule === 'object' && rule.test) {
-            return !rule.test.toString().includes('css');
-          }
-          return true;
-        });
-
-        // Добавляем новое правило для CSS, исключая dist папку
-        config.module.rules.push({
-          test: /\.css$/,
-          exclude: /dist/,
-          use: [
-            'style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 1,
+    // Добавляем поддержку PostCSS для Tailwind CSS
+    if (config.module && config.module.rules) {
+      config.module.rules.push({
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
               },
             },
-            {
-              loader: 'postcss-loader',
-              options: {
-                postcssOptions: {
-                  plugins: [
-                    require('tailwindcss'),
-                    require('autoprefixer'),
-                  ],
-                },
-              },
-            },
-          ],
-        });
-
-        // Отдельное правило для CSS файлов в dist папке
-        config.module.rules.push({
-          test: /\.css$/,
-          include: /dist/,
-          use: ['style-loader', 'css-loader'],
-        });
-      }
+          },
+        ],
+      });
+    }
 
     return config;
   },
