@@ -1,10 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BevelBox Component */
+@layer components {
+  .bevel-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+/* Подключение шрифтов */
+@font-face {
+  font-family: 'Azorath';
+  src: url('../fonts/AzorathRegular.woff2') format('woff2'),
+       url('../fonts/AzorathRegular.woff') format('woff'),
+       url('../fonts/AzorathRegular.eot') format('embedded-opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azorath';
+  src: url('../fonts/AzorathLight.woff2') format('woff2'),
+       url('../fonts/AzorathLight.woff') format('woff'),
+       url('../fonts/AzorathLight.eot') format('embedded-opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azorath';
+  src: url('../fonts/AzorathMedium.woff2') format('woff2'),
+       url('../fonts/AzorathMedium.woff') format('woff'),
+       url('../fonts/AzorathMedium.eot') format('embedded-opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azorath';
+  src: url('../fonts/AzorathBold.woff2') format('woff2'),
+       url('../fonts/AzorathBold.woff') format('woff'),
+       url('../fonts/AzorathBold.eot') format('embedded-opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DrukTextCyr';
+  src: url('../fonts/druktextcyr-medium.woff2') format('woff2'),
+       url('../fonts/druktextcyr-medium.woff') format('woff'),
+       url('../fonts/druktextcyr-medium.eot') format('embedded-opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DrukTextCyr';
+  src: url('../fonts/druktextcyr-bold.woff2') format('woff2'),
+       url('../fonts/druktextcyr-bold.woff') format('woff'),
+       url('../fonts/druktextcyr-bold.eot') format('embedded-opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DrukTextCyr';
+  src: url('../fonts/druktextcyr-super.woff2') format('woff2'),
+       url('../fonts/druktextcyr-super.woff') format('woff'),
+       url('../fonts/druktextcyr-super.eot') format('embedded-opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Базовые стили */
 @layer base {
   html {
     font-family: Azorath, system-ui, sans-serif;
   }
+}
+
+/* Heading sizes */
+@layer components {
+  .heading-h1 {
+    font-size: 32px;
+    line-height: 40px;
+  }
   
-  h1, h2, h3, h4, h5, h6 {
-    font-family: DrukTextCyr, system-ui, sans-serif;
+  .heading-h2 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+  
+  .heading-h3 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+  
+  .heading-h4 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  
+  .heading-h5 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+  
+  .heading-h6 {
+    font-size: 16px;
+    line-height: 20px;
   }
 }
