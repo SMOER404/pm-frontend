@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Подключение шрифтов */
 @font-face {
   font-family: 'Azorath';
