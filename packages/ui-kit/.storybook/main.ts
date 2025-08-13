@@ -51,6 +51,15 @@ const config: StorybookConfig = {
           },
         ],
       });
+
+      // Добавляем правило для шрифтов
+      config.module.rules.push({
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]'
+        }
+      });
     }
 
     return config;
