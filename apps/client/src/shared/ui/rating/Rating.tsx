@@ -1,1 +1,0 @@
-export { CustomRating as Rating } from "@poizon/ui-kit";

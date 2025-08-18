@@ -1,29 +1,23 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
-import { Providers } from './providers'
-import {CustomHeader, CustomFooter} from '@poizon/ui-kit'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'POIZON MARKET',
   description: 'Официальный маркетплейс POIZON в России',
-  icons: {
-    icon: '/static/favicons/favicon.ico',
-  },
 }
 
-export default function RootLayout({children}: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="ru">
-      <body>
-        <Providers>
-          <div className="min-h-screen flex flex-col">
-            <CustomHeader />
-            <main className="flex-grow container mx-auto px-4 pt-[70px] pb-8">
-              {children}
-            </main>
-            <CustomFooter />
-          </div>
-        </Providers>
+      <body className={inter.className}>
+        {children}
       </body>
     </html>
   )

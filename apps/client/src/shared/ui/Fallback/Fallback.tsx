@@ -1,1 +1,0 @@
-export { CustomFallback as Fallback } from "@poizon/ui-kit"; 

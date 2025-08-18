@@ -1,1 +1,0 @@
-export { CustomSeoHead as SeoHead } from "@poizon/ui-kit"; 

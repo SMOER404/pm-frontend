@@ -1,1 +1,0 @@
-export { CustomSpinner as Spinner } from "@poizon/ui-kit"; 

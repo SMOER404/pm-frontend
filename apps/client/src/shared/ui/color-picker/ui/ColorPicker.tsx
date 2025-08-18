@@ -1,1 +1,0 @@
-export { CustomColorPicker as ColorPicker } from "@poizon/ui-kit";

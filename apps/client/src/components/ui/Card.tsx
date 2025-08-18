@@ -1,1 +1,0 @@
-export { CustomCard as Card } from "@poizon/ui-kit"; 

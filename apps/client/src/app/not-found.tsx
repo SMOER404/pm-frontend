@@ -1,25 +1,27 @@
-import Link from 'next/link'
-import { Metadata } from 'next'
-import { CustomTypography, CustomButton } from "@poizon/ui-kit";
-
-export const metadata: Metadata = {
-  title: 'Страница не найдена | POIZON MARKET',
-  description: 'Запрашиваемая страница не найдена',
-}
-
 export default function NotFound() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-      <CustomTypography variant="h1" className="font-bold mb-4">404</CustomTypography>
-      <CustomTypography variant="h2" className="mb-6">Страница не найдена</CustomTypography>
-      <CustomTypography variant="body1" className="text-gray-600 mb-8 text-center">
-        К сожалению, запрашиваемая страница не существует или была удалена
-      </CustomTypography>
-      <Link href="/">
-        <CustomButton variant="primary">
-          Вернуться на главную
-        </CustomButton>
-      </Link>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center space-y-6">
+        <h1 className="text-6xl font-bold text-red-600">404</h1>
+        <h2 className="text-3xl font-semibold text-gray-900">Страница не найдена</h2>
+        <p className="text-lg text-gray-600">
+          К сожалению, запрашиваемая страница не существует.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/" 
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            На главную
+          </a>
+          <a 
+            href="/catalog" 
+            className="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors"
+          >
+            Перейти в каталог
+          </a>
+        </div>
+      </div>
     </div>
   )
 } 
