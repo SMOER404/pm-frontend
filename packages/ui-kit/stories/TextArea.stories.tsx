@@ -169,7 +169,7 @@ export const LongContent: Story = {
 export const ContactForm: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Message"
         placeholder="Tell us about your inquiry..."
         helperText="Please provide as much detail as possible"
@@ -184,7 +184,7 @@ export const ContactForm: Story = {
 export const BioForm: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Bio"
         placeholder="Tell us about yourself..."
         helperText="Share your background, interests, or what you're working on"
@@ -200,7 +200,7 @@ export const BioForm: Story = {
 export const ReviewForm: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Review"
         placeholder="Share your experience with this product..."
         helperText="Your honest feedback helps others make informed decisions"
@@ -216,7 +216,7 @@ export const ReviewForm: Story = {
 export const CodeEditor: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Code"
         placeholder="Enter your code here..."
         helperText="Use this area to write or paste your code"
@@ -231,7 +231,7 @@ export const CodeEditor: Story = {
 export const NotesEditor: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Notes"
         placeholder="Write your notes here..."
         autoResize={true}
@@ -246,7 +246,7 @@ export const NotesEditor: Story = {
 export const FeedbackForm: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Feedback"
         placeholder="We'd love to hear your thoughts..."
         helperText="Your feedback helps us improve our service"
@@ -262,19 +262,19 @@ export const FeedbackForm: Story = {
 export const SizeComparison: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         size="sm"
         label="Small"
         placeholder="Small textarea..."
         {...args}
       />
-      <TextArea
+      <Textarea
         size="default"
         label="Default"
         placeholder="Default textarea..."
         {...args}
       />
-      <TextArea
+      <Textarea
         size="lg"
         label="Large"
         placeholder="Large textarea..."
@@ -287,13 +287,13 @@ export const SizeComparison: Story = {
 export const VariantComparison: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         variant="default"
         label="Default Variant"
         placeholder="Default variant..."
         {...args}
       />
-      <TextArea
+      <Textarea
         variant="outlined"
         label="Outlined Variant"
         placeholder="Outlined variant..."
@@ -306,24 +306,24 @@ export const VariantComparison: Story = {
 export const StateComparison: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Normal"
         placeholder="Normal state..."
         {...args}
       />
-      <TextArea
+      <Textarea
         label="Disabled"
         value="Disabled textarea"
         disabled
         {...args}
       />
-      <TextArea
+      <Textarea
         label="Read Only"
         value="Read-only textarea"
         readOnly
         {...args}
       />
-      <TextArea
+      <Textarea
         label="Error"
         error
         errorMessage="This field has an error"
@@ -337,7 +337,7 @@ export const StateComparison: Story = {
 export const CharacterCountExample: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Tweet"
         placeholder="What's happening?"
         maxLength={280}
@@ -352,7 +352,7 @@ export const CharacterCountExample: Story = {
 export const AutoResizeExample: Story = {
   render: (args) => (
     <div className="space-y-4 w-[400px]">
-      <TextArea
+      <Textarea
         label="Dynamic Height"
         placeholder="Start typing and watch the textarea grow..."
         autoResize={true}
