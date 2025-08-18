@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup } from '../components/ui/select'
 import { Globe, MapPin, User, Settings } from 'lucide-react'
 
 const meta: Meta<typeof Select> = {

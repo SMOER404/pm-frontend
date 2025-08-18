@@ -114,24 +114,23 @@ export const WithDefaultValue: Story = {
 
 // Individual Radio stories
 export const SingleRadio: Story = {
-  render: (args) => (
-    <RadioGroup>
-      <Radio value="option1" label="Single radio button" {...args} />
-    </RadioGroup>
-  ),
+  args: {
+    options: [
+      { value: "option1", label: "Single radio button" }
+    ],
+  },
 }
 
 export const SingleRadioWithDescription: Story = {
-  render: (args) => (
-    <RadioGroup>
-      <Radio 
-        value="option1" 
-        label="Single radio button"
-        description="This is a description for the radio button"
-        {...args} 
-      />
-    </RadioGroup>
-  ),
+  args: {
+    options: [
+      { 
+        value: "option1", 
+        label: "Single radio button",
+        description: "This is a description for the radio button"
+      }
+    ],
+  },
 }
 
 // Complex examples

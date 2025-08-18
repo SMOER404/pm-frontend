@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { TextArea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -426,7 +426,7 @@ export const ComplexForm: Story = {
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <TextArea
+            <Textarea
               id="description"
               placeholder="Enter project description"
               rows={4}
