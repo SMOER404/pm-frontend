@@ -2,7 +2,7 @@ import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown, Plus, Minus } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { BaseProps } from "./base-props"
 
 const accordionVariants = cva(
@@ -88,7 +88,7 @@ const accordionContentVariants = cva(
 )
 
 // New simplified AccordionProps interface
-interface AccordionProps extends BaseProps, VariantProps<typeof accordionVariants> {
+interface AccordionProps extends Omit<BaseProps, 'size' | 'variant'>, VariantProps<typeof accordionVariants> {
   items: {
     id: string;
     title: React.ReactNode;
@@ -161,9 +161,9 @@ const Accordion = React.forwardRef<
     return (
       <AccordionPrimitive.Root
         ref={ref}
-        type={accordionType}
+        type={accordionType as any}
         collapsible={accordionCollapsible}
-        defaultValue={accordionDefaultValue}
+        defaultValue={accordionDefaultValue as any}
         className={cn(accordionVariants({ variant, size }), className)}
         style={sx}
         aria-label={ariaLabel}
@@ -201,10 +201,10 @@ const Accordion = React.forwardRef<
   return (
     <AccordionPrimitive.Root
       ref={ref}
-      type={type}
+      type={type as any}
       collapsible={collapsible}
-      defaultValue={defaultValue}
-      value={value}
+      defaultValue={defaultValue as any}
+      value={value as any}
       onValueChange={onValueChange}
       className={cn(accordionVariants({ variant, size }), className)}
       style={sx}

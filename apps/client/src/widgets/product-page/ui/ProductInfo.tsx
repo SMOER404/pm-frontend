@@ -1,7 +1,9 @@
+"use client";
+
 import {ColorPicker} from "@/shared/ui/color-picker/ui/ColorPicker";
 import {SizeSelector} from "@/shared/ui/size-selector/ui/SizeSelector";
 import {Price} from "@/shared/ui/price/Price";
-import { CustomTypography } from "@poizon/ui-kit";
+import { Text, Heading } from "@poizon/ui-kit";
 
 interface ProductInfoProps {
     title: string;
@@ -33,16 +35,12 @@ export const ProductInfo = ({
                                 onSizeChange,
                             }: ProductInfoProps) => (
     <div className="product-info uppercase">
-        <CustomTypography variant="body" size="sm" className='text-primary-light mb-4'>ПОВСЕДНЕВНАЯ ОБУВЬ</CustomTypography>
-        <CustomTypography variant="h1" className='font-medium'>{title}</CustomTypography>
-        <CustomTypography variant="body" size="md" className='mb-2'>{description}</CustomTypography>
+        <Text type="body" size="sm" className='text-primary-light mb-4'>ПОВСЕДНЕВНАЯ ОБУВЬ</Text>
+        <Heading size="h1" className='font-medium'>{title}</Heading>
+        <Text type="body" size="md" className='mb-2'>{description}</Text>
         <Price value={price} oldValue={oldPrice} className='mb-2'/>
         <div className="mb-4">
-            <ColorPicker
-                colors={colors}
-                selectedColor={selectedColor}
-                onChange={onColorChange}
-            />
+            <ColorPicker />
         </div>
         <SizeSelector
             pricesAndSizes={pricesAndSizes}

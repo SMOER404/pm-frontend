@@ -1,10 +1,11 @@
 'use client'
 
-import { CustomNavigationLoader } from "@poizon/ui-kit"
+// CustomNavigationLoader not available in UI Kit
+const CustomNavigationLoader = () => null
 import { useLoading } from '@/shared/hooks/useLoading'
 
 export const NavigationLoader = () => {
   const isLoading = useLoading()
 
-  return <CustomNavigationLoader isLoading={isLoading} />
+  return <CustomNavigationLoader />
 } 

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ChevronRight, Home } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const breadcrumbVariants = cva(
   "flex items-center space-x-1 text-sm font-medium",

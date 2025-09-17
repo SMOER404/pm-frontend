@@ -1,1 +1,2 @@
-export { CustomSizeSelector as SizeSelector } from "@poizon/ui-kit";
+// CustomSizeSelector component not available in UI Kit
+export const SizeSelector = (props: any) => null;

@@ -81,9 +81,9 @@ export class ProductStore {
           limit: this.pagination.itemsPerPage
         }
       })
-      this.products = response.data.items
-      this.pagination.totalItems = response.data.total
-      this.pagination.totalPages = response.data.totalPages
+      this.products = response.data
+      this.pagination.totalItems = response.data.length
+      this.pagination.totalPages = Math.ceil(response.data.length / this.pagination.itemsPerPage)
     } catch (error) {
       this.error = error instanceof Error ? error.message : 'Произошла ошибка при загрузке товаров'
     } finally {
@@ -107,18 +107,12 @@ export class ProductStore {
 
   private getMinPrice(product: ProductResponseDto): number {
     if (!product.variants || product.variants.length === 0) return 0
-    return Math.min(...product.variants.map(v => {
-      const prices = Object.values((v.sizesAndPrices as Record<string, number>) || {})
-      return Math.min(...prices)
-    }))
+    return Math.min(...product.variants.map(v => v.priceCny))
   }
 
   private getMaxPrice(product: ProductResponseDto): number {
     if (!product.variants || product.variants.length === 0) return 0
-    return Math.max(...product.variants.map(v => {
-      const prices = Object.values((v.sizesAndPrices as Record<string, number>) || {})
-      return Math.max(...prices)
-    }))
+    return Math.max(...product.variants.map(v => v.priceCny))
   }
 
   get filteredProducts() {

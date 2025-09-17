@@ -1,12 +1,14 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { cartApi, CartItemResponseDto, AddToCartDto, SizeAndPriceDto } from '@poizon/api'
+import { CartApi, CartItemResponseDto, AddToCartDto } from '@poizon/api'
 
 export class CartStore {
   items: CartItemResponseDto[] = []
   isLoading = false
   error: string | null = null
+  private api: CartApi
 
   constructor() {
+    this.api = new CartApi()
     makeAutoObservable(this)
   }
 
@@ -14,7 +16,7 @@ export class CartStore {
     this.isLoading = true
     this.error = null
     try {
-      const response = await cartApi.getCart()
+      const response = await this.api.findAll()
       runInAction(() => {
         this.items = response.data
       })
@@ -30,15 +32,15 @@ export class CartStore {
     }
   }
 
-  async addToCart(productId: string, sizeAndPrice: SizeAndPriceDto) {
+  async addToCart(productVariantId: string, quantity: number = 1) {
     this.isLoading = true
     this.error = null
     try {
       const dto: AddToCartDto = {
-        productId,
-        sizeAndPrice
+        productVariantId,
+        quantity
       }
-      await cartApi.addToCart(dto)
+      await this.api.addToCart(dto)
       await this.fetchCart()
     } catch (error) {
       runInAction(() => {
@@ -56,7 +58,7 @@ export class CartStore {
     this.isLoading = true
     this.error = null
     try {
-      await cartApi.removeFromCart(itemId)
+      await this.api.remove(itemId)
       await this.fetchCart()
     } catch (error) {
       runInAction(() => {
@@ -75,7 +77,7 @@ export class CartStore {
   }
 
   get totalPrice() {
-    return this.items.reduce((sum, item) => sum + item.sizeAndPrice.price, 0)
+    return this.items.reduce((sum, item) => sum + (item.variant.priceCny * item.quantity), 0)
   }
 }
 

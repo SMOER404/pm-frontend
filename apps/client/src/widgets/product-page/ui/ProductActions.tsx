@@ -1,3 +1,5 @@
+"use client";
+
 import Image from 'next/image'
 import { CustomButton } from "@poizon/ui-kit";
 import {Heart, Save, ShoppingCart} from "lucide-react";
@@ -15,8 +17,8 @@ export const ProductActions = ({
                                }: ProductActionsProps) => (
     <div className="product-actions flex flex-wrap items-center gap-4 mb-4 mt-8">
         <CustomButton
-            variant="primary"
-            icon={<ShoppingCart width={20}  className="w-4 h-4" />}
+            variant="default"
+            leftIcon={<ShoppingCart width={20}  className="w-4 h-4" />}
             onClick={onAddToCart}
             disabled={!isAvailable}
             className='uppercase'
@@ -25,11 +27,10 @@ export const ProductActions = ({
         </CustomButton>
         <CustomButton
             variant="outlined"
-            size='lg'
+            size="icon"
             onClick={onAddToCart}
             disabled={!isAvailable}
-            icon={<Heart className="w-4 h-4" />}
-            iconOnly
+            leftIcon={<Heart className="w-4 h-4" />}
         >
             Лайк
         </CustomButton>

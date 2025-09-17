@@ -1,1 +1,2 @@
-export { CustomColorPicker as ColorPicker } from "@poizon/ui-kit";
+// ColorPicker component not available in UI Kit
+export const ColorPicker = () => null;

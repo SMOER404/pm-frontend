@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { defaultApi, AuthResponseDto, LoginDto, RegisterDto } from '@poizon/api'
+import { DefaultApi, AuthResponseDto, LoginDto, RegisterDto, Configuration } from '@poizon/api'
 import { cartStore } from './cart.store'
 
 interface User {
@@ -25,8 +25,13 @@ export class AuthStore {
   user: User | null = null
   isLoading = false
   error: string | null = null
+  private api: DefaultApi
 
   constructor() {
+    const config = new Configuration({
+      basePath: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+    })
+    this.api = new DefaultApi(config)
     makeAutoObservable(this)
   }
 
@@ -68,7 +73,7 @@ export class AuthStore {
         email,
         password
       }
-      const response = await defaultApi.loginUser(loginDto)
+      const response = await this.api.loginUser(loginDto)
       const token = response.data.accessToken
       
       // Проверяем валидность токена
@@ -117,7 +122,7 @@ export class AuthStore {
         password,
         username: name // Используем name как username
       }
-      const response = await defaultApi.registerUser(registerDto)
+      const response = await this.api.registerUser(registerDto)
       const token = response.data.accessToken
       
       // Проверяем валидность токена

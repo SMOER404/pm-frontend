@@ -15,9 +15,6 @@ export class ProductStore {
   setProducts(products: ProductDto[]) {
     products.forEach(product => {
       this.products.set(product.id, product)
-      product.variants?.forEach(variant => {
-        this.variants.set(variant.id, variant)
-      })
     })
   }
 
@@ -31,13 +28,13 @@ export class ProductStore {
 
   getProductsByCategory(categoryId: string): ProductDto[] {
     return Array.from(this.products.values()).filter(
-      product => product.category.id === categoryId
+      product => product.categoryId === categoryId
     )
   }
 
   getProductsByBrand(brandId: string): ProductDto[] {
     return Array.from(this.products.values()).filter(
-      product => product.brand.id === brandId
+      product => product.brandId === brandId
     )
   }
 

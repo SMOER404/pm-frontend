@@ -1,1 +1,2 @@
-export { CustomSeoHead as SeoHead } from "@poizon/ui-kit"; 
+// CustomSeoHead component not available in UI Kit
+export const SeoHead = (props: any) => null; 

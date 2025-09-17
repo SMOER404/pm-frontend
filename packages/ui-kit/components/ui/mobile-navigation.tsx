@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const mobileNavigationVariants = cva(
   "fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-background border-t border-border",

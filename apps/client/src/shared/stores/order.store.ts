@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { OrdersService } from '@poizon/api'
+import { OrdersApi, Configuration, OrderDto } from '@poizon/api'
 
 interface OrderItem {
   id: string
@@ -21,23 +21,24 @@ interface Order {
 }
 
 export class OrderStore {
-  orders: Order[] = []
-  currentOrder: Order | null = null
+  orders: OrderDto[] = []
+  currentOrder: OrderDto | null = null
   loading = false
-  error = null
-  private ordersService: OrdersService
+  error: string | null = null
+  private ordersService: OrdersApi
 
   constructor() {
     makeAutoObservable(this)
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-    this.ordersService = new OrdersService({BASE: baseUrl})
+    const config = new Configuration({basePath: baseUrl})
+    this.ordersService = new OrdersApi(config)
   }
 
-  setOrders(orders: Order[]) {
+  setOrders(orders: OrderDto[]) {
     this.orders = orders
   }
 
-  setCurrentOrder(order: Order | null) {
+  setCurrentOrder(order: OrderDto | null) {
     this.currentOrder = order
   }
 
@@ -53,7 +54,7 @@ export class OrderStore {
     try {
       this.setLoading(true)
       const response = await this.ordersService.getUserOrders()
-      this.setOrders(response)
+      this.setOrders(response.data)
     } catch (error) {
       this.setError(error instanceof Error ? error.message : 'Failed to fetch orders')
       throw error
@@ -62,21 +63,16 @@ export class OrderStore {
     }
   }
 
-  async createOrder(items: OrderItem[], total: number) {
+  async createOrder(deliveryAddress: string, phone: string) {
     try {
       this.setLoading(true)
       const response = await this.ordersService.createOrder({
-        items: items.map(item => ({
-          productId: item.productId,
-          quantity: item.quantity,
-          size: item.size,
-          color: item.color
-        })),
-        total
+        deliveryAddress,
+        phone
       })
-      this.orders.push(response)
-      this.currentOrder = response
-      return response
+      this.orders.push(response.data)
+      this.currentOrder = response.data
+      return response.data
     } catch (error) {
       this.setError(error instanceof Error ? error.message : 'Failed to create order')
       throw error
@@ -85,17 +81,13 @@ export class OrderStore {
     }
   }
 
-  async updateOrderStatus(orderId: string, status: Order['status']) {
+  async updateOrderStatus(orderId: string) {
     try {
       this.setLoading(true)
-      const response = await this.ordersService.updateOrderStatus({
-        id: orderId,
-        status
-      })
+      const response = await this.ordersService.updateOrderStatus(orderId)
       const order = this.orders.find(o => o.id === orderId)
       if (order) {
-        order.status = response.status
-        order.updatedAt = response.updatedAt
+        Object.assign(order, response.data)
       }
     } catch (error) {
       this.setError(error instanceof Error ? error.message : 'Failed to update order status')

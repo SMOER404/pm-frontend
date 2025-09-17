@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const skeletonVariants = cva(
   "animate-pulse rounded-md bg-muted",
@@ -147,7 +147,7 @@ const SkeletonAvatar = React.forwardRef<HTMLDivElement, SkeletonAvatarProps>(
     return (
       <Skeleton
         ref={ref}
-        variant={variant}
+        variant={variant === "square" ? "rectangular" : variant}
         className={cn(getSize(), className)}
         {...props}
       />

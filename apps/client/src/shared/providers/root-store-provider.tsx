@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useMemo } from 'react'
+import { ReactNode, useMemo, useContext } from 'react'
 import { RootStore, RootStoreContext } from '@/shared/stores/root-store'
 
 interface RootStoreProviderProps {

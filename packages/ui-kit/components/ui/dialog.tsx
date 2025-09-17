@@ -3,7 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { X } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { Button } from "./button"
 
 const dialogVariants = cva(
@@ -40,12 +40,13 @@ const dialogOverlayVariants = cva(
 export interface DialogProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>,
     VariantProps<typeof dialogVariants> {
+  className?: string
   type?: 'alert' | 'confirm' | 'custom'
   title?: string
   description?: string
   actions?: Array<{
     label: string
-    variant?: 'default' | 'secondary' | 'destructive'
+    variant?: 'default' | 'secondary' | 'outlined' | 'ghost'
     onClick?: () => void
     disabled?: boolean
   }>
@@ -336,12 +337,12 @@ const AlertDialog = React.forwardRef<
         </div>
         <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
           <AlertDialogPrimitive.Cancel asChild>
-            <Button variant="outline" onClick={onCancel}>
+            <Button variant="outlined" onClick={onCancel}>
               {cancelLabel}
             </Button>
           </AlertDialogPrimitive.Cancel>
           <AlertDialogPrimitive.Action asChild>
-            <Button variant={variant} onClick={onAction}>
+            <Button variant={variant === 'destructive' ? 'secondary' : variant || 'default'} onClick={onAction}>
               {actionLabel}
             </Button>
           </AlertDialogPrimitive.Action>

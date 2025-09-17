@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { BevelShape } from "./bevel-shape"
 
 const bevelBoxVariants = cva(
@@ -32,11 +32,12 @@ export interface BevelBoxProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof bevelBoxVariants> {
   hover?: boolean
+  contentClassName?: string
   children?: React.ReactNode
 }
 
 const BevelBox = React.forwardRef<HTMLDivElement, BevelBoxProps>(
-  ({ className, variant = "default", bevelSize = "md", hover = false, children, ...props }, ref) => {
+  ({ className, variant = "default", bevelSize = "md", hover = false, children, contentClassName = "p", ...props }, ref) => {
     // Color definitions
     const colors = {
       brand: "#AFEB0F",
@@ -119,7 +120,8 @@ const BevelBox = React.forwardRef<HTMLDivElement, BevelBoxProps>(
         />
         <div className={cn(
           "relative z-10 h-full p-4",
-          textClasses
+          textClasses,
+          contentClassName
         )}>
           {children}
         </div>

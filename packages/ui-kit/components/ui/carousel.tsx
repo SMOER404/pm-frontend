@@ -1,7 +1,9 @@
+"use client"
+
 import * as React from "react"
 import { ChevronLeft, ChevronRight, Circle } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const carouselVariants = cva(
   "relative w-full overflow-hidden",

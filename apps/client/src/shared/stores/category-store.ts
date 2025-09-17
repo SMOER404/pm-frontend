@@ -23,6 +23,10 @@ export class CategoryStore {
         .catch((err) => console.log('err fetch categories error', err))
   }
 
+  setCategories(categories: CategoryDto[]) {
+    this.categories = categories
+  }
+
   getChildCategories(parentId: string): CategoryDto[] {
     return Array.from(this.categories.values()).filter(
       category => category.parentId === parentId

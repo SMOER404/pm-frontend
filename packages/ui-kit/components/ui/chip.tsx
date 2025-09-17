@@ -1,7 +1,7 @@
 import * as React from "react"
 import { X } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const chipVariants = cva(
   "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -70,9 +70,9 @@ const Chip = React.forwardRef<HTMLDivElement, ChipProps>(
       }
     }
 
-    const handleClick = (e: React.MouseEvent) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       if (!disabled && onClick) {
-        onClick(e)
+        onClick(e as any)
       }
     }
 

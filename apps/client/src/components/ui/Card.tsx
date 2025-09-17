@@ -1,1 +1,1 @@
-export { CustomCard as Card } from "@poizon/ui-kit"; 
+export { Card } from "@poizon/ui-kit"; 

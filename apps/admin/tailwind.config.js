@@ -1,11 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  presets: [require('../../packages/config/tailwind.config.js')],
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx}',
-    './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/ui-kit/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-} 
+}

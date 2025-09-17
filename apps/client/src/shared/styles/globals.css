@@ -1,17 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  html {
-    @apply antialiased;
-  }
-  
-  body {
-    @apply bg-white text-gray-900;
-  }
-}
-
+@import '../../../../packages/config/globals.css';
 
 @layer components {
   .container {

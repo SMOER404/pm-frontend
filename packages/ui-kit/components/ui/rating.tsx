@@ -1,7 +1,9 @@
+"use client"
+
 import * as React from "react"
 import { Star, Heart, ThumbsUp } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const ratingVariants = cva(
   "inline-flex items-center gap-1",
@@ -75,7 +77,7 @@ export interface RatingProps
 }
 
 export interface RatingItemProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick'>,
     VariantProps<typeof ratingItemVariants> {
   index: number
   filled: boolean
@@ -135,7 +137,7 @@ const RatingItem = React.forwardRef<HTMLButtonElement, RatingItemProps>(
         onMouseEnter={() => !disabled && onHover?.(index)}
         onMouseLeave={() => !disabled && onLeave?.()}
         onClick={() => !disabled && onClick?.(index)}
-        disabled={disabled}
+        disabled={disabled || undefined}
         aria-label={`Rate ${index} ${variant === "stars" ? "stars" : variant === "hearts" ? "hearts" : "thumbs"}`}
         {...props}
       >

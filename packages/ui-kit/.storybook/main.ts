@@ -22,7 +22,11 @@ const config: StorybookConfig = {
     check: false,
     reactDocgen: false,
   },
-  staticDirs: ['../fonts', '../dist/fonts', '../image'],
+  staticDirs: [
+    { from: '../fonts', to: '/fonts' },
+    { from: '../dist/fonts', to: '/dist/fonts' },
+    { from: '../image', to: '/image' },
+  ],
   webpackFinal: async (config) => {
     if (config.resolve) {
       config.resolve.alias = {

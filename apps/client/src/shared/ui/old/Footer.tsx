@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { CustomTypography } from "@poizon/ui-kit";
+import { Text } from "@poizon/ui-kit";
 
 export default function Footer() {
   return (
@@ -17,13 +17,13 @@ export default function Footer() {
                 priority
               />
             </div>
-            <CustomTypography variant="body2">
+            <Text type="body" size="sm">
               Ваш надежный партнер в мире моды и стиля
-            </CustomTypography>
+            </Text>
           </div>
 
           <div>
-            <CustomTypography variant="h5" className="font-medium mb-4">Каталог</CustomTypography>
+            <Text type="body" size="lg" weight="bold" className="font-medium mb-4">Каталог</Text>
             <ul className="space-y-2">
               <li>
                 <Link href="/catalog/men" className="hover:text-white">
@@ -44,7 +44,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <CustomTypography variant="h5" className="font-medium mb-4">Информация</CustomTypography>
+            <Text type="body" size="lg" weight="bold" className="font-medium mb-4">Информация</Text>
             <ul className="space-y-2">
               <li>
                 <Link href="/about" className="hover:text-white">
@@ -65,7 +65,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <CustomTypography variant="h5" className="font-medium mb-4">Контакты</CustomTypography>
+            <Text type="body" size="lg" weight="bold" className="font-medium mb-4">Контакты</Text>
             <ul className="space-y-2">
               <li>Телефон: +7 (999) 123-45-67</li>
               <li>Email: info@poizonmarket.ru</li>
@@ -75,7 +75,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <CustomTypography variant="body2">&copy; {new Date().getFullYear()} POIZON MARKET. Все права защищены.</CustomTypography>
+          <Text type="body" size="sm">&copy; {new Date().getFullYear()} POIZON MARKET. Все права защищены.</Text>
         </div>
       </div>
     </footer>

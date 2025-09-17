@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const progressVariants = cva(
   "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
@@ -65,7 +65,7 @@ const circularProgressVariants = cva(
 )
 
 export interface ProgressProps
-  extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>,
+  extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, 'color'>,
     VariantProps<typeof progressVariants> {
   value?: number
   max?: number
@@ -98,8 +98,8 @@ const Progress = React.forwardRef<
       <CircularProgress
         value={progressValue}
         max={max}
-        size={size}
-        color={color}
+        size={size || undefined}
+        color={color || undefined}
         showValue={showValue}
         animated={animated}
         indeterminate={indeterminate}

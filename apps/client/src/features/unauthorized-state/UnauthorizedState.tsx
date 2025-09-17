@@ -1,18 +1,18 @@
 import Link from 'next/link'
-import { CustomCard, CustomTypography, CustomButton } from "@poizon/ui-kit";
+import { Card, Text, Button } from "@poizon/ui-kit";
 
 export const UnauthorizedState = () => {
   return (
-    <CustomCard className="p-6 text-center">
-      <CustomTypography variant="h4" className="mb-4">Доступ запрещен</CustomTypography>
-      <CustomTypography variant="body" size="md" className="text-gray-500 mb-6">
+    <Card className="p-6 text-center">
+      <Text type="body" size="lg" weight="bold" className="mb-4">Доступ запрещен</Text>
+      <Text type="body" size="md" color="muted" className="mb-6">
         Для просмотра этой страницы необходимо авторизоваться
-      </CustomTypography>
+      </Text>
       <Link href="/auth/login">
-        <CustomButton variant="primary">
+        <Button variant="default">
           Войти
-        </CustomButton>
+        </Button>
       </Link>
-    </CustomCard>
+    </Card>
   )
 } 

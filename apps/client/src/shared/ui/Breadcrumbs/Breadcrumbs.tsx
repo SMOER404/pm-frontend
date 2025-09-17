@@ -1,1 +1,1 @@
-export { CustomBreadcrumbs as Breadcrumbs } from "@poizon/ui-kit"; 
+export { Breadcrumb as Breadcrumbs } from "@poizon/ui-kit"; 

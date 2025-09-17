@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx'
 import { RootStore } from './root-store'
-import { ProductVariantDto } from '@poizon/api'
+import { VariantDto } from '@poizon/api'
 
 interface CartItem {
-  variant: ProductVariantDto
+  variant: VariantDto
   quantity: number
   size: string
   price: number
@@ -18,7 +18,7 @@ export class CartStore {
     this.rootStore = rootStore
   }
 
-  addItem(variant: ProductVariantDto, size: string, price: number, quantity: number = 1) {
+  addItem(variant: VariantDto, size: string, price: number, quantity: number = 1) {
     const itemKey = `${variant.id}-${size}`
     const existingItem = this.items.get(itemKey)
     if (existingItem) {

@@ -55,6 +55,13 @@ export { Rating, RatingItem } from './components/ui/rating'
 // Utilities
 export { cn } from './lib/utils'
 
+// Custom Components (aliases for backward compatibility)
+export { Text as CustomTypography } from './components/ui/text'
+export { Container as CustomContainer } from './components/ui/container'
+export { Button as CustomButton } from './components/ui/button'
+export { BevelBox as CustomSkewedBackground } from './components/ui/bevel-box'
+export { Skeleton as CustomFallback } from './components/ui/skeleton'
+
 // Types
 export type { BoxProps } from './components/ui/box'
 export type { ContainerProps } from './components/ui/container'
@@ -69,7 +76,6 @@ export type { TextProps } from './components/ui/text'
 export type { LinkProps } from './components/ui/link'
 export type { ListProps } from './components/ui/list'
 export type { ButtonProps } from './components/ui/button'
-export type { CardProps } from './components/ui/card'
 export type { InputProps } from './components/ui/input'
 export type { InputErrorProps } from './components/ui/input-error'
 export type { ImageListProps } from './components/ui/image-list'
@@ -88,7 +94,7 @@ export type { CheckboxProps, CheckboxGroupProps } from './components/ui/checkbox
 export type { RadioGroupProps, RadioProps } from './components/ui/radio-group'
 export type { TextareaProps } from './components/ui/textarea'
 export type { SeparatorProps } from './components/ui/separator'
-export type { AccordionProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps } from './components/ui/accordion'
+export type { AccordionItemProps, AccordionTriggerProps, AccordionContentProps } from './components/ui/accordion'
 export type { CarouselProps, CarouselSlideProps, CarouselControlProps, CarouselIndicatorProps } from './components/ui/carousel'
 export type { ChipProps } from './components/ui/chip'
 export type { TooltipProps, TooltipTriggerProps, TooltipContentProps } from './components/ui/tooltip'

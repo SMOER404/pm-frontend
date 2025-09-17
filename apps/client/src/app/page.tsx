@@ -2,7 +2,6 @@ import { Metadata } from 'next'
 import { api } from '@/shared/api'
 import ProductCardList from "@/shared/ui/product-card-list/ProductCardList"
 import HeroSection from "@/components/HeroSection"
-import { CustomContainer, CustomTypography } from "@poizon/ui-kit"
 
 export const dynamic = 'force-dynamic'
 
@@ -20,25 +19,22 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* <HeroSection /> */}
-      
-      <CustomContainer className="mt-10 mb-10 px-0">
+      <div className="container mx-auto mt-10 mb-10 px-0">
         <div className='mb-20'>
-          {Boolean(popularProducts.data.length) &&
-              <ProductCardList
-                  title='Популярные'
-                  products={popularProducts.data.slice(0,4)}
-              />
-          }
-        </div>
-
-        {Boolean(trendingProducts.data.length) &&
+          {Boolean(popularProducts.data?.items?.length) && (
             <ProductCardList
-                title='В тренде'
-                products={trendingProducts.data.slice(0,4)}
+              title='Популярные'
+              products={popularProducts.data.items.slice(0,4).map((item: any) => item.product).filter(Boolean)}
             />
-        }
-      </CustomContainer>
+          )}
+        </div>
+        {Boolean(trendingProducts.data?.items?.length) && (
+          <ProductCardList
+            title='В тренде'
+            products={trendingProducts.data.items.slice(0,4).map((item: any) => item.product).filter(Boolean)}
+          />
+        )}
+      </div>
     </>
   )
 } 
